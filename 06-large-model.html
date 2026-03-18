@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06. 초거대모델 - AI 학습 가이드</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f5f7fa; color:#333; line-height:1.8; }
+
+    .top-nav { background:#2c3e50; padding:12px 24px; position:sticky; top:0; z-index:100; display:flex; justify-content:space-between; align-items:center; }
+
+    .top-nav a { color:#ecf0f1; text-decoration:none; font-size:0.9rem; }
+
+    .top-nav a:hover { color:#3498db; }
+
+    .page-header { background:linear-gradient(135deg,#2c3e50,#3498db); color:white; padding:48px 24px; text-align:center; }
+
+    .page-header h1 { font-size:2.2rem; margin-bottom:8px; }
+
+    .page-header p { font-size:1.1rem; opacity:0.9; }
+
+    .toc { background:white; max-width:860px; margin:24px auto; border-radius:12px; padding:32px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
+
+    .toc h2 { font-size:1.3rem; color:#2c3e50; margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid #3498db; }
+
+    .toc ul { list-style:none; }
+
+    .toc li { margin-bottom:8px; }
+
+    .toc a { color:#2c3e50; text-decoration:none; font-size:0.95rem; display:flex; align-items:center; gap:8px; padding:4px 8px; border-radius:6px; }
+
+    .toc a:hover { background:#eef6fd; color:#3498db; }
+
+    .toc .section-num { background:#3498db; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:bold; flex-shrink:0; }
+
+    .container { max-width:860px; margin:0 auto; padding:0 24px 48px; }
+
+    .section { background:white; border-radius:12px; padding:36px; margin-top:32px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
+
+    .section h2 { font-size:1.5rem; color:#2c3e50; margin-bottom:20px; padding-bottom:10px; border-bottom:3px solid #3498db; }
+
+    .section h3 { font-size:1.2rem; color:#2c3e50; margin:24px 0 12px; padding-left:12px; border-left:4px solid #3498db; }
+
+    .section h4 { font-size:1.05rem; color:#555; margin:16px 0 8px; }
+
+    .section p { margin-bottom:14px; font-size:0.95rem; }
+
+    .term-box { background:#eef6fd; border-left:4px solid #3498db; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
+
+    .term-box strong { color:#2c3e50; }
+
+    .analogy-box { background:#fef9e7; border-left:4px solid #f1c40f; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
+
+    .analogy-box strong { color:#7d6608; }
+
+    .note-box { background:#f0f9f0; border-left:4px solid #27ae60; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
+
+    .warning-box { background:#fdf2f2; border-left:4px solid #e74c3c; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
+
+    .compare-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9rem; }
+
+    .compare-table th { background:#2c3e50; color:white; padding:12px; text-align:left; }
+
+    .compare-table td { padding:10px 12px; border-bottom:1px solid #e0e0e0; vertical-align:top; }
+
+    .compare-table tr:nth-child(even) { background:#f8f9fa; }
+
+    .step-cards { display:flex; flex-wrap:wrap; gap:16px; margin:16px 0; }
+
+    .step-card { flex:1; min-width:180px; background:#f8f9fa; border-radius:8px; padding:16px; border-top:4px solid #3498db; }
+
+    .step-card .step-num { font-size:1.8rem; font-weight:bold; color:#3498db; }
+
+    .step-card .step-title { font-weight:bold; color:#2c3e50; margin:4px 0; }
+
+    .step-card .step-desc { font-size:0.85rem; color:#666; }
+
+    .process-flow { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:16px 0; justify-content:center; }
+
+    .process-step { background:linear-gradient(135deg,#3498db,#2c3e50); color:white; padding:12px 18px; border-radius:8px; text-align:center; font-size:0.85rem; min-width:100px; }
+
+    .process-arrow { color:#3498db; font-size:1.4rem; font-weight:bold; }
+
+    .key-summary { background:linear-gradient(135deg,#2c3e50,#34495e); color:white; border-radius:12px; padding:28px; margin:24px 0; }
+
+    .key-summary h3 { color:#3498db; border:none; padding:0; margin-bottom:12px; }
+
+    .key-summary ul { list-style:disc; padding-left:20px; }
+
+    .key-summary li { margin-bottom:6px; font-size:0.9rem; opacity:0.95; }
+
+    .bottom-nav { display:flex; justify-content:space-between; max-width:860px; margin:32px auto; padding:0 24px; }
+
+    .bottom-nav a { background:white; color:#2c3e50; text-decoration:none; padding:14px 28px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); font-weight:500; }
+
+    .bottom-nav a:hover { background:#3498db; color:white; }
+
+    .footer { text-align:center; padding:32px; color:#999; font-size:0.85rem; }
+
+    @media(max-width:768px) {
+      .page-header h1 { font-size:1.6rem; }
+      .page-header p { font-size:0.95rem; }
+      .section { padding:20px; margin-top:20px; }
+      .section h2 { font-size:1.2rem; }
+      .section h3 { font-size:1.05rem; }
+      .toc { padding:20px; margin:16px auto; }
+      .toc h2 { font-size:1.1rem; }
+      .toc a { font-size:0.85rem; }
+      .step-cards { gap:12px; }
+      .step-card { min-width:140px; padding:12px; }
+      .step-card .step-num { font-size:1.4rem; }
+      .process-flow { gap:6px; }
+      .process-step { padding:8px 12px; font-size:0.75rem; min-width:80px; }
+      .bottom-nav { flex-direction:column; gap:12px; padding:0 16px; }
+      .bottom-nav a { text-align:center; width:100%; }
+      .compare-table { font-size:0.8rem; }
+      .compare-table th, .compare-table td { padding:8px; }
+      .key-summary { padding:20px; }
+      .key-summary ul { padding-left:16px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="05-generative-model.html">← 이전: 생성모델과 신경망 확장</a>
+    <a href="index.html">홈으로</a>
+  </nav>
+
+  <header class="page-header">
+    <h1>06. 초거대모델</h1>
+    <p>AI의 언어 이해와 생성 능력을 만드는 거대한 신경망</p>
+  </header>
+
+  <div class="toc">
+    <h2>목차</h2>
+    <ul>
+      <li><a href="#section1"><span class="section-num">1</span>Seq2Seq (시퀀스 투 시퀀스)</a></li>
+      <li><a href="#section2"><span class="section-num">2</span>Attention 메커니즘</a></li>
+      <li><a href="#section3"><span class="section-num">3</span>Self-Attention과 Multi-Head Attention</a></li>
+      <li><a href="#section4"><span class="section-num">4</span>Transformer 아키텍처</a></li>
+      <li><a href="#section5"><span class="section-num">5</span>BERT 상세</a></li>
+      <li><a href="#section6"><span class="section-num">6</span>GPT 계열</a></li>
+      <li><a href="#section7"><span class="section-num">7</span>BERT vs GPT 비교</a></li>
+      <li><a href="#section8"><span class="section-num">8</span>멀티모달 AI</a></li>
+      <li><a href="#section9"><span class="section-num">9</span>LLM 훈련 과정</a></li>
+      <li><a href="#section10"><span class="section-num">10</span>토큰화와 임베딩</a></li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <!-- Section 1: Seq2Seq -->
+    <section id="section1" class="section">
+      <h2>1. Seq2Seq (시퀀스 투 시퀀스)</h2>
+
+      <h3>기본 개념</h3>
+      <p>Seq2Seq는 "입력 문장을 출력 문장으로 변환"하는 신경망 구조입니다. 기계번역(영어→한국어), 챗봇, 요약 같은 작업에 사용됩니다.</p>
+
+      <div class="term-box">
+        <strong>Seq2Seq:</strong> 가변 길이의 입력 시퀀스를 가변 길이의 출력 시퀀스로 매핑하는 신경망 모델. 인코더와 디코더 두 부분으로 구성됩니다.
+      </div>
+
+      <h3>인코더-디코더 구조</h3>
+      <p>Seq2Seq는 두 부분으로 나뉩니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Encoder:</strong> 입력 문장을 읽고 압축하여 "핵심 정보"를 고정 길이 벡터(Context Vector)로 만듭니다</li>
+        <li><strong>Decoder:</strong> 그 벡터를 받아 출력 문장을 한 단어씩 생성합니다</li>
+      </ul>
+
+      <div class="process-flow">
+        <div class="process-step">입력: "Hello"</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">Encoder 압축</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">Context Vector</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">Decoder 전개</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">출력: "안녕"</div>
+      </div>
+
+      <h3>한계점: 정보 손실</h3>
+      <p>고정 길이 벡터의 문제점:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>긴 문장을 고정 길이 벡터로 압축하면 정보가 손실됩니다</li>
+        <li>100단어짜리 문장을 128개 숫자로 압축하면 세부 정보가 사라집니다</li>
+        <li>문장이 길수록 번역 품질이 저하됩니다</li>
+        <li>기울기 소실(Vanishing Gradient) 문제 발생</li>
+      </ul>
+
+      <div class="analogy-box">
+        <strong>유추:</strong> 통역사가 10분짜리 회의 전체를 한 줄 메모에 압축한 후 번역하려고 할 때, 중요한 세부사항이 빠질 수 있는 것과 같습니다.
+      </div>
+
+      <div class="note-box">
+        <strong>알아두기:</strong> 이러한 한계를 극복하기 위해 "Attention" 메커니즘이 등장했습니다.
+      </div>
+    </section>
+
+    <!-- Section 2: Attention -->
+    <section id="section2" class="section">
+      <h2>2. Attention 메커니즘</h2>
+
+      <h3>왜 필요한가?</h3>
+      <p>Seq2Seq의 고정 길이 벡터 한계를 극복하기 위해 Attention이 등장했습니다. Attention의 핵심 아이디어는 간단합니다:</p>
+
+      <div class="term-box">
+        <strong>Attention의 핵심:</strong> 출력할 때마다 입력의 모든 부분을 다시 살펴보되, 현재 생성할 단어와 "관련 있는" 입력 부분에 더 많은 주의(높은 가중치)를 기울인다.
+      </div>
+
+      <h3>작동 방식: Query-Key-Value</h3>
+      <p>Attention은 세 가지 요소로 작동합니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Query (Q):</strong> "내가 어떤 정보가 필요한가?" - 현재 디코더의 상태</li>
+        <li><strong>Key (K):</strong> "각 입력 부분은 어떤 특징을 가지는가?" - 입력의 특징</li>
+        <li><strong>Value (V):</strong> "실제 정보의 내용은 무엇인가?" - 입력의 실제 데이터</li>
+      </ul>
+
+      <h3>어텐션 스코어 계산</h3>
+      <p>Attention의 계산 과정:</p>
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0; font-size:0.9rem;">
+        <strong>1단계: 유사도 계산</strong> (Dot Product)<br>
+        - Query와 Key를 곱해서 유사도를 계산합니다<br>
+        - Similarity = Q · K^T<br>
+        <br>
+        <strong>2단계: 정규화</strong> (Softmax)<br>
+        - 유사도를 확률로 변환합니다 (0~1 범위)<br>
+        - Attention Weight = Softmax(Similarity)<br>
+        <br>
+        <strong>3단계: 가중합</strong> (Weighted Sum)<br>
+        - Value를 가중평균으로 합칩니다<br>
+        - Output = Attention Weight × V
+      </div>
+
+      <h3>효과와 의미</h3>
+      <p>Attention 메커니즘으로 인해:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>긴 문장도 효율적으로 처리 가능</li>
+        <li>어떤 입력 부분이 각 출력에 영향을 미쳤는지 해석 가능</li>
+        <li>번역 품질 대폭 향상</li>
+        <li>기울기가 모든 입력으로 역전파되어 장거리 의존성 문제 해결</li>
+      </ul>
+
+      <div class="analogy-box">
+        <strong>유추:</strong> 시험을 볼 때 교과서 전체를 외우는 대신, 현재 문제와 관련된 페이지를 펼쳐보고 그 부분을 집중해서 읽는 것과 같습니다.
+      </div>
+
+      <div class="note-box">
+        <strong>다양한 Attention:</strong> Bahdanau Attention, Luong Attention 등 여러 변형이 존재합니다.
+      </div>
+    </section>
+
+    <!-- Section 3: Self-Attention -->
+    <section id="section3" class="section">
+      <h2>3. Self-Attention과 Multi-Head Attention</h2>
+
+      <h3>Self-Attention: 자기 참조</h3>
+      <p>Self-Attention은 Attention을 한 단계 더 발전시킨 것입니다. 입력 문장 내의 단어들이 서로 어떤 관계를 가지는지를 파악합니다.</p>
+
+      <div class="term-box">
+        <strong>Self-Attention:</strong> 문장 내의 모든 단어가 문장 내의 다른 모든 단어와의 관계를 학습하는 메커니즘. Query, Key, Value가 모두 같은 입력에서 나옵니다.
+      </div>
+
+      <h3>문맥 파악의 핵심</h3>
+      <p>자기참조의 예시:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>문장: "그것은 매우 맛있다"</li>
+        <li>"그것"이 무엇을 가리키는지 파악하려면, "그것"을 앞의 단어들과 비교</li>
+        <li>"밥", "국", "고기" 중 가장 유사한 것을 찾음</li>
+        <li>이 과정이 자동으로 학습됩니다</li>
+      </ul>
+
+      <div class="analogy-box">
+        <strong>유추:</strong> 글을 읽을 때 대명사가 무엇을 가리키는지 파악하기 위해 앞뒤 문맥을 보는 것처럼, 모델이 문장 내 단어 간의 관계를 자동으로 파악합니다.
+      </div>
+
+      <h3>Multi-Head Attention: 다양한 관점</h3>
+      <p>Multi-Head Attention은 동일한 입력을 다양한 관점에서 동시에 분석합니다:</p>
+
+      <div class="compare-table">
+        <tr>
+          <th>Head</th>
+          <th>분석 관점</th>
+          <th>예시</th>
+        </tr>
+        <tr>
+          <td>Head 1</td>
+          <td>문장의 문법 구조</td>
+          <td>주어-동사-목적어 관계</td>
+        </tr>
+        <tr>
+          <td>Head 2</td>
+          <td>단어의 의미 관계</td>
+          <td>유의어, 반의어 관계</td>
+        </tr>
+        <tr>
+          <td>Head 3</td>
+          <td>대명사의 선행사</td>
+          <td>"그것"이 무엇을 가리키는지</td>
+        </tr>
+        <tr>
+          <td>Head 4</td>
+          <td>시간적 관계</td>
+          <td>"이전", "이후" 같은 시간 표현</td>
+        </tr>
+      </div>
+
+      <h3>작동 원리</h3>
+      <p>Multi-Head Attention의 과정:</p>
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0; font-size:0.9rem;">
+        <strong>1단계: 입력 분할</strong><br>
+        - 입력을 여러 개의 서브스페이스로 선형 변환<br>
+        <br>
+        <strong>2단계: 각 Head에서 Self-Attention 계산</strong><br>
+        - 병렬로 여러 Attention 계산<br>
+        - 각 Head는 다른 가중치 사용<br>
+        <br>
+        <strong>3단계: 결과 연결 및 변환</strong><br>
+        - 모든 Head의 결과를 이어붙임<br>
+        - 최종 선형 변환으로 통합
+      </div>
+
+      <div class="note-box">
+        <strong>효과:</strong> 다중 관점으로 분석하므로 더욱 정확한 의미 파악이 가능합니다.
+      </div>
+    </section>
+
+    <!-- Section 4: Transformer -->
+    <section id="section4" class="section">
+      <h2>4. Transformer 아키텍처</h2>
+
+      <h3>혁신적인 구조</h3>
+      <p>Transformer는 2017년 "Attention Is All You Need" 논문에서 제안되었습니다. RNN(순환 신경망)을 완전히 대체했으며, Attention만으로 이루어진 혁신적인 구조입니다.</p>
+
+      <div class="term-box">
+        <strong>Transformer:</strong> Self-Attention과 Multi-Head Attention만을 사용하여 병렬 처리가 가능한 신경망 구조. Encoder와 Decoder 스택으로 구성됩니다.
+      </div>
+
+      <div class="note-box">
+        <strong>중요:</strong> Transformer는 이후 모든 대형 언어 모델(GPT, BERT, Claude 등)의 기반이 됩니다.
+      </div>
+
+      <h3>Encoder: 입력 처리</h3>
+      <p>Encoder는 입력 문장을 깊이 있게 분석합니다. 여러 층(6층)으로 쌓여 있으며, 각 층은:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Multi-Head Self-Attention:</strong> 입력 내 단어들 간의 관계 파악</li>
+        <li><strong>Feed Forward Network (FFN):</strong> 각 단어를 독립적으로 더 풍부하게 변환</li>
+        <li><strong>Residual Connection:</strong> 이전 층의 출력을 더해주는 건너뛰기 연결</li>
+        <li><strong>Layer Normalization:</strong> 수치 안정성을 위한 정규화</li>
+      </ul>
+
+      <h3>Decoder: 출력 생성</h3>
+      <p>Decoder는 한 번에 한 단어씩 생성합니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Masked Self-Attention:</strong> 자신 앞의 단어들만 볼 수 있도록 제한 (미래 보기 방지)</li>
+        <li><strong>Encoder-Decoder Attention:</strong> Encoder의 출력(Key, Value)을 참고하여 단어 생성</li>
+        <li><strong>Feed Forward Network:</strong> 생성된 단어를 더 풍부하게 표현</li>
+      </ul>
+
+      <h3>Positional Encoding: 위치 정보</h3>
+      <p>Transformer는 병렬 처리를 하기 때문에, 단어의 순서를 명시적으로 알려줘야 합니다:</p>
+
+      <div class="term-box">
+        <strong>Positional Encoding:</strong> 사인(sin)과 코사인(cos) 함수를 사용하여 각 단어의 위치 정보를 인코딩합니다. 이를 통해 모델이 단어의 위치를 인식합니다.
+      </div>
+
+      <p>공식: PE(pos, 2i) = sin(pos / 10000^(2i/d_model))</p>
+      <p>공식: PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))</p>
+
+      <h3>기존 RNN과의 비교</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>측면</th>
+          <th>RNN</th>
+          <th>Transformer</th>
+        </tr>
+        <tr>
+          <td>처리 방식</td>
+          <td>순차적 (한 단어씩)</td>
+          <td>병렬 처리 (모든 단어 동시)</td>
+        </tr>
+        <tr>
+          <td>학습 속도</td>
+          <td>느림</td>
+          <td>매우 빠름</td>
+        </tr>
+        <tr>
+          <td>긴 문장 처리</td>
+          <td>정보 손실 많음</td>
+          <td>정보 손실 적음</td>
+        </tr>
+        <tr>
+          <td>장거리 의존성</td>
+          <td>어려움 (기울기 소실)</td>
+          <td>매우 용이 (직접 연결)</td>
+        </tr>
+        <tr>
+          <td>메모리 사용</td>
+          <td>메모리 효율적</td>
+          <td>더 많은 메모리 필요</td>
+        </tr>
+        <tr>
+          <td>계산 복잡도</td>
+          <td>O(n)</td>
+          <td>O(n²)</td>
+        </tr>
+      </div>
+
+      <h3>Transformer의 강점</h3>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>병렬 처리로 큰 모델을 빠르게 학습 가능</li>
+        <li>긴 문장의 의미를 정확히 포착</li>
+        <li>전이학습(Transfer Learning)이 매우 효과적</li>
+        <li>멀티헤드 어텐션으로 다양한 관계 동시 포착</li>
+        <li>병목 현상 없음 (RNN의 순차 처리 제거)</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>구조:</strong> Encoder는 문맥 이해, Decoder는 텍스트 생성에 최적화되어 있습니다.
+      </div>
+    </section>
+
+    <!-- Section 5: BERT -->
+    <section id="section5" class="section">
+      <h2>5. BERT 상세</h2>
+
+      <h3>BERT의 기본 개념</h3>
+      <p>BERT는 2018년 Google에서 발표한 "Bidirectional Encoder Representations from Transformers"의 약자입니다. Transformer의 Encoder를 사용합니다.</p>
+
+      <div class="term-box">
+        <strong>BERT:</strong> 양방향(양쪽 모두 읽음) 문맥 이해에 최적화된 사전학습 모델. 텍스트의 의미를 매우 정확히 이해합니다.
+      </div>
+
+      <h3>BERT의 학습 방식</h3>
+      <p>BERT는 두 가지 자기지도학습(Self-Supervised Learning) 목표로 학습됩니다:</p>
+
+      <h4>1. MLM (Masked Language Model)</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>원리: 문장의 일부 단어를 [MASK] 토큰으로 가림</li>
+        <li>목표: 앞뒤 문맥으로 가려진 단어를 맞추기</li>
+        <li>예시: "나는 [MASK] 먹었다" → "밥" 예측</li>
+        <li>효과: 양방향 문맥 이해 가능</li>
+      </ul>
+
+      <h4>2. NSP (Next Sentence Prediction)</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>원리: 두 문장이 실제로 연속인지 여부를 판단</li>
+        <li>목표: 문장 간의 관계 학습</li>
+        <li>예시: "나는 밥을 먹었다" + "맛있었다" → IsNext</li>
+        <li>효과: 문장 간의 의미 관계 이해</li>
+      </ul>
+
+      <h3>BERT의 특징</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>특징</th>
+          <th>설명</th>
+        </tr>
+        <tr>
+          <td>양방향성</td>
+          <td>앞의 단어와 뒤의 단어를 모두 고려하여 단어 의미 파악</td>
+        </tr>
+        <tr>
+          <td>문맥 의존성</td>
+          <td>같은 단어도 문맥에 따라 다른 의미 표현 (Contextual Embedding)</td>
+        </tr>
+        <tr>
+          <td>문장 이해</td>
+          <td>감정분석, 질의응답, 텍스트 분류에 탁월</td>
+        </tr>
+        <tr>
+          <td>텍스트 생성</td>
+          <td>Encoder만 있으므로 단어 생성에는 부족</td>
+        </tr>
+        <tr>
+          <td>파인튜닝</td>
+          <td>소량의 데이터로도 특정 작업에 빠르게 적응</td>
+        </tr>
+      </div>
+
+      <h3>BERT의 구조</h3>
+      <p>BERT는 다음과 같이 구성됩니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Token Embedding:</strong> 단어를 벡터로 변환</li>
+        <li><strong>Position Embedding:</strong> 단어의 위치 정보 추가</li>
+        <li><strong>Segment Embedding:</strong> 문장 구분 정보 추가 ([CLS], [SEP] 토큰)</li>
+        <li><strong>12-24개의 Transformer Encoder 층</strong></li>
+      </ul>
+
+      <h3>Fine-tuning: 전이학습</h3>
+      <p>BERT의 강력한 특징은 Fine-tuning입니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>큰 데이터로 사전학습된 일반적 지식 활용</li>
+        <li>작은 데이터로 특정 작업에 빠르게 적응</li>
+        <li>과적합 위험 감소</li>
+        <li>학습 시간 단축</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>응용 분야:</strong> 감정분석, 개체명인식(NER), 질의응답(QA), 텍스트 분류, 텍스트 유사도 계산 등
+      </div>
+    </section>
+
+    <!-- Section 6: GPT -->
+    <section id="section6" class="section">
+      <h2>6. GPT 계열</h2>
+
+      <h3>GPT의 기본 원리</h3>
+      <p>GPT (Generative Pre-trained Transformer)는 Transformer의 Decoder만 사용합니다. 자기회귀(Autoregressive) 방식으로 다음 단어를 계속 예측합니다.</p>
+
+      <div class="term-box">
+        <strong>GPT의 학습 방식:</strong> "이전 단어들이 주어졌을 때 다음 단어는 무엇인가?" 를 계속 반복하여 문장을 생성하도록 학습합니다.
+      </div>
+
+      <h3>GPT의 발전 과정</h3>
+
+      <h4>GPT-1 (2018년) - 기초</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>파라미터: 1억 1,700만 개</li>
+        <li>특징: Transformer Decoder 구조 최초 적용</li>
+        <li>성능: 문장 분류, 텍스트 유사도 측정 가능</li>
+        <li>의의: 사전학습의 가능성 입증</li>
+      </ul>
+
+      <h4>GPT-2 (2019년) - 확장</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>파라미터: 15억 개 (GPT-1의 10배 이상)</li>
+        <li>특징: Zero-shot Learning 가능 (특정 작업으로 학습하지 않음)</li>
+        <li>성능: 사전학습만으로도 다양한 텍스트 생성 가능</li>
+        <li>의의: "스케일이 곧 능력"임을 증명</li>
+      </ul>
+
+      <h4>GPT-3 (2020년) - 혁신</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>파라미터: 1,750억 개 (어마어마한 규모)</li>
+        <li>특징: In-context Learning 가능</li>
+        <li>Few-shot: 극히 적은 예시로도 새로운 작업 학습</li>
+        <li>응용: 기계번역, 질의응답, 코드 생성 등</li>
+      </ul>
+
+      <h4>GPT-3.5 (2022년) - ChatGPT</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>개선: 대화형 UI 추가</li>
+        <li>특징: RLHF(강화학습)로 인간 의도에 맞게 조정</li>
+        <li>성능: GPT-3 대비 훨씬 높은 품질의 답변</li>
+        <li>의의: AI가 대중에 널리 알려지는 계기</li>
+      </ul>
+
+      <h4>GPT-4 (2023년) - 최신</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>파라미터: 정확한 수치 미공개 (조 단위 추정)</li>
+        <li>멀티모달: 이미지와 텍스트 동시 처리</li>
+        <li>성능: 인간 수준의 이해와 추론</li>
+        <li>특징: 복잡한 문제 해결 능력</li>
+      </ul>
+
+      <h3>GPT의 핵심 특징</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>특징</th>
+          <th>설명</th>
+        </tr>
+        <tr>
+          <td>자기회귀성</td>
+          <td>이전 출력이 다음 입력이 됨. 단어를 하나씩 생성</td>
+        </tr>
+        <tr>
+          <td>단방향성</td>
+          <td>좌측에서 우측으로만 문맥을 봄</td>
+        </tr>
+        <tr>
+          <td>텍스트 생성</td>
+          <td>Decoder만 있으므로 자연스러운 문장 생성 가능</td>
+        </tr>
+        <tr>
+          <td>대화형</td>
+          <td>프롬프트에 따라 유연한 응답 생성</td>
+        </tr>
+        <tr>
+          <td>스케일 효과</td>
+          <td>모델 크기와 데이터량이 커질수록 성능 향상</td>
+        </tr>
+      </div>
+
+      <div class="analogy-box">
+        <strong>발전 과정:</strong> GPT-1은 기본 문법을 아는 학생, GPT-2는 다양한 글쓰기를 경험한 고등학생, GPT-3은 많은 책을 읽은 지식인, GPT-4는 전문가 수준이라고 할 수 있습니다.
+      </div>
+
+      <div class="note-box">
+        <strong>현재 트렌드:</strong> 점점 더 큰 모델을 만들되, 효율성 개선과 멀티모달 확장이 진행 중입니다.
+      </div>
+    </section>
+
+    <!-- Section 7: BERT vs GPT -->
+    <section id="section7" class="section">
+      <h2>7. BERT vs GPT 비교</h2>
+
+      <h3>구조 비교</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>항목</th>
+          <th>BERT</th>
+          <th>GPT</th>
+        </tr>
+        <tr>
+          <td>기반 구조</td>
+          <td>Transformer Encoder</td>
+          <td>Transformer Decoder</td>
+        </tr>
+        <tr>
+          <td>방향성</td>
+          <td>양방향 (Bidirectional)</td>
+          <td>단방향 (Left-to-Right)</td>
+        </tr>
+        <tr>
+          <td>문맥 이해</td>
+          <td>앞뒤 모두 봄</td>
+          <td>앞에서만 봄</td>
+        </tr>
+        <tr>
+          <td>Attention 제약</td>
+          <td>없음 (모든 위치 접근)</td>
+          <td>Causal Mask (미래 차단)</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>학습 방식 비교</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>항목</th>
+          <th>BERT</th>
+          <th>GPT</th>
+        </tr>
+        <tr>
+          <td>학습 목표</td>
+          <td>MLM (빈칸 채우기)</td>
+          <td>LM (다음 단어 예측)</td>
+        </tr>
+        <tr>
+          <td>훈련 방식</td>
+          <td>양쪽 방향 동시 학습</td>
+          <td>순차적 예측 학습</td>
+        </tr>
+        <tr>
+          <td>추가 목표</td>
+          <td>NSP (문장 관계 예측)</td>
+          <td>없음</td>
+        </tr>
+        <tr>
+          <td>사전학습 데이터</td>
+          <td>Wikipedia, BookCorpus</td>
+          <td>인터넷 텍스트 (대규모)</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>강점과 약점</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>항목</th>
+          <th>BERT</th>
+          <th>GPT</th>
+        </tr>
+        <tr>
+          <td>텍스트 이해</td>
+          <td style="background:#e8f8f5;"><strong>탁월</strong> - 양방향 문맥</td>
+          <td style="background:#fdeee9;">제한적 - 단방향</td>
+        </tr>
+        <tr>
+          <td>텍스트 생성</td>
+          <td style="background:#fdeee9;">부족 - Encoder만 있음</td>
+          <td style="background:#e8f8f5;"><strong>탁월</strong> - Decoder 최적화</td>
+        </tr>
+        <tr>
+          <td>대화 능력</td>
+          <td style="background:#fdeee9;">약함</td>
+          <td style="background:#e8f8f5;"><strong>강함</strong></td>
+        </tr>
+        <tr>
+          <td>감정분석</td>
+          <td style="background:#e8f8f5;"><strong>우수</strong></td>
+          <td>보통</td>
+        </tr>
+        <tr>
+          <td>질의응답</td>
+          <td>우수</td>
+          <td style="background:#e8f8f5;"><strong>우수</strong></td>
+        </tr>
+        <tr>
+          <td>개체명인식</td>
+          <td style="background:#e8f8f5;"><strong>우수</strong></td>
+          <td>보통</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>응용 사례 비교</h3>
+
+      <div class="compare-table">
+        <tr>
+          <th>BERT 활용</th>
+          <th>GPT 활용</th>
+        </tr>
+        <tr>
+          <td>감정분석 (영화평 분류)</td>
+          <td>챗봇 (ChatGPT)</td>
+        </tr>
+        <tr>
+          <td>개체명인식 (인물 추출)</td>
+          <td>코드 생성</td>
+        </tr>
+        <tr>
+          <td>질의응답 시스템</td>
+          <td>창의적 글쓰기</td>
+        </tr>
+        <tr>
+          <td>텍스트 분류</td>
+          <td>번역</td>
+        </tr>
+        <tr>
+          <td>검색 시스템 (임베딩)</td>
+          <td>요약</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>선택 기준</h3>
+
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0;">
+        <strong>BERT를 선택해야 할 때:</strong>
+        <ul style="margin-left:16px; margin-top:8px;">
+          <li>텍스트 의미 이해가 중심인 작업</li>
+          <li>분류, 감정분석, NER 등의 이해 기반 작업</li>
+          <li>상대적으로 작은 모델 크기 필요</li>
+          <li>미세조정(Fine-tuning)으로 빠른 구현 필요</li>
+        </ul>
+      </div>
+
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0;">
+        <strong>GPT를 선택해야 할 때:</strong>
+        <ul style="margin-left:16px; margin-top:8px;">
+          <li>텍스트 생성이 중심인 작업</li>
+          <li>대화, 챗봇, 질의응답 등의 생성 기반 작업</li>
+          <li>창의적인 글쓰기 필요</li>
+          <li>Zero-shot / Few-shot 학습 필요</li>
+        </ul>
+      </div>
+
+      <div class="note-box">
+        <strong>최신 트렌드:</strong> BERT와 GPT의 장점을 모두 가진 모델들이 등장했습니다. 예: T5 (Encoder-Decoder), ELECTRA, 그리고 최신 GPT-4는 이해와 생성 모두 탁월합니다.
+      </div>
+    </section>
+
+    <!-- Section 8: Multimodal AI -->
+    <section id="section8" class="section">
+      <h2>8. 멀티모달 AI</h2>
+
+      <h3>멀티모달의 개념</h3>
+      <p>지금까지의 모델은 주로 텍스트만 처리했습니다. 멀티모달 AI는 여러 종류의 데이터를 동시에 이해하고 처리합니다.</p>
+
+      <div class="term-box">
+        <strong>멀티모달 AI:</strong> 텍스트, 이미지, 음성, 비디오 등 다양한 형태의 데이터를 함께 처리하고 이해하는 AI 시스템.
+      </div>
+
+      <h3>멀티모달 시스템의 구성</h3>
+
+      <h4>1. 입력 모듈: 다양한 데이터 처리</h4>
+      <p>각 데이터 종류를 전문 신경망으로 처리합니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>텍스트:</strong> NLP 모델 (BERT, GPT 등) - 문자 시퀀스 처리</li>
+        <li><strong>이미지:</strong> CNN (합성곱 신경망) - 시각 특징 추출</li>
+        <li><strong>음성:</strong> 음성 인코더 - 스펙트로그램 변환 및 처리</li>
+        <li><strong>비디오:</strong> 3D CNN - 시간 축 정보 포함</li>
+      </ul>
+
+      <h4>2. 융합 모듈 (Fusion): 정보 통합</h4>
+      <p>각각 처리된 정보를 하나의 의미로 종합합니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>멀티모달 Transformer:</strong> 여러 모달의 Self-Attention 동시 수행</li>
+        <li><strong>Cross-Attention:</strong> 텍스트가 이미지 영역에 주의, 이미지가 텍스트에 주의</li>
+        <li><strong>대조학습 (Contrastive Learning):</strong> "같은 의미 쌍은 가깝게, 다른 의미는 멀게"</li>
+        <li><strong>Late Fusion:</strong> 각 모달을 독립 처리 후 끝에서 합침</li>
+        <li><strong>Early Fusion:</strong> 입력 초기 단계에서 모달 결합</li>
+      </ul>
+
+      <div class="analogy-box">
+        <strong>유추:</strong> 인간이 뉴스를 이해할 때 기자의 말(음성), 자막(텍스트), 화면 영상(이미지)을 모두 종합하는 것과 같습니다.
+      </div>
+
+      <h4>3. 지식 증류 (Knowledge Distillation)</h4>
+      <p>큰 모델의 지식을 작은 모델로 옮깁니다:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Teacher 모델:</strong> 큰 멀티모달 모델 (높은 성능)</li>
+        <li><strong>Student 모델:</strong> 작은 모델 (빠른 추론)</li>
+        <li>Student가 Teacher의 확률 분포를 모방하도록 학습</li>
+        <li>결과: 작은 모델도 우수한 성능 달성</li>
+      </ul>
+
+      <h4>4. 출력 모듈: 생성 및 응답</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Vision-Language Model:</strong> 이미지 설명 생성 또는 텍스트에 맞는 이미지 생성</li>
+        <li><strong>Diffusion Model:</strong> 텍스트 설명으로부터 새로운 이미지 합성</li>
+        <li><strong>Speech Synthesis:</strong> 텍스트를 음성으로 변환</li>
+      </ul>
+
+      <h3>멀티모달 AI의 구체적 예시</h3>
+
+      <div class="step-cards">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-title">CLIP</div>
+          <div class="step-desc">OpenAI의 모델. 텍스트와 이미지를 공통 임베딩 공간에서 학습. 사진 검색에 최적화</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-title">GPT-4V</div>
+          <div class="step-desc">OpenAI의 멀티모달 LLM. 이미지와 텍스트를 동시에 이해하고 추론</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Gemini</div>
+          <div class="step-desc">Google의 멀티모달 모델. 텍스트, 이미지, 음성, 영상 처리 가능</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-title">DALL-E</div>
+          <div class="step-desc">텍스트 설명으로부터 이미지 생성. Vision-Language 모델의 대표</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div class="step-title">LLaVA</div>
+          <div class="step-desc">오픈소스 비전-언어 모델. 이미지 설명 및 시각적 질의응답</div>
+        </div>
+      </div>
+
+      <h3>Cross-Attention: 모달 간 상호작용</h3>
+      <p>멀티모달 모델의 핵심 메커니즘:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>텍스트의 Query가 이미지 영역의 Key-Value에 주의</li>
+        <li>각 단어가 이미지의 어느 부분과 연관된지 학습</li>
+        <li>이미지도 텍스트의 어느 부분과 연관된지 학습</li>
+        <li>결과: 깊은 의미적 융합</li>
+      </ul>
+
+      <h3>Vision Language Adapter (VLA)</h3>
+      <p>시각-언어 모델 간의 효율적인 통합:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>이미지 인코더와 LLM을 연결하는 어댑터</li>
+        <li>이미지 토큰을 LLM이 이해할 수 있는 형식으로 변환</li>
+        <li>최소한의 추가 학습으로 통합 가능</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>미래:</strong> 향후 음성, 영상, 센서 데이터, 실시간 입력까지 포함한 더욱 복잡한 멀티모달 AI가 등장할 것으로 예상됩니다. 이는 인간의 감각 능력에 더 가까워질 것입니다.
+      </div>
+    </section>
+
+    <!-- Section 9: LLM Training -->
+    <section id="section9" class="section">
+      <h2>9. LLM 훈련 과정</h2>
+
+      <h3>LLM 훈련의 세 단계</h3>
+      <p>현대 대형 언어 모델은 다음 세 단계를 거쳐 훈련됩니다:</p>
+
+      <div class="process-flow">
+        <div class="process-step">Pre-training</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">SFT</div>
+        <div class="process-arrow">→</div>
+        <div class="process-step">RLHF</div>
+      </div>
+
+      <h3>1단계: Pre-training (사전학습)</h3>
+      <p>기초적인 언어 능력 획득:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>목표:</strong> 다음 토큰 예측 (Next Token Prediction)</li>
+        <li><strong>데이터:</strong> 인터넷의 거대한 텍스트 데이터 (수조 토큰)</li>
+        <li><strong>방식:</strong> 자기지도학습 (Self-Supervised Learning)</li>
+        <li><strong>결과:</strong> 기본적인 언어 패턴과 일반 지식 학습</li>
+      </ul>
+
+      <p>예시:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>"인공지능은 → 컴퓨터 시스템으로..."</li>
+        <li>"사과는 → 빨간색 과일로..."</li>
+        <li>수십억 번의 반복</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>특징:</strong> 이 단계에서 모델은 사실적 오류가 많을 수 있으며, 유해한 내용도 학습할 수 있습니다.
+      </div>
+
+      <h3>2단계: SFT (Supervised Fine-Tuning)</h3>
+      <p>특정 작업에 맞게 조정:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>목표:</strong> 사전학습 모델을 특정 형식의 대화나 작업에 맞추기</li>
+        <li><strong>데이터:</strong> 고품질의 레이블된 데이터 (보통 수만~수십만)</li>
+        <li><strong>방식:</strong> 지도학습 (Supervised Learning)</li>
+        <li><strong>예시:</strong> "Q: 날씨는? A: 저는 실시간 날씨 정보가 없습니다"</li>
+      </ul>
+
+      <p>SFT의 특징:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>인간 전문가가 고품질 답변 작성</li>
+        <li>대화형 형식으로 모델을 훈련</li>
+        <li>모델이 "맞는 답변 형식"을 학습</li>
+        <li>일반화 능력은 pre-training에서 나옴</li>
+      </ul>
+
+      <h3>3단계: RLHF (Reinforcement Learning from Human Feedback)</h3>
+      <p>인간의 선호도에 따라 조정:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>목표:</strong> 모델의 답변이 인간의 가치관과 선호도에 부합하도록 조정</li>
+        <li><strong>방식:</strong> 강화학습 (Reinforcement Learning)</li>
+        <li><strong>보상 모델:</strong> 인간의 평가를 학습한 별도의 모델</li>
+      </ul>
+
+      <h4>RLHF의 구체적 과정</h4>
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0; font-size:0.9rem;">
+        <strong>1단계: 보상 모델 훈련</strong><br>
+        - SFT 모델이 생성한 여러 답변을 인간이 평가<br>
+        - "이 답변이 더 좋다/나쁘다" 라는 비교 데이터 수집<br>
+        - 이 평가를 학습한 보상 모델(Reward Model) 생성<br>
+        <br>
+        <strong>2단계: 정책 최적화</strong><br>
+        - SFT 모델이 다양한 답변 생성<br>
+        - 보상 모델이 각 답변에 점수 부여<br>
+        - 점수를 최대화하도록 모델의 가중치 조정<br>
+        - PPO(Proximal Policy Optimization) 같은 강화학습 알고리즘 사용<br>
+      </div>
+
+      <h4>RLHF의 장점</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>모델의 답변이 더 안전하고 정직함</li>
+        <li>사용자의 선호도를 반영</li>
+        <li>유해한 콘텐츠 생성 감소</li>
+        <li>설명가능성(Explainability) 향상</li>
+      </ul>
+
+      <h3>ChatGPT의 예시</h3>
+      <p>ChatGPT의 훈련 과정:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>Pre-training:</strong> GPT-3 사전학습</li>
+        <li><strong>SFT:</strong> 인간이 작성한 고품질 대화 데이터로 미세조정</li>
+        <li><strong>RLHF:</strong> 인간 피드백을 기반으로 강화학습 (InstructGPT → ChatGPT)</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>비용:</strong> RLHF 단계는 매우 비용이 많이 들어갑니다. 수천~수만 명의 인간이 답변을 평가해야 합니다.
+      </div>
+
+      <h3>최신 트렌드</h3>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>DPO (Direct Preference Optimization):</strong> RLHF를 더 효율적으로</li>
+        <li><strong>Constitutional AI:</strong> 인간 피드백 대신 AI 헌법을 기준으로</li>
+        <li><strong>Mixture of Experts (MoE):</strong> 효율성 향상</li>
+        <li><strong>양자화:</strong> 모델 크기 감소</li>
+      </ul>
+    </section>
+
+    <!-- Section 10: Tokenization & Embedding -->
+    <section id="section10" class="section">
+      <h2>10. 토큰화와 임베딩</h2>
+
+      <h3>토큰화 (Tokenization)</h3>
+      <p>신경망은 텍스트를 직접 처리할 수 없습니다. 먼저 텍스트를 작은 단위로 분할합니다.</p>
+
+      <div class="term-box">
+        <strong>토큰화:</strong> 텍스트를 신경망이 처리할 수 있는 작은 단위(토큰)로 분할하는 과정.
+      </div>
+
+      <h3>토큰화의 종류</h3>
+
+      <h4>1. 단어 수준 토큰화 (Word-level)</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>방식:</strong> 공백과 구두점 기준으로 분할</li>
+        <li><strong>예:</strong> "Hello world" → ["Hello", "world"]</li>
+        <li><strong>장점:</strong> 간단하고 직관적</li>
+        <li><strong>단점:</strong> 어휘 크기가 너무 커서 메모리 낭비, 희귀 단어 처리 어려움</li>
+      </ul>
+
+      <h4>2. 문자 수준 토큰화 (Character-level)</h4>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>방식:</strong> 문자 하나하나로 분할</li>
+        <li><strong>예:</strong> "hello" → ["h", "e", "l", "l", "o"]</li>
+        <li><strong>장점:</strong> 미지의 단어도 처리 가능</li>
+        <li><strong>단점:</strong> 시퀀스가 너무 길어서 느림</li>
+      </ul>
+
+      <h4>3. 서브워드 토큰화 (Subword-level) - 현재 표준</h4>
+      <p>현대 NLP의 표준. 단어와 문자의 장점을 결합합니다:</p>
+
+      <div class="compare-table">
+        <tr>
+          <th>방식</th>
+          <th>특징</th>
+          <th>사용 모델</th>
+        </tr>
+        <tr>
+          <td><strong>BPE</strong><br>(Byte Pair Encoding)</td>
+          <td>가장 자주 나오는 연속 토큰을 병합하는 방식. 반복적으로 병합하며 어휘 구성</td>
+          <td>GPT, RoBERTa</td>
+        </tr>
+        <tr>
+          <td><strong>WordPiece</strong></td>
+          <td>BPE와 유사하지만, 병합 시 우도(Likelihood)를 기준으로 선택</td>
+          <td>BERT</td>
+        </tr>
+        <tr>
+          <td><strong>SentencePiece</strong></td>
+          <td>언어 무관적. 문자 또는 음소 기반으로 시작하여 병합. 다국어 처리 최적화</td>
+          <td>T5, mBERT, XLNet</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>BPE (Byte Pair Encoding) 예시</h3>
+      <p>BPE의 작동 원리:</p>
+      <div style="background:#f8f9fa; padding:16px; border-radius:8px; margin:16px 0; font-size:0.9rem;">
+        <strong>초기:</strong> "apple" → ["a", "p", "p", "l", "e"]<br>
+        <strong>반복 1:</strong> "pp"가 가장 빈번 → ["a", "pp", "l", "e"]<br>
+        <strong>반복 2:</strong> "ppl"이 가장 빈번 → ["a", "ppl", "e"]<br>
+        <strong>반복 3:</strong> "apple"이 병합 → ["apple"]<br>
+        <strong>결과:</strong> 문자 레벨과 단어 레벨의 장점 결합
+      </div>
+
+      <h3>임베딩 (Embedding)</h3>
+      <p>토큰화 후에는 각 토큰을 벡터로 변환해야 합니다. 이것이 임베딩입니다.</p>
+
+      <div class="term-box">
+        <strong>임베딩:</strong> 단어나 토큰을 연속된 수의 벡터로 표현하는 방법. 의미적으로 유사한 단어는 벡터 공간에서도 가깝게 위치합니다.
+      </div>
+
+      <h3>임베딩의 종류</h3>
+
+      <h4>1. Word2Vec - 정적 임베딩</h4>
+      <p>2013년 Google에서 제안. 각 단어에 고정된 벡터를 부여합니다.</p>
+
+      <div class="compare-table">
+        <tr>
+          <th>방식</th>
+          <th>설명</th>
+        </tr>
+        <tr>
+          <td><strong>CBOW</strong><br>(Continuous Bag of Words)</td>
+          <td>주변 단어들로부터 중심 단어를 예측. "dog good is ___" → "boy"</td>
+        </tr>
+        <tr>
+          <td><strong>Skip-gram</strong></td>
+          <td>중심 단어로부터 주변 단어를 예측. "boy" → "good", "dog", "is"</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>Word2Vec의 특징:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>장점: 빠르고 효율적, 벡터 연산이 가능 ("king" - "man" + "woman" = "queen")</li>
+        <li>단점: 같은 단어는 항상 같은 벡터 (다의성 미처리)</li>
+        <li>예: "bank"가 금융기관일 때와 강(river bank)일 때 같은 벡터</li>
+      </ul>
+
+      <h4>2. GloVe - 개선된 정적 임베딩</h4>
+      <p>2014년 Stanford에서 제안. Word2Vec과 행렬 분해를 결합합니다.</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>전체 말뭉치의 단어 공출현(Co-occurrence) 정보 활용</li>
+        <li>더 나은 의미적 표현</li>
+        <li>Word2Vec보다 더 나은 성능 (많은 경우)</li>
+      </ul>
+
+      <h4>3. FastText</h4>
+      <p>Facebook에서 제안. Word2Vec의 개선판:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li>문자 수준 n-gram 정보 사용</li>
+        <li>미지의 단어도 표현 가능 (철자 유사성 활용)</li>
+        <li>형태적으로 유사한 단어들 잘 처리</li>
+      </ul>
+
+      <h4>4. Contextual Embeddings - 동적 임베딩</h4>
+      <p>최근 대세. 문맥에 따라 다른 벡터를 생성합니다:</p>
+
+      <div class="compare-table">
+        <tr>
+          <th>모델</th>
+          <th>특징</th>
+        </tr>
+        <tr>
+          <td><strong>ELMo</strong><br>(2018)</td>
+          <td>양방향 LSTM 사용. 문맥 의존적 임베딩 첫 제안</td>
+        </tr>
+        <tr>
+          <td><strong>BERT</strong><br>(2018)</td>
+          <td>양방향 Transformer. 사전학습 후 Fine-tuning</td>
+        </tr>
+        <tr>
+          <td><strong>GPT</strong><br>(2018+)</td>
+          <td>단방향 Transformer. 일반화 능력 우수</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3>임베딩의 성질</h3>
+
+      <p>좋은 임베딩의 특징:</p>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>의미 유사성:</strong> 의미가 비슷한 단어는 벡터도 가까움</li>
+        <li><strong>벡터 연산:</strong> "king" - "man" + "woman" ≈ "queen"</li>
+        <li><strong>선형 성질:</strong> 의미 관계가 벡터 공간에서 선형으로 표현</li>
+        <li><strong>저차원성:</strong> 보통 300차원 정도로 충분 (Word2Vec 기준)</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>최신 트렌드:</strong> Contextual Embedding (BERT, GPT)이 정적 임베딩(Word2Vec, GloVe)을 대체하고 있습니다. 같은 단어도 문맥에 따라 다르게 표현되므로 성능이 훨씬 좋습니다.
+      </div>
+
+      <h3>임베딩의 응용</h3>
+      <ul style="margin-left:16px; margin-bottom:14px;">
+        <li><strong>유사도 검색:</strong> 코사인 유사도로 관련 문서 검색</li>
+        <li><strong>군집화:</strong> K-means로 단어 그룹화</li>
+        <li><strong>분류:</strong> 임베딩을 특징으로 사용해 분류 모델 학습</li>
+        <li><strong>추천 시스템:</strong> 사용자-아이템 임베딩 공간에서 추천</li>
+      </ul>
+    </section>
+
+    <!-- Key Summary -->
+    <div class="key-summary">
+      <h3>핵심 요약</h3>
+      <ul>
+        <li><strong>Seq2Seq:</strong> 입력을 압축하여 출력 생성하는 구조이지만, 고정 벡터로 인한 정보 손실 문제 존재</li>
+        <li><strong>Attention:</strong> 출력 시 입력의 관련 부분에만 집중하여 정보 손실 극복. Query-Key-Value 메커니즘</li>
+        <li><strong>Self-Attention:</strong> 문장 내 단어들 간의 관계를 파악하는 메커니즘</li>
+        <li><strong>Multi-Head Attention:</strong> 여러 관점에서 동시에 주의를 기울여 다양한 관계 포착</li>
+        <li><strong>Positional Encoding:</strong> 사인/코사인 함수로 단어의 위치 정보 인코딩</li>
+        <li><strong>Transformer:</strong> Attention만으로 구성되어 병렬 처리 가능한 구조. 현대 AI의 기초 아키텍처</li>
+        <li><strong>BERT:</strong> 양방향 Transformer Encoder. 텍스트 이해에 탁월. MLM과 NSP로 학습</li>
+        <li><strong>GPT:</strong> 단방향 Transformer Decoder. 텍스트 생성에 탁월. 다음 토큰 예측으로 학습</li>
+        <li><strong>BERT vs GPT:</strong> BERT는 이해 중심, GPT는 생성 중심. 구조와 학습 방식이 다름</li>
+        <li><strong>멀티모달 AI:</strong> 텍스트, 이미지, 음성 등을 동시에 처리하는 시스템</li>
+        <li><strong>LLM 훈련:</strong> Pre-training → SFT → RLHF 세 단계로 진행. 각 단계가 다른 역할</li>
+        <li><strong>토큰화:</strong> BPE, WordPiece, SentencePiece 등의 서브워드 방식이 표준</li>
+        <li><strong>임베딩:</strong> Word2Vec, GloVe (정적)에서 BERT, GPT (동적)로 진화. 동적이 더 우수</li>
+      </ul>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="05-generative-model.html">이전: 05. 생성모델과 신경망 확장</a>
+    <a href="07-genai.html">다음: 07. 생성형 AI</a>
+  </nav>
+
+  <footer class="footer">
+    <p>AI 학습 가이드 | 06. 초거대모델</p>
+    <p>마지막 업데이트: 2026년 3월</p>
+  </footer>
+</body>
+</html>

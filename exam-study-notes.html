@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기술사 2교시 답안 설명자료 (문제 3~6)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.8; }
+        .top-nav { background: #2c3e50; padding: 12px 24px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .top-nav a:hover { color: #3498db; }
+        .page-header { background: linear-gradient(135deg, #2c3e50, #e74c3c); color: white; padding: 48px 24px; text-align: center; }
+        .page-header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+        .page-header p { font-size: 1.1rem; opacity: 0.9; }
+        .toc { background: white; max-width: 900px; margin: 24px auto; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .toc h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e74c3c; }
+        .toc ul { list-style: none; }
+        .toc li { margin-bottom: 8px; }
+        .toc a { color: #2c3e50; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+        .toc a:hover { background: #fdf2f2; color: #e74c3c; }
+        .toc .section-num { background: #e74c3c; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px 48px; }
+        .section { background: white; border-radius: 12px; padding: 36px; margin-top: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .section h2 { font-size: 1.5rem; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #e74c3c; }
+        .section h3 { font-size: 1.2rem; color: #2c3e50; margin: 24px 0 12px; padding-left: 12px; border-left: 4px solid #e74c3c; }
+        .section h4 { font-size: 1.05rem; color: #555; margin: 16px 0 8px; }
+        .section p { margin-bottom: 14px; font-size: 0.95rem; }
+        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .term-box strong { color: #2c3e50; }
+        .analogy-box { background: #fef9e7; border-left: 4px solid #f1c40f; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .analogy-box strong { color: #7d6608; }
+        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .note-box strong { color: #1e8449; }
+        .warning-box { background: #fdf2f2; border-left: 4px solid #e74c3c; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .warning-box strong { color: #c0392b; }
+        .lead-text { background: #f8f9fa; border-left: 4px solid #95a5a6; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-style: italic; color: #555; }
+        .inter-comment { background: #fef9e7; border-left: 4px solid #e67e22; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.9rem; color: #7d5a00; }
+        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+        .compare-table th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
+        .compare-table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+        .compare-table tr:nth-child(even) { background: #f8f9fa; }
+        .compare-table tr:hover { background: #eef6fd; }
+        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
+        .process-step { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 18px; border-radius: 8px; text-align: center; font-size: 0.85rem; font-weight: 500; min-width: 100px; }
+        .process-arrow { color: #e74c3c; font-size: 1.4rem; font-weight: bold; }
+        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
+        .key-summary h3 { color: #e74c3c; border: none; padding: 0; margin-bottom: 12px; font-size: 1.15rem; }
+        .key-summary ul { list-style: disc; padding-left: 20px; }
+        .key-summary li { margin-bottom: 6px; font-size: 0.9rem; opacity: 0.95; }
+        .exam-meta { background: #fdf2f2; border: 2px solid #e74c3c; border-radius: 8px; padding: 16px; margin: 16px 0; }
+        .exam-meta strong { color: #c0392b; }
+        .bottom-nav { background: #2c3e50; padding: 24px; text-align: center; margin-top: 48px; }
+        .bottom-nav a { color: #ecf0f1; text-decoration: none; margin: 0 16px; font-size: 0.95rem; transition: color 0.2s; }
+        .bottom-nav a:hover { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="index.html">AI 학습 가이드</a>
+        <a href="01-overview.html">01. 인공지능 개요</a>
+    </nav>
+
+    <header class="page-header">
+        <h1>기술사 2교시 답안 설명자료</h1>
+        <p>문제 3~6 | 자기지도학습, AI 테스트, 멀티모달 품질검증, 군집분석</p>
+    </header>
+
+    <div class="toc">
+        <h2>목차</h2>
+        <ul>
+            <li><a href="#q3"><span class="section-num">3</span>자기지도 학습 (Self-supervised Learning)</a></li>
+            <li><a href="#q4"><span class="section-num">4</span>AI 시스템 테스트 (ISO/IEC TR 29119-11)</a></li>
+            <li><a href="#q5"><span class="section-num">5</span>멀티모달 데이터 품질검증 (TTAK.KO-10.1558)</a></li>
+            <li><a href="#q6"><span class="section-num">6</span>군집분석 (Cluster Analysis)</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+
+        <!-- ==================== 문제 3: 자기지도 학습 ==================== -->
+        <div class="section" id="q3">
+            <h2>문제 3. 자기지도 학습 (Self-supervised Learning)</h2>
+
+            <div class="exam-meta">
+                <strong>문제 분석:</strong> 2교시형 / 2문제 복합형 / 핵심 키워드: Self-supervised Learning, 데이터 효율성, 동작 방식, 활용 분야<br>
+                <strong>출제 의도:</strong> 레이블링 비용 문제 해결을 위한 자기지도 학습의 부상, GPT/BERT 등 사전학습 모델의 핵심 기반 기술로서의 중요성
+            </div>
+
+            <div class="lead-text">
+                인간의 개입 없이 데이터 자체의 구조로부터 학습하는 자기지도 학습의 데이터 효율성과 동작 방식, 활용 분야를 중심으로 설명하겠습니다.
+            </div>
+
+            <h3>I. 자기지도 학습의 개요</h3>
+
+            <h4>가. 자기지도 학습의 개념</h4>
+            <div class="term-box">
+                <strong>자기지도 학습(Self-supervised Learning)</strong>이란, 레이블이 없는 대규모 데이터에서 데이터 자체의 구조적 특성을 활용하여 자동으로 학습 신호(pretext task)를 생성하고, 이를 통해 범용적인 데이터 표현(representation)을 학습하는 기술
+            </div>
+            <p>기존 지도학습은 사람이 일일이 정답(레이블)을 붙여야 하는 반면, 자기지도 학습은 데이터의 일부를 가리거나 변형하여 스스로 정답을 만들어냅니다. GPT(다음 단어 예측), BERT(빈칸 채우기) 등이 대표적입니다.</p>
+
+            <h4>나. 등장 배경</h4>
+            <p>지도학습에 필요한 대규모 레이블링 비용 문제, 비정형 데이터(텍스트, 이미지, 음성)의 폭발적 증가, 그리고 Foundation Model(기반 모델) 패러다임의 등장이 자기지도 학습을 핵심 기술로 부상시켰습니다.</p>
+
+            <h4>다. 자기지도 학습의 전체 구조 (개요 도식)</h4>
+            <div style="display: flex; flex-direction: column; gap: 0; margin: 16px 0; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                    <div style="background: #95a5a6; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">동인: 레이블링 비용 한계<br><span style="font-size:0.72rem; opacity:0.85;">비정형 데이터 폭증, Foundation Model 부상</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                    <div style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">II. 지도학습 대비 비교<br><span style="font-size:0.72rem; opacity:0.85;">데이터 효율성, 레이블 비용, 일반화 능력</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                    <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">III. 동작 방식 및 활용<br><span style="font-size:0.72rem; opacity:0.85;">생성/대조/예측 기반 + NLP, CV, 음성, 멀티모달</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                    <div style="background: #27ae60; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">IV. 고려사항 및 발전방향<br><span style="font-size:0.72rem; opacity:0.85;">컴퓨팅 자원, 편향, Green AI, 도메인 특화</span></div>
+                </div>
+            </div>
+
+            <div class="inter-comment">
+                ChatGPT, GPT-4 등 생성형 AI의 사전학습 단계가 바로 자기지도 학습이며, AI 산업의 패러다임 전환을 이끌고 있다.
+            </div>
+
+            <h3>II. 지도학습 대비 자기지도 학습의 데이터 효율성 및 특징 비교</h3>
+
+            <h4>가. 학습 방식 비교 구조</h4>
+
+            <table class="compare-table">
+                <tr><th style="width:50%;">지도학습 (Supervised Learning)</th><th>자기지도 학습 (Self-supervised Learning)</th></tr>
+                <tr>
+                    <td>입력 데이터 + <strong>사람이 부여한 레이블</strong> --> 모델 학습</td>
+                    <td>입력 데이터 --> <strong>데이터 자체에서 레이블 자동 생성</strong> --> 모델 학습</td>
+                </tr>
+            </table>
+
+            <h4>나. 데이터 효율성 및 특징 비교표</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">비교 항목</th><th>지도학습 (Supervised)</th><th>자기지도 학습 (Self-supervised)</th></tr>
+                <tr><td><strong>레이블 필요성</strong></td><td>필수 (사람이 직접 부여)</td><td>불필요 (데이터에서 자동 생성)</td></tr>
+                <tr><td><strong>데이터 효율성</strong></td><td>낮음 (레이블링 비용 높음, 대규모 레이블 데이터 확보 어려움)</td><td>높음 (비레이블 데이터 무한 활용 가능)</td></tr>
+                <tr><td><strong>학습 데이터 규모</strong></td><td>수만~수백만 건 (레이블링 병목)</td><td>수억~수조 건 (인터넷 전체 데이터 활용 가능)</td></tr>
+                <tr><td><strong>레이블링 비용</strong></td><td>매우 높음 (전문가 필요, 의료/법률 등)</td><td>거의 없음 (자동 생성)</td></tr>
+                <tr><td><strong>일반화 능력</strong></td><td>특정 태스크에 특화 (task-specific)</td><td>범용적 표현 학습 (task-agnostic), 다운스트림 태스크에 전이 용이</td></tr>
+                <tr><td><strong>전이 학습</strong></td><td>제한적 (도메인 특화)</td><td>강력 (사전학습 후 fine-tuning 패러다임)</td></tr>
+                <tr><td><strong>데이터 편향</strong></td><td>레이블러의 주관 개입 가능</td><td>데이터 자체의 편향은 존재하나 레이블 편향은 없음</td></tr>
+                <tr><td><strong>대표 사례</strong></td><td>이미지 분류(ImageNet), 스팸 필터</td><td>GPT(다음 토큰 예측), BERT(MLM), SimCLR(대조학습)</td></tr>
+            </table>
+
+            <div class="inter-comment">
+                자기지도 학습은 데이터 효율성에서 압도적 우위를 가지며, 이것이 GPT 시리즈가 인터넷 전체 텍스트를 학습 데이터로 활용할 수 있는 핵심 이유이다. 이러한 특성을 기반으로 동작 방식을 살펴보겠다.
+            </div>
+
+            <h3>III. 자기지도 학습의 동작 방식 및 활용 분야</h3>
+
+            <h4>가. 자기지도 학습의 동작 방식</h4>
+            <p>자기지도 학습은 Pretext Task(사전 과제)를 통해 데이터 표현을 학습한 후, Downstream Task(본 과제)에 전이하는 2단계 구조입니다.</p>
+
+            <div class="process-flow">
+                <div class="process-step">비레이블<br>데이터</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">Pretext Task<br>(사전 과제)</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">표현 학습<br>(Representation)</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">Fine-tuning<br>(미세 조정)</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">Downstream<br>Task</div>
+            </div>
+
+            <p>핵심은 Pretext Task의 설계입니다. 주요 방식은 3가지로 분류됩니다.</p>
+
+            <table class="compare-table">
+                <tr><th style="width:140px;">동작 방식</th><th>원리</th><th>Pretext Task 예시</th><th style="width:140px;">대표 모델</th></tr>
+                <tr>
+                    <td><strong>생성 기반 (Generative)</strong></td>
+                    <td>입력 데이터의 일부를 가리거나 손상시킨 후, 원래 데이터를 복원하도록 학습</td>
+                    <td>빈칸 채우기(MLM), 다음 토큰 예측(CLM), 이미지 마스킹(MAE)</td>
+                    <td>BERT, GPT, MAE</td>
+                </tr>
+                <tr>
+                    <td><strong>대조 학습 (Contrastive)</strong></td>
+                    <td>같은 데이터의 다른 변환(positive pair)은 가깝게, 다른 데이터(negative pair)는 멀게 임베딩 공간에 배치</td>
+                    <td>이미지 증강 후 같은 이미지끼리 유사도 최대화, 다른 이미지와는 최소화</td>
+                    <td>SimCLR, MoCo, CLIP</td>
+                </tr>
+                <tr>
+                    <td><strong>예측 기반 (Predictive)</strong></td>
+                    <td>데이터의 속성이나 관계를 예측하는 과제를 통해 구조적 이해를 학습</td>
+                    <td>이미지 회전 각도 예측, 패치 순서 맞추기(Jigsaw), 문장 순서 예측(NSP)</td>
+                    <td>RotNet, ALBERT</td>
+                </tr>
+            </table>
+
+            <h4>나. 활용 분야</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">활용 분야</th><th>활용 사례</th><th style="width:180px;">대표 모델/기술</th></tr>
+                <tr><td><strong>자연어 처리 (NLP)</strong></td><td>번역, 요약, 질의응답, 감성분석, 코드 생성</td><td>GPT-4, BERT, T5, LLaMA</td></tr>
+                <tr><td><strong>컴퓨터 비전 (CV)</strong></td><td>이미지 분류, 객체 탐지, 세그멘테이션</td><td>MAE, DINO, SimCLR</td></tr>
+                <tr><td><strong>음성 처리</strong></td><td>음성 인식, 화자 식별, 음성 합성</td><td>wav2vec 2.0, HuBERT</td></tr>
+                <tr><td><strong>멀티모달</strong></td><td>이미지-텍스트 연결, 시각 질의응답</td><td>CLIP, DALL-E, GPT-4V</td></tr>
+                <tr><td><strong>의료/바이오</strong></td><td>단백질 구조 예측, 의료 영상 분석</td><td>AlphaFold, BioGPT</td></tr>
+                <tr><td><strong>추천 시스템</strong></td><td>사용자 행동 패턴 학습, 콘텐츠 추천</td><td>BERT4Rec, SASRec</td></tr>
+            </table>
+
+            <div class="inter-comment">
+                자기지도 학습은 Foundation Model 패러다임의 핵심이며, "사전학습(Pre-training) + 미세조정(Fine-tuning)" 구조가 AI 산업의 표준으로 자리잡고 있다.
+            </div>
+
+            <h3>IV. 자기지도 학습의 고려사항 및 발전방향</h3>
+
+            <table class="compare-table">
+                <tr><th style="width:100px;">구분</th><th>내용</th></tr>
+                <tr><td><strong>고려사항</strong></td><td>대규모 컴퓨팅 자원 요구 (GPU/TPU 클러스터), 데이터 편향 전파 위험, Pretext Task와 Downstream Task 간 갭(gap) 최소화 필요, 학습 데이터의 저작권/개인정보 이슈</td></tr>
+                <tr><td><strong>발전방향</strong></td><td>멀티모달 자기지도 학습 확대 (텍스트+이미지+음성 통합), 소규모 데이터에서도 효율적인 학습 방법론 연구, 도메인 특화 사전학습(의료, 법률, 과학), 에너지 효율적 학습(Green AI) 추구</td></tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사적 제언:</strong> 자기지도 학습은 데이터 레이블링의 한계를 근본적으로 해결하며 AI의 범용화를 가속화하고 있다. 기업은 자사 도메인 데이터를 활용한 도메인 특화 사전학습 전략을 수립하고, 동시에 데이터 거버넌스 체계를 확립하여 편향과 개인정보 이슈에 선제적으로 대응해야 한다.
+            </div>
+        </div>
+
+        <!-- ==================== 문제 4: AI 시스템 테스트 ==================== -->
+        <div class="section" id="q4">
+            <h2>문제 4. AI 시스템 테스트 (ISO/IEC TR 29119-11)</h2>
+
+            <div class="exam-meta">
+                <strong>문제 분석:</strong> 2교시형 / 2문제 복합형 / 핵심 키워드: ISO/IEC TR 29119-11, AI 테스트, 블랙박스, 화이트박스<br>
+                <strong>출제 의도:</strong> AI 시스템의 비결정적 특성으로 인한 기존 테스트 방법론의 한계, 국제 표준 기반 AI 테스트 체계의 필요성
+            </div>
+
+            <div class="lead-text">
+                AI 시스템의 특수성을 고려한 테스트 접근법을 ISO/IEC TR 29119-11의 목적 및 구성, 그리고 블랙박스/화이트박스 테스트 기법 관점에서 설명하겠습니다.
+            </div>
+
+            <h3>I. AI 시스템 테스트의 개요</h3>
+
+            <h4>가. AI 시스템 테스트의 개념</h4>
+            <div class="term-box">
+                <strong>AI 시스템 테스트</strong>란, 데이터 기반으로 학습된 AI 모델의 정확성, 공정성, 강건성, 설명가능성 등을 검증하기 위해 기존 소프트웨어 테스트와 차별화된 접근법을 적용하는 품질 보증 체계
+            </div>
+
+            <h4>나. 기존 SW 테스트와 AI 테스트의 차이</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">비교 항목</th><th>기존 SW 테스트</th><th>AI 시스템 테스트</th></tr>
+                <tr><td><strong>동작 방식</strong></td><td>규칙 기반 (결정적)</td><td>데이터 기반 (확률적, 비결정적)</td></tr>
+                <tr><td><strong>오라클 문제</strong></td><td>명확한 기대 결과 존재</td><td>정답이 모호하거나 주관적 (오라클 부재)</td></tr>
+                <tr><td><strong>결함 원인</strong></td><td>코드 로직 오류</td><td>데이터 편향, 학습 부족, 분포 변화</td></tr>
+                <tr><td><strong>테스트 데이터</strong></td><td>경계값, 동등분할 등</td><td>데이터 다양성, 분포 커버리지</td></tr>
+                <tr><td><strong>재현성</strong></td><td>높음</td><td>낮음 (랜덤 시드, 학습 순서 등 영향)</td></tr>
+            </table>
+
+            <h4>다. AI 시스템 테스트의 전체 구조 (개요 도식)</h4>
+            <div style="display: flex; flex-direction: column; gap: 0; margin: 16px 0; align-items: center;">
+                <div style="background: #95a5a6; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 200px;">동인: AI의 비결정적/확률적 특성<br><span style="font-size:0.72rem; opacity:0.85;">오라클 부재, 데이터 편향, 재현성 한계</span></div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 200px;">II. ISO/IEC TR 29119-11<br><span style="font-size:0.72rem; opacity:0.85;">목적 4가지 + 구성 5개 항목 (AI 테스트 표준 프레임워크)</span></div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">III-가. 블랙박스 테스트<br><span style="font-size:0.72rem; opacity:0.85;">메타모픽, 적대적, 공정성 등 7기법</span></div>
+                    <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 160px;">III-나. 화이트박스 테스트<br><span style="font-size:0.72rem; opacity:0.85;">뉴런 커버리지, 그래디언트, XAI 등 6기법</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="background: #27ae60; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 200px;">IV. 고려사항 및 발전방향<br><span style="font-size:0.72rem; opacity:0.85;">테스트 자동화, Continuous Testing, EU AI Act 대응</span></div>
+            </div>
+
+            <div class="inter-comment">
+                AI의 비결정적 특성은 기존 테스트 패러다임의 한계를 드러내며, 이를 해결하기 위한 국제 표준이 ISO/IEC TR 29119-11이다.
+            </div>
+
+            <h3>II. ISO/IEC TR 29119-11의 목적 및 구성</h3>
+
+            <h4>가. 목적</h4>
+            <div class="term-box">
+                <strong>ISO/IEC TR 29119-11</strong>은 ISO/IEC 29119 소프트웨어 테스팅 표준 시리즈의 Part 11로서, AI 기반 시스템의 테스팅에 대한 가이드라인을 제공하기 위한 기술 보고서(Technical Report)이다.
+            </div>
+            <p>핵심 목적은 다음과 같습니다.</p>
+            <table class="compare-table">
+                <tr><th style="width:60px;">번호</th><th style="width:200px;">목적</th><th>설명</th></tr>
+                <tr><td><strong>1</strong></td><td>AI 테스트 가이드 제공</td><td>AI 시스템의 특수성을 고려한 테스트 기법, 절차, 고려사항에 대한 실무 가이드 제공</td></tr>
+                <tr><td><strong>2</strong></td><td>기존 표준과의 연계</td><td>ISO/IEC 29119 시리즈(Part 1~5)의 기존 테스트 프로세스/기법을 AI에 확장 적용하는 방법 제시</td></tr>
+                <tr><td><strong>3</strong></td><td>AI 품질 속성 검증</td><td>정확성(Accuracy), 공정성(Fairness), 강건성(Robustness), 설명가능성(Explainability) 등 AI 고유 품질 속성의 테스트 방법 정의</td></tr>
+                <tr><td><strong>4</strong></td><td>리스크 기반 접근</td><td>AI 시스템의 리스크 수준에 따라 테스트 범위와 깊이를 차등 적용하는 체계 마련</td></tr>
+            </table>
+
+            <h4>나. 구성</h4>
+            <table class="compare-table">
+                <tr><th style="width:60px;">구성</th><th style="width:200px;">항목</th><th>내용</th></tr>
+                <tr><td><strong>1</strong></td><td>범위 및 용어 정의</td><td>AI 시스템 테스트의 범위, 적용 대상, 핵심 용어 정의 (ML, DL, 강화학습 등)</td></tr>
+                <tr><td><strong>2</strong></td><td>AI 테스트 과제 식별</td><td>AI 시스템의 테스트 과제 11가지: 정확성, 공정성, 강건성, 보안성, 투명성, 설명가능성, 개인정보보호, 자율성 수준, 데이터 품질, 편향, 윤리적 영향</td></tr>
+                <tr><td><strong>3</strong></td><td>테스트 접근법</td><td>블랙박스, 화이트박스, 경험 기반 테스트 기법의 AI 적용 방법</td></tr>
+                <tr><td><strong>4</strong></td><td>AI 생명주기별 테스트</td><td>데이터 수집/전처리, 모델 학습, 검증, 배포, 운영/모니터링 단계별 테스트 활동 정의</td></tr>
+                <tr><td><strong>5</strong></td><td>테스트 환경 및 도구</td><td>AI 테스트에 필요한 인프라, 자동화 도구, 테스트 데이터 관리 방안</td></tr>
+            </table>
+
+            <div class="inter-comment">
+                ISO/IEC TR 29119-11은 AI 품질 보증의 국제 표준 프레임워크이며, 특히 블랙박스와 화이트박스 관점에서 AI 시스템에 특화된 테스트 기법을 제시한다.
+            </div>
+
+            <h3>III. AI 시스템의 블랙박스 테스트 기법과 화이트박스 테스트 기법</h3>
+
+            <h4>가. 블랙박스 테스트 기법 (모델 내부를 보지 않고 입출력 관계로 검증)</h4>
+            <table class="compare-table">
+                <tr><th style="width:160px;">기법</th><th>설명</th><th style="width:180px;">AI 적용 예시</th></tr>
+                <tr><td><strong>동등 분할 (Equivalence Partitioning)</strong></td><td>입력 도메인을 동등한 클래스로 분할하여 대표값으로 테스트</td><td>이미지 분류 시 밝은/어두운/보통 조도별 이미지 테스트</td></tr>
+                <tr><td><strong>경계값 분석 (Boundary Value)</strong></td><td>입력값의 경계 부근에서 오류가 발생하기 쉬운 지점을 집중 테스트</td><td>나이 예측 모델에서 유아/성인/노인 경계 나이 테스트</td></tr>
+                <tr><td><strong>메타모픽 테스팅 (Metamorphic Testing)</strong></td><td>입력을 변환해도 출력 관계가 유지되는지 검증 (오라클 문제 해결의 핵심)</td><td>이미지 회전/크기변경 시 분류 결과가 동일한지 검증</td></tr>
+                <tr><td><strong>페어와이즈 테스팅 (Pairwise)</strong></td><td>다수 입력 변수의 조합을 최소한의 테스트 케이스로 커버</td><td>자율주행 시나리오 (날씨 x 시간 x 도로 조건) 조합 테스트</td></tr>
+                <tr><td><strong>적대적 테스팅 (Adversarial Testing)</strong></td><td>모델을 속이기 위한 의도적 입력(적대적 예제)으로 강건성 검증</td><td>이미지에 미세 노이즈를 추가하여 오분류 유도 테스트</td></tr>
+                <tr><td><strong>공정성 테스팅 (Fairness Testing)</strong></td><td>보호 속성(성별, 인종 등)에 따른 모델 출력의 편향 검증</td><td>대출 승인 모델에서 성별/인종별 승인율 편차 측정</td></tr>
+                <tr><td><strong>데이터 분포 테스팅</strong></td><td>학습 데이터와 운영 데이터의 분포 차이(Data Drift) 검증</td><td>운영 환경에서 입력 데이터의 분포 변화 모니터링</td></tr>
+            </table>
+
+            <h4>나. 화이트박스 테스트 기법 (모델 내부 구조를 분석하여 검증)</h4>
+            <table class="compare-table">
+                <tr><th style="width:160px;">기법</th><th>설명</th><th style="width:180px;">AI 적용 예시</th></tr>
+                <tr><td><strong>뉴런 커버리지 (Neuron Coverage)</strong></td><td>테스트 입력이 신경망의 뉴런을 얼마나 활성화시키는지 측정 (코드 커버리지의 AI 버전)</td><td>전체 뉴런 중 활성화된 비율로 테스트 충분성 판단</td></tr>
+                <tr><td><strong>레이어별 커버리지</strong></td><td>각 레이어의 뉴런 활성화 패턴을 분석하여 깊은 네트워크의 테스트 커버리지 측정</td><td>CNN의 각 레이어별 특징 맵 활성화 분석</td></tr>
+                <tr><td><strong>가중치/활성화 분석</strong></td><td>학습된 가중치의 분포, 활성화 함수의 출력 패턴을 분석하여 이상 탐지</td><td>특정 뉴런의 Dead Neuron 현상 탐지</td></tr>
+                <tr><td><strong>그래디언트 분석</strong></td><td>입력 변화에 대한 출력의 민감도(기울기)를 분석하여 취약점 식별</td><td>Grad-CAM으로 모델이 주목하는 영역 시각화</td></tr>
+                <tr><td><strong>설명가능성 테스팅 (XAI)</strong></td><td>LIME, SHAP 등으로 모델의 판단 근거를 분석하고 합리성 검증</td><td>의료 AI의 진단 근거가 의학적으로 타당한지 검증</td></tr>
+                <tr><td><strong>모델 구조 테스팅</strong></td><td>모델 아키텍처의 적합성, 하이퍼파라미터 설정의 타당성 검증</td><td>과적합(Overfitting) 여부, 레이어 수의 적절성 검증</td></tr>
+            </table>
+
+            <h4>다. 블랙박스 vs 화이트박스 비교</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">비교 항목</th><th>블랙박스 테스트</th><th>화이트박스 테스트</th></tr>
+                <tr><td><strong>관점</strong></td><td>외부 (입출력 관계)</td><td>내부 (모델 구조/파라미터)</td></tr>
+                <tr><td><strong>모델 접근</strong></td><td>모델 내부 접근 불필요</td><td>모델 내부 접근 필수</td></tr>
+                <tr><td><strong>적합 대상</strong></td><td>모든 AI 모델 (모델 종류 무관)</td><td>주로 신경망 기반 모델</td></tr>
+                <tr><td><strong>핵심 검증</strong></td><td>정확성, 공정성, 강건성</td><td>커버리지, 설명가능성, 내부 결함</td></tr>
+                <tr><td><strong>장점</strong></td><td>모델 독립적, 실사용 관점 검증</td><td>근본 원인 분석 가능, 정밀 검증</td></tr>
+                <tr><td><strong>단점</strong></td><td>내부 결함 원인 파악 어려움</td><td>모델 구조 의존적, 복잡한 모델 분석 어려움</td></tr>
+            </table>
+
+            <h3>IV. 고려사항 및 발전방향</h3>
+
+            <table class="compare-table">
+                <tr><th style="width:100px;">구분</th><th>내용</th></tr>
+                <tr><td><strong>고려사항</strong></td><td>AI 오라클 문제(정답이 없는 경우) 해결을 위한 메타모픽 테스팅 적극 도입, 테스트 데이터의 대표성 및 다양성 확보, 블랙박스+화이트박스 병행 적용으로 검증 완전성 확보</td></tr>
+                <tr><td><strong>발전방향</strong></td><td>AI 테스트 자동화 도구 표준화, Continuous Testing (지속적 테스트) 체계 구축, AI 모델 모니터링과 연계한 운영 단계 테스트 강화, EU AI Act 등 규제 대응을 위한 적합성 인증 체계 마련</td></tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사적 제언:</strong> AI 시스템은 비결정적 특성으로 인해 기존 테스트 방법론만으로는 품질 보증이 불충분하다. ISO/IEC TR 29119-11을 기반으로 AI 생명주기 전반에 걸친 테스트 전략을 수립하고, 블랙박스(사용자 관점)와 화이트박스(개발자 관점)를 상호 보완적으로 적용하여 AI 시스템의 신뢰성을 확보해야 한다.
+            </div>
+        </div>
+
+        <!-- ==================== 문제 5: 멀티모달 데이터 품질검증 ==================== -->
+        <div class="section" id="q5">
+            <h2>문제 5. 멀티모달 데이터 품질검증 (TTAK.KO-10.1558)</h2>
+
+            <div class="exam-meta">
+                <strong>문제 분석:</strong> 2교시형 / 2문제 복합형 / 핵심 키워드: 멀티모달 데이터, 품질특성, 유효성 검증, TTAK.KO-10.1558<br>
+                <strong>출제 의도:</strong> 생성형 AI의 학습 데이터 품질이 모델 성능에 직결되며, 멀티모달 환경에서의 데이터 품질 관리 표준화 필요성
+            </div>
+
+            <div class="lead-text">
+                생성형 인공지능 학습용 멀티모달 데이터의 품질특성과 유형별 유효성 검증 방법을 TTAK.KO-10.1558 표준 관점에서 설명하겠습니다.
+            </div>
+
+            <h3>I. 멀티모달 데이터 품질검증의 개요</h3>
+
+            <h4>가. 멀티모달 데이터의 개념</h4>
+            <div class="term-box">
+                <strong>멀티모달 데이터(Multimodal Data)</strong>란, 텍스트, 이미지, 음성, 영상 등 두 가지 이상의 서로 다른 유형(모달리티)의 데이터가 결합된 데이터로, 생성형 AI 학습에 활용되는 복합적 데이터 형식
+            </div>
+
+            <h4>나. TTAK.KO-10.1558 표준의 위치</h4>
+            <p>TTAK.KO-10.1558은 한국정보통신기술협회(TTA)에서 제정한 정보통신단체표준으로, 생성형 인공지능 학습을 위한 멀티모달 데이터의 품질검증 방법을 정의합니다. GPT-4V, Gemini 등 멀티모달 AI의 발전에 따라 학습 데이터 품질 관리의 표준화가 시급해진 배경에서 제정되었습니다.</p>
+
+            <h4>다. 멀티모달 데이터 품질검증의 전체 구조 (개요 도식)</h4>
+            <div style="display: flex; flex-direction: column; gap: 0; margin: 16px 0; align-items: center;">
+                <div style="background: #95a5a6; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 220px;">동인: 생성형 AI의 멀티모달 학습 확대<br><span style="font-size:0.72rem; opacity:0.85;">GIGO 원칙, GPT-4V/Gemini 등 멀티모달 모델 부상</span></div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <div style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 10px 14px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600;">II-가. 일반 품질특성<br><span style="font-size:0.72rem; opacity:0.85;">정확성, 완전성, 일관성 등 6개</span></div>
+                    <div style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 10px 14px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600;">II-나. 모달리티별 품질특성<br><span style="font-size:0.72rem; opacity:0.85;">텍스트/이미지/음성/영상 + 모달리티 간 정합성</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 220px;">III. 유형별 유효성 검증 방법<br><span style="font-size:0.72rem; opacity:0.85;">텍스트/이미지/음성/영상별 자동+수동+교차 검증</span></div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="background: #27ae60; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 220px;">IV. 고려사항 및 발전방향<br><span style="font-size:0.72rem; opacity:0.85;">자동 검증 고도화, Quality Gate, ISO 5259 연계</span></div>
+            </div>
+
+            <div class="inter-comment">
+                "쓰레기가 들어가면 쓰레기가 나온다(Garbage In, Garbage Out)"는 원칙은 AI에서 더욱 절대적이며, 멀티모달 환경에서는 각 모달리티별 품질과 모달리티 간 정합성까지 관리해야 한다.
+            </div>
+
+            <h3>II. 생성형 인공지능 학습용 멀티모달 데이터 품질특성</h3>
+
+            <h4>가. 품질특성 분류 체계</h4>
+            <p>TTAK.KO-10.1558은 멀티모달 데이터의 품질을 크게 <strong>일반 품질특성</strong>과 <strong>모달리티별 품질특성</strong>으로 구분합니다.</p>
+
+            <h4>나. 일반 품질특성 (모달리티 공통)</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">품질특성</th><th>설명</th><th style="width:200px;">검증 기준 예시</th></tr>
+                <tr><td><strong>정확성 (Accuracy)</strong></td><td>데이터가 현실 세계의 실제 값을 정확하게 반영하는 정도</td><td>레이블과 실제 내용의 일치율 95% 이상</td></tr>
+                <tr><td><strong>완전성 (Completeness)</strong></td><td>필수 데이터 항목의 누락 없이 완전하게 수집된 정도</td><td>결측값 비율 5% 이하</td></tr>
+                <tr><td><strong>일관성 (Consistency)</strong></td><td>동일 개체에 대한 데이터가 서로 모순되지 않는 정도</td><td>동일 대상의 다른 모달리티 간 일관된 정보</td></tr>
+                <tr><td><strong>적시성 (Timeliness)</strong></td><td>데이터가 현재 상황을 반영하는 최신성의 정도</td><td>수집 시점과 활용 시점의 시간 차이</td></tr>
+                <tr><td><strong>유효성 (Validity)</strong></td><td>데이터가 정의된 형식, 범위, 규칙을 준수하는 정도</td><td>정의된 스키마/포맷 준수율</td></tr>
+                <tr><td><strong>고유성 (Uniqueness)</strong></td><td>중복 데이터 없이 고유한 데이터로 구성된 정도</td><td>중복 데이터 비율 3% 이하</td></tr>
+            </table>
+
+            <h4>다. 모달리티별 품질특성</h4>
+            <table class="compare-table">
+                <tr><th style="width:110px;">모달리티</th><th style="width:140px;">품질특성</th><th>설명</th></tr>
+                <tr>
+                    <td rowspan="3"><strong>텍스트</strong></td>
+                    <td>언어적 정확성</td><td>문법 오류, 오탈자, 비문 여부</td>
+                </tr>
+                <tr><td>의미적 일관성</td><td>문맥 흐름의 논리적 타당성</td></tr>
+                <tr><td>다양성</td><td>어휘, 문체, 주제의 다양한 분포</td></tr>
+                <tr>
+                    <td rowspan="3"><strong>이미지</strong></td>
+                    <td>해상도 적합성</td><td>학습 목적에 부합하는 해상도/화질</td>
+                </tr>
+                <tr><td>시각적 명확성</td><td>노이즈, 블러, 왜곡의 부재</td></tr>
+                <tr><td>바운딩박스 정확도</td><td>객체 탐지용 어노테이션의 정확한 위치</td></tr>
+                <tr>
+                    <td rowspan="3"><strong>음성</strong></td>
+                    <td>음질</td><td>잡음 수준, 신호 대 잡음비(SNR)</td>
+                </tr>
+                <tr><td>전사 정확도</td><td>음성-텍스트 전사(Transcription)의 정확성</td></tr>
+                <tr><td>화자 다양성</td><td>성별, 연령, 방언 등 화자 분포의 다양성</td></tr>
+                <tr>
+                    <td rowspan="2"><strong>영상(비디오)</strong></td>
+                    <td>프레임 품질</td><td>프레임 해상도, FPS 적합성</td>
+                </tr>
+                <tr><td>시간적 일관성</td><td>프레임 간 연속성, 타임스탬프 정확성</td></tr>
+                <tr>
+                    <td rowspan="2"><strong>모달리티 간</strong></td>
+                    <td>정합성 (Alignment)</td><td>텍스트-이미지, 음성-자막 등 모달리티 간 의미적 대응의 정확성</td>
+                </tr>
+                <tr><td>동기화 (Synchronization)</td><td>음성-영상 간 시간적 정렬의 정확성</td></tr>
+            </table>
+
+            <div class="inter-comment">
+                멀티모달 데이터의 핵심은 개별 모달리티의 품질뿐 아니라 "모달리티 간 정합성"이며, 이것이 단일 모달리티 품질관리와 근본적으로 다른 점이다.
+            </div>
+
+            <h3>III. 생성 데이터 유형별 유효성 검증 방법</h3>
+
+            <h4>가. 유효성 검증 프로세스</h4>
+            <div class="process-flow">
+                <div class="process-step">데이터<br>수집</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">자동<br>검증</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">수동<br>검증</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">교차<br>검증</div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">품질<br>보고서</div>
+            </div>
+
+            <h4>나. 유형별 유효성 검증 방법</h4>
+            <table class="compare-table">
+                <tr><th style="width:100px;">데이터 유형</th><th style="width:160px;">검증 방법</th><th>세부 내용</th></tr>
+                <tr>
+                    <td rowspan="4"><strong>텍스트</strong></td>
+                    <td>형식 검증</td><td>인코딩(UTF-8), 문장 길이 범위, 특수문자/이모지 처리 규칙 준수 여부</td>
+                </tr>
+                <tr><td>언어 품질 검증</td><td>맞춤법/문법 검사 도구(LanguageTool 등), 비문/반복문 자동 탐지</td></tr>
+                <tr><td>의미 유효성 검증</td><td>문맥 일관성 평가, 할루시네이션(환각) 탐지, 사실 관계 검증</td></tr>
+                <tr><td>유해성 검증</td><td>혐오 표현, 개인정보, 저작권 침해 텍스트 자동 필터링</td></tr>
+                <tr>
+                    <td rowspan="4"><strong>이미지</strong></td>
+                    <td>기술적 검증</td><td>해상도, 파일 형식, 색 공간(RGB/CMYK), 파일 크기 범위 검증</td>
+                </tr>
+                <tr><td>시각 품질 검증</td><td>블러/노이즈/왜곡 자동 탐지(SSIM, PSNR), 중복 이미지 해싱</td></tr>
+                <tr><td>어노테이션 검증</td><td>바운딩박스 좌표 유효성, 클래스 레이블 일관성, IoU 기준 검증</td></tr>
+                <tr><td>콘텐츠 검증</td><td>유해 이미지(NSFW) 필터링, 워터마크/저작권 이미지 탐지</td></tr>
+                <tr>
+                    <td rowspan="3"><strong>음성</strong></td>
+                    <td>기술적 검증</td><td>샘플링 레이트, 비트 깊이, 채널 수, 오디오 포맷 검증</td>
+                </tr>
+                <tr><td>음질 검증</td><td>SNR(신호 대 잡음비) 측정, 무음 구간 탐지, 클리핑 검사</td></tr>
+                <tr><td>전사 검증</td><td>STT 결과와 수동 전사의 WER(단어 오류율) 비교, 타임스탬프 정합성</td></tr>
+                <tr>
+                    <td rowspan="3"><strong>영상</strong></td>
+                    <td>기술적 검증</td><td>해상도, FPS, 코덱, 영상 길이 범위 검증</td>
+                </tr>
+                <tr><td>프레임 품질 검증</td><td>프레임 결손, 화면 깨짐, 장면 전환 탐지</td></tr>
+                <tr><td>시간 정합성 검증</td><td>음성-영상 동기화 오차 측정, 자막 타이밍 검증</td></tr>
+                <tr>
+                    <td rowspan="2"><strong>모달리티 간 교차</strong></td>
+                    <td>의미적 정합성 검증</td><td>이미지-캡션 일치도 평가(CLIPScore 등), 음성-텍스트 대응 검증</td>
+                </tr>
+                <tr><td>통합 일관성 검증</td><td>동일 객체/사건에 대한 멀티모달 데이터 간 정보 불일치 탐지</td></tr>
+            </table>
+
+            <h3>IV. 고려사항 및 발전방향</h3>
+
+            <table class="compare-table">
+                <tr><th style="width:100px;">구분</th><th>내용</th></tr>
+                <tr><td><strong>고려사항</strong></td><td>자동 검증과 수동 검증의 적절한 비율 설정, 데이터 규모에 따른 샘플링 검증 전략, 모달리티 간 정합성 검증의 기준값 설정, 검증 비용 대비 품질 향상 효과의 균형</td></tr>
+                <tr><td><strong>발전방향</strong></td><td>AI 기반 자동 품질검증 도구 고도화 (LLM 활용 텍스트 품질 평가), 실시간 데이터 파이프라인 내 품질 게이트(Quality Gate) 적용, 국제 표준(ISO/IEC 5259 시리즈)과의 연계 강화, 합성 데이터(Synthetic Data) 품질검증 체계 수립</td></tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사적 제언:</strong> 생성형 AI의 성능은 학습 데이터의 품질에 직결되며, 멀티모달 환경에서는 개별 모달리티 품질과 모달리티 간 정합성을 동시에 관리해야 한다. TTAK.KO-10.1558을 기반으로 조직의 데이터 품질 관리 체계를 수립하고, 자동화된 품질검증 파이프라인을 구축하여 대규모 멀티모달 데이터의 품질을 체계적으로 보증해야 한다.
+            </div>
+        </div>
+
+        <!-- ==================== 문제 6: 군집분석 ==================== -->
+        <div class="section" id="q6">
+            <h2>문제 6. 군집분석 (Cluster Analysis)</h2>
+
+            <div class="exam-meta">
+                <strong>문제 분석:</strong> 2교시형 / 3문제 복합형 / 핵심 키워드: 군집분석, 유사도(Similarity), 비유사도(Dis-Similarity)<br>
+                <strong>출제 의도:</strong> 비지도학습의 핵심인 군집분석의 기본 개념과, 유사도/비유사도 측정이 군집 품질에 미치는 영향 이해
+            </div>
+
+            <div class="lead-text">
+                군집분석의 개념 및 특징, 유사도(Similarity) 측정지표, 비유사도(Dis-Similarity) 측정지표를 중심으로 설명하겠습니다.
+            </div>
+
+            <h3>I. 군집분석의 개요</h3>
+
+            <h4>가. 군집분석의 개념</h4>
+            <div class="term-box">
+                <strong>군집분석(Cluster Analysis)</strong>이란, 사전에 정의된 레이블 없이 데이터 간의 유사도(Similarity)를 기반으로 유사한 데이터를 동일 그룹(군집)으로, 상이한 데이터를 다른 그룹으로 분류하는 비지도학습(Unsupervised Learning) 기법
+            </div>
+            <p>핵심 원리는 <strong>"군집 내 유사도 최대화(Within-cluster similarity), 군집 간 비유사도 최대화(Between-cluster dissimilarity)"</strong>입니다.</p>
+
+            <div class="analogy-box">
+                <strong>비유:</strong> 도서관에서 책을 분류하는 것과 같습니다. 정해진 분류 기준(레이블)이 없어도, 비슷한 주제의 책끼리 모아두면 자연스럽게 "소설", "과학", "역사" 같은 그룹이 형성됩니다. 같은 그룹의 책은 유사하고, 다른 그룹의 책은 상이합니다.
+            </div>
+
+            <h4>나. 군집분석의 특징</h4>
+            <table class="compare-table">
+                <tr><th style="width:160px;">특징</th><th>설명</th></tr>
+                <tr><td><strong>비지도학습</strong></td><td>사전 레이블 없이 데이터의 내재된 구조를 발견 (탐색적 데이터 분석)</td></tr>
+                <tr><td><strong>유사도 기반</strong></td><td>데이터 간 거리/유사도 측정이 군집 품질을 결정하는 핵심 요소</td></tr>
+                <tr><td><strong>다양한 알고리즘</strong></td><td>K-Means, 계층적 군집, DBSCAN, GMM 등 데이터 특성에 맞는 알고리즘 선택</td></tr>
+                <tr><td><strong>군집 수 결정</strong></td><td>최적 군집 수(k)를 사전에 지정하거나 자동 결정하는 것이 과제</td></tr>
+                <tr><td><strong>스케일 민감성</strong></td><td>변수의 단위/스케일에 따라 결과가 달라지므로 정규화/표준화 필수</td></tr>
+                <tr><td><strong>차원의 저주</strong></td><td>고차원 데이터에서는 거리 계산의 의미가 약해지는 문제 발생</td></tr>
+            </table>
+
+            <h4>다. 주요 군집분석 알고리즘</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">알고리즘</th><th>원리</th><th style="width:120px;">군집 수</th><th style="width:120px;">군집 형태</th></tr>
+                <tr><td><strong>K-Means</strong></td><td>k개 중심점(centroid)을 기준으로 가장 가까운 데이터를 할당/갱신 반복</td><td>사전 지정(k)</td><td>구형(spherical)</td></tr>
+                <tr><td><strong>계층적 군집 (Hierarchical)</strong></td><td>덴드로그램(dendrogram)으로 데이터를 병합/분할하며 계층 구조 생성</td><td>자동 결정 가능</td><td>다양한 형태</td></tr>
+                <tr><td><strong>DBSCAN</strong></td><td>밀도(density)가 높은 영역을 군집으로, 밀도가 낮은 영역을 노이즈로 분류</td><td>자동 결정</td><td>비정형 가능</td></tr>
+                <tr><td><strong>GMM</strong></td><td>데이터가 여러 가우시안 분포의 혼합으로 생성되었다고 가정하여 확률적 할당</td><td>사전 지정</td><td>타원형</td></tr>
+            </table>
+
+            <h4>라. 군집분석의 전체 구조 (개요 도식)</h4>
+            <div style="display: flex; flex-direction: column; gap: 0; margin: 16px 0; align-items: center;">
+                <div style="background: #95a5a6; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 220px;">동인: 비지도학습 기반 데이터 탐색 수요<br><span style="font-size:0.72rem; opacity:0.85;">레이블 없는 대규모 데이터에서 패턴/그룹 발견</span></div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <div style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 10px 14px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600;">II. 유사도 측정지표<br><span style="font-size:0.72rem; opacity:0.85;">코사인, 자카드, 피어슨, SMC, 다이스</span></div>
+                    <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 14px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600;">III. 비유사도 측정지표<br><span style="font-size:0.72rem; opacity:0.85;">유클리디안, 맨해튼, 마할라노비스, 해밍 등</span></div>
+                </div>
+                <div style="color: #e74c3c; font-size: 1.4rem; font-weight: bold; text-align: center;">&#8595;</div>
+                <div style="background: #27ae60; color: white; padding: 10px 16px; border-radius: 8px; text-align: center; font-size: 0.82rem; font-weight: 600; min-width: 220px;">IV. 고려사항 및 발전방향<br><span style="font-size:0.72rem; opacity:0.85;">데이터 유형별 지표 선택, 차원 축소, Metric Learning</span></div>
+            </div>
+
+            <div class="inter-comment">
+                군집분석의 성능은 "유사도를 어떻게 측정하느냐"에 의해 결정적으로 좌우되며, 적절한 유사도/비유사도 측정지표의 선택이 핵심이다.
+            </div>
+
+            <h3>II. 군집의 유사도(Similarity) 측정지표</h3>
+
+            <h4>가. 유사도의 개념</h4>
+            <div class="term-box">
+                <strong>유사도(Similarity)</strong>란, 두 데이터 객체 간의 닮은 정도를 수치로 표현한 것으로, 값이 클수록 두 데이터가 유사함을 의미한다. 일반적으로 0~1 사이의 값으로 정규화된다.
+            </div>
+
+            <h4>나. 유사도 측정지표</h4>
+            <table class="compare-table">
+                <tr><th style="width:160px;">측정지표</th><th>수식/원리</th><th>특징</th><th style="width:140px;">적합 데이터</th></tr>
+                <tr>
+                    <td><strong>코사인 유사도 (Cosine Similarity)</strong></td>
+                    <td>두 벡터 간 각도의 코사인 값. cos(theta) = (A . B) / (||A|| x ||B||). 값 범위: -1~1</td>
+                    <td>벡터의 크기(magnitude)보다 방향(direction)을 비교. 고차원 희소 데이터에 적합</td>
+                    <td>텍스트(TF-IDF), 문서 유사도, 추천시스템</td>
+                </tr>
+                <tr>
+                    <td><strong>자카드 유사도 (Jaccard Similarity)</strong></td>
+                    <td>두 집합의 교집합 / 합집합. J(A,B) = |A 교 B| / |A 합 B|. 값 범위: 0~1</td>
+                    <td>집합 기반 비교, 이진(binary) 데이터에 적합</td>
+                    <td>문서 키워드 집합, 상품 구매 여부, 유전자 서열</td>
+                </tr>
+                <tr>
+                    <td><strong>피어슨 상관계수 (Pearson Correlation)</strong></td>
+                    <td>두 변수의 선형 상관관계. r = cov(X,Y) / (std(X) x std(Y)). 값 범위: -1~1</td>
+                    <td>선형 관계의 강도와 방향을 측정. 평균 중심화(centering) 효과</td>
+                    <td>연속형 수치 데이터, 평점 데이터</td>
+                </tr>
+                <tr>
+                    <td><strong>SMC (Simple Matching Coefficient)</strong></td>
+                    <td>전체 속성 중 일치하는 속성의 비율. SMC = (일치 수) / (전체 속성 수)</td>
+                    <td>이진 데이터에서 0-0 일치도 유사로 간주</td>
+                    <td>이진 속성 데이터 (설문 응답 등)</td>
+                </tr>
+                <tr>
+                    <td><strong>다이스 계수 (Dice Coefficient)</strong></td>
+                    <td>두 집합의 겹침을 강조. D = 2|A 교 B| / (|A| + |B|). 값 범위: 0~1</td>
+                    <td>자카드보다 교집합에 더 큰 가중치. 불균형 데이터에 유리</td>
+                    <td>이미지 세그멘테이션, 의료 영상 비교</td>
+                </tr>
+            </table>
+
+            <div class="inter-comment">
+                유사도가 "닮은 정도"를 측정한다면, 비유사도는 "다른 정도"를 측정한다. 두 관점은 상호 보완적이며, 군집분석에서는 비유사도(거리)를 더 직접적으로 활용하는 경우가 많다.
+            </div>
+
+            <h3>III. 군집의 비유사도(Dis-Similarity) 측정지표</h3>
+
+            <h4>가. 비유사도의 개념</h4>
+            <div class="term-box">
+                <strong>비유사도(Dis-Similarity)</strong>란, 두 데이터 객체 간의 다른 정도를 수치로 표현한 것으로, 주로 거리(Distance)로 표현되며, 값이 클수록 두 데이터가 상이함을 의미한다. 비유사도 = 1 - 유사도 관계가 성립하는 경우가 많다.
+            </div>
+
+            <h4>나. 비유사도(거리) 측정지표</h4>
+            <table class="compare-table">
+                <tr><th style="width:160px;">측정지표</th><th>수식/원리</th><th>특징</th><th style="width:140px;">적합 데이터</th></tr>
+                <tr>
+                    <td><strong>유클리디안 거리 (Euclidean Distance)</strong></td>
+                    <td>두 점 사이의 직선 거리. d = sqrt(sum((xi - yi)^2))</td>
+                    <td>가장 직관적인 거리. 스케일에 민감하므로 정규화 필요</td>
+                    <td>연속형 수치, K-Means의 기본 거리</td>
+                </tr>
+                <tr>
+                    <td><strong>맨해튼 거리 (Manhattan Distance)</strong></td>
+                    <td>각 좌표 차이의 절대값 합. d = sum(|xi - yi|)</td>
+                    <td>격자 도로처럼 축 방향으로만 이동하는 거리. 이상치에 덜 민감</td>
+                    <td>고차원 데이터, 이상치 존재 시</td>
+                </tr>
+                <tr>
+                    <td><strong>민코프스키 거리 (Minkowski Distance)</strong></td>
+                    <td>유클리디안과 맨해튼의 일반화. d = (sum(|xi - yi|^p))^(1/p)</td>
+                    <td>p=1이면 맨해튼, p=2이면 유클리디안. p값으로 거리 특성 조절</td>
+                    <td>범용 (p값 조절로 다양한 상황 대응)</td>
+                </tr>
+                <tr>
+                    <td><strong>체비셰프 거리 (Chebyshev Distance)</strong></td>
+                    <td>각 차원의 차이 중 최대값. d = max(|xi - yi|)</td>
+                    <td>어느 한 차원이라도 크게 다르면 비유사. 민코프스키의 p=무한대</td>
+                    <td>최악의 경우(worst case) 기반 판단</td>
+                </tr>
+                <tr>
+                    <td><strong>마할라노비스 거리 (Mahalanobis Distance)</strong></td>
+                    <td>공분산 행렬을 고려한 거리. d = sqrt((x-y)' S^(-1) (x-y))</td>
+                    <td>변수 간 상관관계와 분산을 고려. 스케일 불변. 타원형 분포에 적합</td>
+                    <td>상관관계 높은 다변량 데이터, 이상치 탐지</td>
+                </tr>
+                <tr>
+                    <td><strong>해밍 거리 (Hamming Distance)</strong></td>
+                    <td>같은 위치에서 값이 다른 비트/속성의 수</td>
+                    <td>범주형/이진 데이터에 적합. 문자열 비교에 활용</td>
+                    <td>이진 데이터, DNA 서열, 오류 검출</td>
+                </tr>
+                <tr>
+                    <td><strong>자카드 거리 (Jaccard Distance)</strong></td>
+                    <td>1 - 자카드 유사도. Jd = 1 - |A 교 B| / |A 합 B|</td>
+                    <td>유사도의 보수(complement)로 비유사도 표현</td>
+                    <td>집합 데이터, 문서 비교</td>
+                </tr>
+            </table>
+
+            <h4>다. 유사도 vs 비유사도 비교</h4>
+            <table class="compare-table">
+                <tr><th style="width:140px;">비교 항목</th><th>유사도 (Similarity)</th><th>비유사도 (Dis-Similarity)</th></tr>
+                <tr><td><strong>의미</strong></td><td>두 객체가 얼마나 닮았는가</td><td>두 객체가 얼마나 다른가</td></tr>
+                <tr><td><strong>값의 방향</strong></td><td>높을수록 유사</td><td>높을수록 상이 (=거리가 멂)</td></tr>
+                <tr><td><strong>관계</strong></td><td colspan="2" style="text-align: center;">비유사도 = 1 - 유사도 (정규화된 경우)</td></tr>
+                <tr><td><strong>대표 지표</strong></td><td>코사인 유사도, 자카드 유사도, 피어슨 상관</td><td>유클리디안, 맨해튼, 마할라노비스, 해밍</td></tr>
+                <tr><td><strong>주 활용</strong></td><td>추천시스템, 정보 검색, 문서 유사도</td><td>군집분석(K-Means 등), 이상치 탐지, KNN</td></tr>
+            </table>
+
+            <h3>IV. 고려사항 및 발전방향</h3>
+
+            <table class="compare-table">
+                <tr><th style="width:100px;">구분</th><th>내용</th></tr>
+                <tr><td><strong>고려사항</strong></td><td>데이터 유형(연속형/범주형/이진)에 적합한 측정지표 선택, 변수 스케일 차이에 따른 정규화/표준화 선행 필수, 고차원 데이터에서의 차원의 저주 문제 대응(차원 축소 PCA/t-SNE 등), 이상치의 영향을 고려한 로버스트(robust) 거리 선택</td></tr>
+                <tr><td><strong>발전방향</strong></td><td>딥러닝 기반 표현 학습(Representation Learning)으로 의미적 유사도 측정 고도화, 도메인 특화 거리 메트릭 학습(Metric Learning), 대규모 데이터에서의 근사 최근접 이웃(ANN) 기법 활용, 그래프 기반 유사도 측정 연구 확대</td></tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사적 제언:</strong> 군집분석의 성패는 적절한 유사도/비유사도 측정지표의 선택에 달려 있다. 데이터의 특성(유형, 분포, 차원)을 면밀히 분석한 후 최적의 측정지표를 선택하고, 필요 시 도메인 지식을 반영한 맞춤형 거리 함수를 설계하여 군집 품질을 극대화해야 한다.
+            </div>
+        </div>
+
+        <!-- ==================== 전체 요약 ==================== -->
+        <div class="key-summary">
+            <h3>4문제 핵심 요약</h3>
+            <ul>
+                <li><strong>자기지도 학습:</strong> 레이블 없이 데이터 자체에서 학습 신호를 생성하는 기술. 생성 기반(GPT), 대조 학습(SimCLR), 예측 기반(RotNet) 3가지 방식. Foundation Model의 핵심.</li>
+                <li><strong>AI 테스트:</strong> ISO/IEC TR 29119-11은 AI 고유 품질(정확성, 공정성, 강건성, 설명가능성) 검증 가이드. 블랙박스(메타모픽, 적대적 테스팅)와 화이트박스(뉴런 커버리지, XAI)를 병행.</li>
+                <li><strong>멀티모달 품질검증:</strong> 일반 품질특성(정확성, 완전성, 일관성) + 모달리티별 품질특성 + 모달리티 간 정합성. 유형별 자동/수동/교차 검증 수행.</li>
+                <li><strong>군집분석:</strong> 유사도(코사인, 자카드, 피어슨)는 "닮은 정도", 비유사도(유클리디안, 맨해튼, 마할라노비스)는 "다른 정도". 데이터 유형에 맞는 지표 선택이 핵심.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html">홈으로</a>
+        <a href="01-overview.html">01. 인공지능 개요</a>
+    </div>
+</body>
+</html>

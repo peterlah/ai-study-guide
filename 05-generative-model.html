@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05. 생성모델과 신경망 확장 - AI 학습 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .top-nav {
+            background: #2c3e50;
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .top-nav a:hover {
+            color: #3498db;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .toc {
+            background: white;
+            max-width: 860px;
+            margin: 24px auto;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .toc h2 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .toc a:hover {
+            background: #eef6fd;
+            color: #3498db;
+        }
+
+        .toc .section-num {
+            background: #3498db;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px 48px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 36px;
+            margin-top: 32px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .section h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin: 24px 0 12px;
+            padding-left: 12px;
+            border-left: 4px solid #3498db;
+        }
+
+        .section h4 {
+            font-size: 1.05rem;
+            color: #555;
+            margin: 16px 0 8px;
+        }
+
+        .section p {
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        .term-box {
+            background: #eef6fd;
+            border-left: 4px solid #3498db;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+
+        .term-box strong {
+            color: #2c3e50;
+        }
+
+        .analogy-box {
+            background: #fef9e7;
+            border-left: 4px solid #f1c40f;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+
+        .analogy-box strong {
+            color: #7d6608;
+        }
+
+        .note-box {
+            background: #f0f9f0;
+            border-left: 4px solid #27ae60;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+
+        .warning-box {
+            background: #fdf2f2;
+            border-left: 4px solid #e74c3c;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+
+        .compare-table th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .compare-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .compare-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .step-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .step-card {
+            flex: 1;
+            min-width: 180px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            border-top: 4px solid #3498db;
+        }
+
+        .step-card .step-num {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .step-card .step-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 4px 0;
+        }
+
+        .step-card .step-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+            justify-content: center;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            min-width: 100px;
+        }
+
+        .process-arrow {
+            color: #3498db;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .key-summary {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 24px 0;
+        }
+
+        .key-summary h3 {
+            color: #3498db;
+            border: none;
+            padding: 0;
+            margin-bottom: 12px;
+        }
+
+        .key-summary ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .key-summary li {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            max-width: 860px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        .bottom-nav a {
+            background: white;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+
+        .bottom-nav a:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .page-header p {
+                font-size: 0.95rem;
+            }
+
+            .section {
+                padding: 24px;
+                margin-top: 24px;
+            }
+
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            .section h3 {
+                font-size: 1.05rem;
+            }
+
+            .section p {
+                font-size: 0.9rem;
+            }
+
+            .toc {
+                padding: 20px;
+                margin: 16px auto;
+            }
+
+            .toc h2 {
+                font-size: 1.1rem;
+            }
+
+            .toc a {
+                font-size: 0.9rem;
+            }
+
+            .compare-table {
+                font-size: 0.8rem;
+            }
+
+            .compare-table th,
+            .compare-table td {
+                padding: 8px;
+            }
+
+            .step-cards {
+                flex-direction: column;
+            }
+
+            .step-card {
+                min-width: 100%;
+            }
+
+            .process-flow {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .process-arrow {
+                transform: rotate(90deg);
+            }
+
+            .bottom-nav {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .bottom-nav a {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="04-deeplearning.html">← 이전: 딥러닝과 모델 최적화</a>
+        <a href="index.html">홈으로</a>
+    </nav>
+
+    <header class="page-header">
+        <h1>05. 생성모델과 신경망 확장</h1>
+        <p>GAN, VAE, Diffusion, SNN, GNN으로 배우는 생성형 AI와 신경망의 미래</p>
+    </header>
+
+    <div class="toc">
+        <h2>이 장의 내용</h2>
+        <ul>
+            <li>
+                <a href="#section1">
+                    <span class="section-num">1</span>
+                    GAN: 생성적 적대 신경망
+                </a>
+            </li>
+            <li>
+                <a href="#section2">
+                    <span class="section-num">2</span>
+                    오토인코더와 VAE
+                </a>
+            </li>
+            <li>
+                <a href="#section3">
+                    <span class="section-num">3</span>
+                    Diffusion 모델
+                </a>
+            </li>
+            <li>
+                <a href="#section4">
+                    <span class="section-num">4</span>
+                    생성모델 비교 분석
+                </a>
+            </li>
+            <li>
+                <a href="#section5">
+                    <span class="section-num">5</span>
+                    SNN: 생물학적 신경망
+                </a>
+            </li>
+            <li>
+                <a href="#section6">
+                    <span class="section-num">6</span>
+                    GNN: 그래프 신경망
+                </a>
+            </li>
+            <li>
+                <a href="#section7">
+                    <span class="section-num">7</span>
+                    전이학습과 도메인 적응
+                </a>
+            </li>
+            <li>
+                <a href="#section8">
+                    <span class="section-num">8</span>
+                    종합 비교 및 선택 가이드
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <section id="section1" class="section">
+            <h2>1. GAN: 생성적 적대 신경망</h2>
+
+            <h3>GAN의 기본 개념</h3>
+
+            <div class="term-box">
+                <strong>GAN (Generative Adversarial Network, 생성적 적대 신경망)</strong>은 생성자(Generator)와 판별자(Discriminator)라는 두 개의 신경망이 서로 경쟁하면서 학습하는 모델입니다. 생성자는 노이즈로부터 가짜 데이터를 만들려고 노력하고, 판별자는 진짜와 가짜를 구별하려고 노력합니다.
+            </div>
+
+            <p>GAN은 2014년 Ian Goodfellow가 제안한 혁신적인 기술입니다. 기존의 신경망은 주로 분류나 예측 같은 판별 작업에 사용되었지만, GAN은 처음으로 신경망으로 새로운 데이터를 생성할 수 있게 만들었습니다.</p>
+
+            <div class="analogy-box">
+                <strong>비유로 이해하기:</strong> GAN은 위조지폐 제조범과 경찰의 대결 같습니다. 위조범(생성자)은 더 완벽한 가짜 지폐를 만들려고 노력하고, 경찰(판별자)은 진짜와 가짜를 구분하려고 노력합니다. 이런 경쟁 속에서 위조범은 점점 더 정교한 지폐를 만들게 되는 것입니다.
+            </div>
+
+            <h3>생성자(Generator)와 판별자(Discriminator)</h3>
+
+            <h4>생성자의 역할</h4>
+            <p>생성자는 무작위 노이즈(잡음) 벡터 z를 입력으로 받아서 진짜처럼 보이는 가짜 데이터 G(z)를 생성합니다. 예를 들어, 이미지 생성 GAN이라면, 생성자는 랜덤 벡터를 받아서 실제 사진처럼 보이는 이미지를 만드는 것입니다.</p>
+
+            <h4>판별자의 역할</h4>
+            <p>판별자는 이미지를 입력으로 받아서 "이것이 진짜일 확률은 얼마인가?"라는 질문에 답합니다. D(x)는 0부터 1 사이의 확률값을 출력하며, 1에 가까울수록 "진짜"라고 생각하는 것입니다.</p>
+
+            <h3>적대적 학습(Adversarial Learning)</h3>
+
+            <div class="process-flow">
+                <span class="process-step">노이즈 z 생성</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">생성자 G(z)</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">가짜 데이터</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">판별자 D</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">피드백</span>
+            </div>
+
+            <div class="step-cards">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">생성</div>
+                    <div class="step-desc">생성자가 노이즈로부터 가짜 데이터를 만듭니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">판별</div>
+                    <div class="step-desc">판별자가 진짜와 가짜를 구분하려고 합니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">손실 계산</div>
+                    <div class="step-desc">두 신경망의 오류를 계산합니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-title">역전파</div>
+                    <div class="step-desc">가중치를 업데이트합니다.</div>
+                </div>
+            </div>
+
+            <h3>Min-Max 게임</h3>
+
+            <p>GAN의 학습 목표는 다음과 같이 표현됩니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>생성자의 목표:</strong> 판별자가 "이건 진짜야!"라고 생각하도록 속이기 (손실 최소화)</li>
+                <li><strong>판별자의 목표:</strong> "이건 가짜야!"라고 정확하게 구분하기 (손실 최소화)</li>
+            </ul>
+
+            <p>이를 수식으로 표현하면, 생성자는 판별자의 실수를 최대화하려고 하고, 판별자는 자신의 실수를 최소화하려고 합니다. 이는 "최소-최대 게임(minimax game)"으로 불리며, 균형에 도달할 때 생성자는 진정한 데이터 분포를 학습하게 됩니다.</p>
+
+            <h3>GAN의 주요 변형(Variants)</h3>
+
+            <div class="term-box">
+                <strong>DCGAN (Deep Convolutional GAN):</strong> 합성곱 신경망(CNN)을 생성자와 판별자에 사용한 GAN입니다. 이미지 생성에 매우 효과적이며, 고해상도 이미지 생성의 기초가 되었습니다.
+            </div>
+
+            <div class="term-box">
+                <strong>StyleGAN:</strong> 이미지의 스타일을 세밀하게 제어할 수 있는 GAN입니다. 스타일과 내용을 분리하여, 얼굴의 스타일은 유지하면서 특정 특징만 수정할 수 있습니다. 얼굴 생성 분야에서 매우 유명합니다.
+            </div>
+
+            <div class="term-box">
+                <strong>CycleGAN:</strong> 한 도메인의 이미지를 다른 도메인으로 변환합니다. 쌍을 이루는 이미지 없이도 학습 가능합니다. 예: 말 사진 ↔ 얼룩말 사진 변환, 낮 사진 ↔ 밤 사진 변환.
+            </div>
+
+            <div class="term-box">
+                <strong>Pix2Pix:</strong> 입력 이미지를 출력 이미지로 직접 변환합니다. 쌍을 이루는 이미지 데이터가 필요합니다. 예: 선화 → 컬러 사진, 스케치 → 실제 사진.
+            </div>
+
+            <div class="term-box">
+                <strong>WGAN (Wasserstein GAN):</strong> Wasserstein 거리를 사용하여 학습의 안정성을 크게 개선했습니다. 기존 GAN의 모드 붕괴 문제를 효과적으로 해결합니다.
+            </div>
+
+            <div class="term-box">
+                <strong>StarGAN:</strong> 여러 속성을 동시에 변환할 수 있는 GAN입니다. 하나의 신경망으로 "젊은 남성 → 나이든 여성"처럼 여러 변환을 수행합니다.
+            </div>
+
+            <h3>GAN의 응용</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>이미지 생성:</strong> 실제 사람처럼 보이는 사진 생성, 풍경 생성 등</li>
+                <li><strong>스타일 변환:</strong> 사진을 그림 같이 변환, 얼굴 스타일 변환</li>
+                <li><strong>데이터 증강:</strong> 부족한 학습 데이터를 GAN으로 생성하여 더 많은 데이터 확보</li>
+                <li><strong>이미지 복원:</strong> 흐릿한 이미지를 선명하게 복원, 노이즈 제거</li>
+                <li><strong>이미지 번역:</strong> 낮 사진을 밤 사진으로, 여름 사진을 겨울 사진으로 변환</li>
+                <li><strong>텍스트-이미지 생성:</strong> 텍스트 설명으로부터 이미지 생성 (DALL-E의 기초 기술)</li>
+            </ul>
+
+            <h3>GAN의 한계와 도전</h3>
+
+            <div class="warning-box">
+                <strong>모드 붕괴(Mode Collapse):</strong> 생성자가 다양한 이미지를 생성하지 못하고 비슷한 이미지만 반복적으로 생성하는 문제입니다. 마치 요리사가 같은 음식만 계속 만드는 것처럼 말입니다.
+            </div>
+
+            <div class="warning-box">
+                <strong>학습 불안정성(Training Instability):</strong> GAN의 학습은 매우 불안정할 수 있습니다. 생성자와 판별자가 균형을 맞추지 못하면, 학습이 발산하거나 수렴하지 않을 수 있습니다.
+            </div>
+
+            <div class="note-box">
+                <strong>개선 방법:</strong> 최신 GAN 기술들은 이런 문제를 해결하기 위해 다양한 기법을 사용합니다. Wasserstein 거리, 스펙트럼 정규화(Spectral Normalization), 조건부 정규화(Conditional Normalization) 등이 있습니다.
+            </div>
+        </section>
+
+        <section id="section2" class="section">
+            <h2>2. 오토인코더와 VAE</h2>
+
+            <h3>오토인코더(Autoencoder, AE)의 개념</h3>
+
+            <div class="term-box">
+                <strong>오토인코더(Autoencoder, AE)</strong>는 입력 데이터를 저차원의 잠재표현(latent representation)으로 압축했다가, 다시 원래 형태로 복원하는 신경망입니다. 인코더와 디코더 두 부분으로 구성됩니다.
+            </div>
+
+            <div class="process-flow">
+                <span class="process-step">입력 이미지</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">인코더</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">잠재표현</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">디코더</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">복원 이미지</span>
+            </div>
+
+            <h4>인코더(Encoder)</h4>
+            <p>인코더는 고차원의 입력 데이터(예: 784차원의 MNIST 이미지)를 저차원의 잠재표현(예: 32차원 벡터)으로 압축합니다. 이 과정에서 데이터의 가장 중요한 특징만 추출되어 저장됩니다.</p>
+
+            <h4>잠재표현(Latent Representation)</h4>
+            <p>잠재표현은 원본 데이터의 본질적인 정보를 담고 있는 저차원 벡터입니다. 예를 들어, 얼굴 이미지의 경우, 잠재표현은 "나이", "성별", "감정" 같은 개념적 특징을 인코딩할 수 있습니다.</p>
+
+            <h4>디코더(Decoder)</h4>
+            <p>디코더는 잠재표현을 입력으로 받아서 원래 형태의 데이터를 복원합니다. 이상적으로, 복원된 데이터는 원본 데이터와 최대한 유사해야 합니다.</p>
+
+            <h3>오토인코더의 학습</h3>
+
+            <p>오토인코더는 복원 오류를 최소화하도록 학습됩니다. 손실함수는 일반적으로 Mean Squared Error(MSE)입니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li>MSE = (원본 - 복원)²의 평균</li>
+            </ul>
+
+            <h3>오토인코더의 응용: 차원축소(Dimensionality Reduction)</h3>
+
+            <p>오토인코더의 주요 응용은 차원축소입니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>데이터 압축:</strong> 이미지나 비디오를 더 작은 크기로 압축</li>
+                <li><strong>특성 추출:</strong> 원본 데이터에서 중요한 특성만 추출</li>
+                <li><strong>노이즈 제거:</strong> 손상된 입력으로부터 깨끗한 데이터 복원</li>
+                <li><strong>이상 탐지:</strong> 정상 데이터는 잘 복원하지만, 이상 데이터는 높은 복원 오류</li>
+                <li><strong>데이터 시각화:</strong> 2차원이나 3차원으로 축소하여 시각화</li>
+            </ul>
+
+            <h3>VAE(Variational Autoencoder)의 개념</h3>
+
+            <div class="term-box">
+                <strong>VAE (Variational Autoencoder)</strong>는 오토인코더를 확률 모델로 확장한 것입니다. 잠재공간이 확률 분포를 따르도록 설계되어, 새로운 데이터를 생성할 수 있습니다.
+            </div>
+
+            <h3>VAE의 핵심: 확률적 잠재공간</h3>
+
+            <p>기존 오토인코더에서는 잠재표현이 단순한 벡터이지만, VAE에서는 잠재표현이 확률분포(보통 정규분포)를 따릅니다:</p>
+
+            <div class="analogy-box">
+                <strong>비유로 이해하기:</strong> 기존 AE는 사진을 압축해서 보관하는 것이고, VAE는 사진의 "특징"을 확률분포로 보관하는 것입니다. VAE의 잠재공간에서는 인접한 영역들이 유사한 데이터를 나타내므로, 새로운 지점에서 샘플링하면 새로운 이미지를 생성할 수 있습니다.
+            </div>
+
+            <h3>VAE의 재매개변수화 트릭(Reparameterization Trick)</h3>
+
+            <p>VAE의 인코더는 두 개의 출력을 생성합니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>평균(μ):</strong> 정규분포의 중심</li>
+                <li><strong>분산(σ):</strong> 정규분포의 퍼짐 정도</li>
+            </ul>
+
+            <p>재매개변수화 트릭은 다음과 같이 작동합니다:</p>
+            <div class="process-flow">
+                <span class="process-step">표준정규분포에서 ε 샘플링</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">z = μ + σ × ε</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">디코더에 입력</span>
+            </div>
+
+            <p>이 기법을 통해 역전파가 가능해지며, VAE를 end-to-end로 학습할 수 있습니다.</p>
+
+            <h3>VAE의 손실함수</h3>
+
+            <p>VAE의 손실함수는 두 부분으로 구성됩니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>복원 손실(Reconstruction Loss):</strong> 원본과 복원된 데이터의 차이</li>
+                <li><strong>KL 발산(KL Divergence):</strong> 학습된 분포와 정규분포의 차이</li>
+            </ul>
+
+            <div class="term-box">
+                <strong>총 손실 = 복원 손실 + β × KL 발산</strong><br>
+                이 균형이 중요합니다. KL 발산이 너무 크면 너무 흐릿한 이미지를 생성하고, 너무 작으면 단순 오토인코더처럼 작동합니다.
+            </div>
+
+            <h3>VAE의 응용</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>이미지 생성:</strong> 잠재공간에서 샘플링하여 새로운 이미지 생성</li>
+                <li><strong>이미지 보간:</strong> 두 이미지의 잠재표현 사이를 보간하여 중간 형태의 이미지 생성</li>
+                <li><strong>이미지 편집:</strong> 잠재표현의 특정 차원을 조정하여 특정 속성 변경</li>
+                <li><strong>노이즈 제거:</strong> 손상된 데이터의 복원</li>
+                <li><strong>데이터 분석:</strong> 잠재공간 시각화를 통한 데이터 이해</li>
+            </ul>
+
+            <h3>AE vs VAE 비교</h3>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">항목</th>
+                        <th style="width: 40%;">오토인코더(AE)</th>
+                        <th style="width: 40%;">변분 오토인코더(VAE)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>잠재표현</strong></td>
+                        <td>결정적 벡터</td>
+                        <td>확률분포(μ, σ)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>생성 능력</strong></td>
+                        <td>생성 불가능</td>
+                        <td>새 데이터 생성 가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>손실함수</strong></td>
+                        <td>복원 손실만</td>
+                        <td>복원 손실 + KL 발산</td>
+                    </tr>
+                    <tr>
+                        <td><strong>주요 용도</strong></td>
+                        <td>압축, 차원축소, 노이즈 제거</td>
+                        <td>데이터 생성, 보간, 편집</td>
+                    </tr>
+                    <tr>
+                        <td><strong>복원 품질</strong></td>
+                        <td>일반적으로 더 선명</td>
+                        <td>약간 흐림 (KL 손실 때문)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>학습 안정성</strong></td>
+                        <td>매우 안정적</td>
+                        <td>안정적 (β 조정 필요)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="section3" class="section">
+            <h2>3. Diffusion 모델</h2>
+
+            <h3>Diffusion 모델의 개념</h3>
+
+            <div class="term-box">
+                <strong>Diffusion 모델</strong>은 노이즈가 점진적으로 추가되는 "forward process"와 노이즈를 제거하는 "reverse process"로 구성된 생성 모델입니다. DDPM(Denoising Diffusion Probabilistic Model)이 대표적입니다.
+            </div>
+
+            <p>Diffusion 모델은 근본적으로 다른 철학에 기반합니다: 복잡한 데이터 분포를 직접 학습하지 않고, 대신 노이즈 제거 과정을 학습합니다.</p>
+
+            <h3>Forward Process: 노이즈 추가</h3>
+
+            <p>Forward process는 원본 데이터에 점진적으로 노이즈를 추가하여 순수한 가우시안 노이즈가 될 때까지 진행합니다:</p>
+
+            <div class="process-flow">
+                <span class="process-step">원본 이미지 x₀</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">약간의 노이즈</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">더 많은 노이즈</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">순수 노이즈 xₜ</span>
+            </div>
+
+            <p>이 과정은 다음과 같이 표현됩니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li>x₀: 원본 데이터</li>
+                <li>x₁, x₂, ..., xₜ: 점진적으로 노이즈가 추가된 중간 상태들</li>
+                <li>xₜ: T 스텝 후의 순수 가우시안 노이즈</li>
+            </ul>
+
+            <h3>Reverse Process: 노이즈 제거</h3>
+
+            <p>Reverse process는 순수 노이즈로부터 시작하여 점진적으로 노이즈를 제거하여 원본 데이터와 유사한 샘플을 생성합니다:</p>
+
+            <div class="process-flow">
+                <span class="process-step">순수 노이즈 xₜ</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">노이즈 제거</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">더 많이 제거</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">생성된 이미지 x₀</span>
+            </div>
+
+            <h3>Diffusion 모델의 학습</h3>
+
+            <p>신경망은 forward process의 각 스텝에서 추가된 노이즈를 예측하도록 학습됩니다:</p>
+
+            <div class="step-cards">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">데이터 선택</div>
+                    <div class="step-desc">학습 데이터 x₀를 선택합니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">랜덤 시간선택</div>
+                    <div class="step-desc">1~T 사이의 랜덤 스텝 t를 선택합니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">노이즈 추가</div>
+                    <div class="step-desc">xₜ에 노이즈를 추가합니다.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-title">노이즈 예측</div>
+                    <div class="step-desc">신경망이 추가된 노이즈를 예측합니다.</div>
+                </div>
+            </div>
+
+            <h3>Stable Diffusion</h3>
+
+            <div class="term-box">
+                <strong>Stable Diffusion</strong>은 Latent Diffusion Models을 기반으로 한 실용적인 이미지 생성 모델입니다. 이미지 공간 대신 압축된 잠재공간에서 diffusion을 수행하여 효율성을 크게 향상시켰습니다.
+            </div>
+
+            <h4>Stable Diffusion의 작동</h4>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>텍스트 인코딩:</strong> 텍스트 프롬프트를 임베딩으로 변환</li>
+                <li><strong>잠재공간 diffusion:</strong> 잠재공간에서 노이즈 제거 diffusion 수행</li>
+                <li><strong>이미지 복원:</strong> 디코더로 잠재표현을 이미지로 변환</li>
+            </ul>
+
+            <h3>Diffusion vs GAN vs VAE</h3>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">항목</th>
+                        <th style="width: 28%;">Diffusion</th>
+                        <th style="width: 28%;">GAN</th>
+                        <th style="width: 28%;">VAE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>기본 원리</strong></td>
+                        <td>점진적 노이즈 제거</td>
+                        <td>적대적 경쟁</td>
+                        <td>확률적 인코딩</td>
+                    </tr>
+                    <tr>
+                        <td><strong>학습 안정성</strong></td>
+                        <td>매우 안정적</td>
+                        <td>불안정함</td>
+                        <td>안정적</td>
+                    </tr>
+                    <tr>
+                        <td><strong>생성 속도</strong></td>
+                        <td>느림 (수백 스텝)</td>
+                        <td>빠름 (1스텝)</td>
+                        <td>빠름 (1스텝)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>생성 품질</strong></td>
+                        <td>매우 우수</td>
+                        <td>우수</td>
+                        <td>중간 (흐림)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>가능도 추정</strong></td>
+                        <td>직접 계산 불가</td>
+                        <td>불가능</td>
+                        <td>가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>조건부 생성</strong></td>
+                        <td>용이 (클래스 레이블/텍스트)</td>
+                        <td>가능 (conditional GAN)</td>
+                        <td>가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>주요 응용</strong></td>
+                        <td>고품질 이미지, 텍스트-이미지</td>
+                        <td>이미지 변환, 초고해상도</td>
+                        <td>데이터 분석, 보간</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Diffusion 모델의 장점</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>학습 안정성:</strong> 기존 생성 모델들보다 훨씬 안정적으로 학습됩니다.</li>
+                <li><strong>생성 품질:</strong> 현재 가장 높은 품질의 이미지를 생성합니다.</li>
+                <li><strong>다양성:</strong> 같은 입력에 대해 다양한 출력을 생성할 수 있습니다.</li>
+                <li><strong>조건부 제어:</strong> 텍스트, 이미지, 세그멘테이션 등으로 생성 과정을 조건화할 수 있습니다.</li>
+            </ul>
+
+            <h3>Diffusion 모델의 도전</h3>
+
+            <div class="warning-box">
+                <strong>느린 생성 속도:</strong> 고품질 생성을 위해 수백 개의 역전파 스텝이 필요하므로, 실시간 응용에는 부적합합니다.
+            </div>
+
+            <div class="note-box">
+                <strong>개선 방법:</strong> DDIM(Denoising Diffusion Implicit Models)과 같은 가속화 기법들이 개발되었으며, 스텝 수를 10~50으로 줄일 수 있습니다.
+            </div>
+        </section>
+
+        <section id="section4" class="section">
+            <h2>4. 생성모델 비교 분석</h2>
+
+            <div class="analogy-box">
+                <strong>세 모델의 특징 비유:</strong> GAN은 "즉흥 연주"처럼 빠르지만 불안정합니다. VAE는 "악보를 읽기"처럼 해석적이지만 다소 흐립니다. Diffusion은 "천천히 조각하기"처럼 느리지만 정교합니다.
+            </div>
+
+            <h3>생성모델 선택 가이드</h3>
+
+            <div class="note-box">
+                <strong>고해상도 고품질 이미지가 필요하면:</strong> Diffusion을 선택하세요. 현재 최고의 품질을 제공합니다.
+            </div>
+
+            <div class="note-box">
+                <strong>실시간 생성이 필요하면:</strong> GAN을 선택하세요. 가장 빠릅니다.
+            </div>
+
+            <div class="note-box">
+                <strong>데이터 분석과 해석이 필요하면:</strong> VAE를 선택하세요. 가장 해석 가능합니다.
+            </div>
+
+            <div class="note-box">
+                <strong>텍스트 제어 생성이 필요하면:</strong> Diffusion을 선택하세요. 조건화가 가장 용이합니다.
+            </div>
+        </section>
+
+        <section id="section5" class="section">
+            <h2>5. SNN: 생물학적 신경망</h2>
+
+            <h3>SNN이란 무엇인가?</h3>
+
+            <div class="term-box">
+                <strong>SNN (Spiking Neural Network, 스파이킹 신경망)</strong>은 생물학적 뉴런의 작동 방식을 모사한 신경망입니다. 전통적인 인공신경망과 달리, SNN은 시간 정보를 활용하여 뉴런 간의 펄스(스파이크)를 통해 정보를 전달합니다.
+            </div>
+
+            <p>우리의 뇌는 매우 효율적인 생물 컴퓨터입니다. 뇌의 신경세포들은 지속적으로 활성화되어 있지 않고, 필요한 순간에만 전기 신호(스파이크)를 보냅니다. SNN은 이런 생물학적 현실을 인공신경망으로 구현한 것입니다.</p>
+
+            <h3>생물학적 뉴런의 작동 원리</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>정보 수집:</strong> 수상돌기(dendrite)가 다른 뉴런으로부터 신호를 받습니다.</li>
+                <li><strong>신호 통합:</strong> 받은 신호들이 모여서 세포체(soma)에 축적됩니다.</li>
+                <li><strong>임계값 초과:</strong> 축적된 신호가 특정 수준(임계값)을 넘으면, 뉴런이 "발화(spike)"합니다.</li>
+                <li><strong>신호 전송:</strong> 축삭(axon)을 통해 전기 신호가 다른 뉴런들에게 전달됩니다.</li>
+                <li><strong>재설정:</strong> 발화 후, 뉴런은 불응기(refractory period)를 거쳐 원래 상태로 돌아갑니다.</li>
+            </ul>
+
+            <h3>전통적 ANN과 SNN의 차이</h3>
+
+            <div class="analogy-box">
+                <strong>신호 전달 방식의 비유:</strong> 전통적인 ANN은 "밝기 조절이 되는 전등"과 같습니다. 신경세포가 항상 어느 정도의 신호를 내보내는데, 그 강도만 조절되는 것입니다. 반면 SNN은 "모스 부호"와 같습니다. 신경세포는 "신호를 보낸다"(1) 또는 "보내지 않는다"(0)의 이진 선택만 하지만, 신호를 보내는 시점(타이밍)이 정보를 담고 있습니다.
+            </div>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">항목</th>
+                        <th style="width: 40%;">전통적 ANN</th>
+                        <th style="width: 40%;">SNN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>신호 형태</strong></td>
+                        <td>연속값 (0~1)</td>
+                        <td>이산값 (0 또는 1)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>시간 개념</strong></td>
+                        <td>없음</td>
+                        <td>있음 (타이밍 중요)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>에너지 소비</strong></td>
+                        <td>높음</td>
+                        <td>매우 낮음</td>
+                    </tr>
+                    <tr>
+                        <td><strong>모델</strong></td>
+                        <td>비생물학적</td>
+                        <td>생물학적</td>
+                    </tr>
+                    <tr>
+                        <td><strong>호환 칩</strong></td>
+                        <td>CPU, GPU</td>
+                        <td>뉴로모픽 칩</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>SNN의 핵심 개념</h3>
+
+            <h4>막전위(Membrane Potential)</h4>
+            <p>실제 뉴런과 마찬가지로, SNN의 인공 뉴런도 막전위라는 개념을 가집니다. 이것은 뉴런이 스파이크를 발화할 때까지 축적되는 "에너지" 같은 것입니다. 들어오는 신호들이 막전위를 높이고, 시간이 지나면서 자연적으로 감소합니다.</p>
+
+            <h4>누적-발화 모델(Leaky Integrate-and-Fire, LIF)</h4>
+            <p>이는 SNN에서 가장 많이 사용되는 뉴런 모델입니다:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>누적(Integrate):</strong> 들어오는 신호를 모습니다.</li>
+                <li><strong>발화(Fire):</strong> 임계값을 넘으면 스파이크를 보냅니다.</li>
+                <li><strong>누출(Leak):</strong> 시간이 지나면서 축적된 신호가 조금씩 감소합니다.</li>
+            </ul>
+
+            <h4>스파이크 타이밍 의존적 가소성(STDP)</h4>
+            <p>생물학적 뉴런의 학습 메커니즘입니다: "선행-후행 학습"이라고도 불리며, 만약 A 뉴런의 스파이크가 B 뉴런의 스파이크보다 조금 먼저 일어나면, A→B 연결이 강해집니다. 반대로 나중에 일어나면, 연결이 약해집니다.</p>
+
+            <h3>SNN의 장점</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>에너지 효율성:</strong> 필요한 순간에만 계산하므로 전력 소비가 매우 적습니다. 임베디드 시스템이나 엣지 디바이스에 매우 유용합니다.</li>
+                <li><strong>시간적 패턴 인식:</strong> 시간 정보를 직접 활용하므로, 시계열 데이터나 시간적 패턴을 매우 잘 인식합니다.</li>
+                <li><strong>신경형 하드웨어 호환성:</strong> 생물학적 원리에 기반하므로, 신경형 칩(neuromorphic chips)과 자연스럽게 맞아떨어집니다.</li>
+                <li><strong>비동기 처리:</strong> 모든 연산이 동시에 일어날 필요가 없어서, 병렬 처리가 용이합니다.</li>
+            </ul>
+
+            <h3>뉴로모픽 칩(Neuromorphic Chips)</h3>
+
+            <div class="term-box">
+                <strong>뉴로모픽 칩:</strong> SNN을 하드웨어 수준에서 구현한 칩입니다. Intel의 Loihi 칩, IBM의 TrueNorth 같은 신경형 컴퓨터들이 SNN을 기본으로 설계되었습니다. 이들은 기존 CPU/GPU보다 훨씬 에너지 효율적입니다.
+            </div>
+
+            <h3>SNN의 응용</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>로봇 제어:</strong> 로봇이 환경을 인식하고 반응하는 데 매우 효율적입니다.</li>
+                <li><strong>에지 AI:</strong> 스마트폰이나 IoT 기기 같은 제한된 전력의 장치에서 AI를 구동합니다.</li>
+                <li><strong>시각 처리:</strong> 동적 시각 센서(DVS)와 결합하여 매우 빠른 객체 인식을 합니다.</li>
+                <li><strong>스피치 인식:</strong> 음성 신호의 시간적 패턴을 잘 포착합니다.</li>
+                <li><strong>이상 탐지:</strong> 비정상적인 패턴을 실시간으로 감지합니다.</li>
+                <li><strong>우주선:</strong> 높은 방사선 환경에서도 작동 가능합니다.</li>
+            </ul>
+
+            <h3>SNN의 도전 과제</h3>
+
+            <div class="warning-box">
+                <strong>학습의 어려움:</strong> SNN은 스파이크가 미분 불가능하기 때문에, 전통적인 역전파(backpropagation)를 직접 사용할 수 없습니다. 이를 극복하기 위해 "Surrogate Gradient Method", "ANN-SNN 변환", "신경 진화" 같은 새로운 기법들이 개발되고 있습니다.
+            </div>
+
+            <div class="warning-box">
+                <strong>훈련 속도:</strong> SNN의 학습은 기존 신경망보다 느릴 수 있습니다. 여러 시간 스텝에 걸쳐 시뮬레이션해야 하기 때문입니다.
+            </div>
+
+            <div class="note-box">
+                <strong>최근 진전:</strong> 2022년 이후, SNN 성능이 급속도로 개선되고 있습니다. Surrogate Gradient Method 같은 기법 덕분에, 대규모 이미지 데이터셋에서도 전통적 신경망과 경쟁할 수 있는 수준에 도달했습니다.
+            </div>
+        </section>
+
+        <section id="section6" class="section">
+            <h2>6. GNN: 그래프 신경망</h2>
+
+            <h3>GNN이란 무엇인가?</h3>
+
+            <div class="term-box">
+                <strong>GNN (Graph Neural Network, 그래프 신경망)</strong>은 그래프 구조의 데이터를 학습하기 위해 설계된 신경망입니다. 노드(점)와 엣지(선)로 이루어진 네트워크 데이터를 효과적으로 처리합니다.
+            </div>
+
+            <h3>그래프 데이터의 구성</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>노드(Node):</strong> 그래프의 개별 점들입니다. 소셜 네트워크에서는 사람, 분자 구조에서는 원자가 노드입니다.</li>
+                <li><strong>엣지(Edge):</strong> 노드들을 연결하는 선들입니다. 소셜 네트워크에서는 친구 관계, 분자 구조에서는 화학 결합이 엣지입니다.</li>
+                <li><strong>노드 특성(Node Features):</strong> 각 노드가 가진 정보입니다. 사람 노드는 나이, 성별 같은 속성을 가질 수 있습니다.</li>
+                <li><strong>엣지 특성(Edge Features):</strong> 각 엣지가 가진 정보입니다. 거리, 강도, 유형 등을 나타낼 수 있습니다.</li>
+            </ul>
+
+            <h3>그래프 데이터의 예시</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>소셜 네트워크:</strong> 노드 = 사람, 엣지 = 친구 관계</li>
+                <li><strong>분자 구조:</strong> 노드 = 원자, 엣지 = 화학 결합</li>
+                <li><strong>지식 그래프:</strong> 노드 = 개념, 엣지 = 관계 (예: "서울" -"수도"- "대한민국")</li>
+                <li><strong>교통 네트워크:</strong> 노드 = 도시, 엣지 = 도로 또는 항공노선</li>
+                <li><strong>추천 시스템:</strong> 노드 = 사용자와 상품, 엣지 = 구매 또는 평가</li>
+                <li><strong>단백질 상호작용:</strong> 노드 = 단백질, 엣지 = 상호작용</li>
+            </ul>
+
+            <h3>GNN의 핵심: 메시지 전달(Message Passing)</h3>
+
+            <div class="term-box">
+                <strong>메시지 전달</strong>은 GNN의 가장 중요한 아이디어입니다. 각 노드가 이웃 노드들로부터 정보(메시지)를 받고, 이를 처리해서 자신의 상태를 업데이트합니다.
+            </div>
+
+            <div class="process-flow">
+                <span class="process-step">이웃 정보 수집</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">메시지 생성</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">집계</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">노드 업데이트</span>
+            </div>
+
+            <div class="analogy-box">
+                <strong>메시지 전달의 비유:</strong> SNS에서 정보가 퍼지는 방식을 생각해보세요. 한 사람이 소식을 올리면, 그 사람의 친구들이 그것을 봅니다. 그 친구들의 친구들도 보게 되고, 점점 퍼져 나갑니다. GNN에서 각 노드는 자신과 연결된 이웃 노드들의 정보를 모아서 자신의 상태를 업데이트하는, 마치 이 전파 메커니즘과 같은 방식으로 작동합니다.
+            </div>
+
+            <h3>GNN의 주요 유형</h3>
+
+            <div class="term-box">
+                <strong>GCN (Graph Convolutional Network):</strong> 이미지 처리의 합성곱(CNN)을 그래프로 확장한 것입니다. 각 노드의 이웃 노드들의 정보를 가중 평균 방식으로 통합합니다.
+            </div>
+
+            <div class="term-box">
+                <strong>GAT (Graph Attention Network):</strong> 어떤 이웃이 더 중요한지를 학습합니다. 모든 이웃을 동등하게 취급하지 않고, "주의(attention)" 메커니즘을 사용해서 중요한 이웃에 더 많은 가중치를 부여합니다.
+            </div>
+
+            <div class="term-box">
+                <strong>GraphSAGE (Graph Sample and Aggregate):</strong> 매우 큰 그래프에서 효율적으로 작동합니다. 모든 이웃을 고려하는 대신, 일부 이웃을 샘플해서 집계합니다. 확장성이 뛰어납니다.
+            </div>
+
+            <h3>GNN의 응용</h3>
+
+            <h4>추천 시스템</h4>
+            <p>사용자-상품 그래프를 만들어서, 사용자와 상품 사이의 복잡한 관계를 학습합니다. 이를 통해 어떤 사용자에게 어떤 상품을 추천할 것인가를 결정합니다.</p>
+
+            <h4>약물 발견</h4>
+            <p>분자 구조를 그래프로 표현한 후, GNN을 사용해서 분자의 특성을 예측합니다. 예: "이 분자는 암 치료에 효과가 있을까?"</p>
+
+            <h4>사기 탐지</h4>
+            <p>거래 네트워크(계좌 간의 송금 관계)를 그래프로 표현한 후, 비정상적인 패턴을 찾아냅니다.</p>
+
+            <h4>교통 예측</h4>
+            <p>도시의 교통 네트워크를 그래프로 표현한 후, "내일 이 도로의 교통량은 얼마나 될 것인가?"를 예측합니다.</p>
+
+            <h4>기타 응용</h4>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li>단백질 구조 예측 및 상호작용 예측</li>
+                <li>텍스트 분류 및 자연어 처리</li>
+                <li>커뮤니티 탐지(그래프에서 밀집된 부분군 찾기)</li>
+                <li>링크 예측(새로운 엣지가 생길 확률 예측)</li>
+                <li>지식 그래프 완성</li>
+                <li>소셜 네트워크 분석</li>
+            </ul>
+
+            <h3>GNN과 LLM: 환각 완화</h3>
+
+            <p>최근 주목받는 응용이 바로 GNN을 사용한 LLM(대규모 언어모델) 환각 완화입니다. ChatGPT 같은 LLM은 때때로 존재하지 않는 정보를 마치 진실인 것처럼 생성합니다. 이를 "환각(hallucination)"이라고 합니다.</p>
+
+            <div class="note-box">
+                <strong>해결책:</strong> 지식 그래프(노드: 개념, 엣지: 관계)와 GNN을 결합하면, LLM의 출력을 지식 그래프에 대비해서 검증할 수 있습니다. 이렇게 하면, LLM이 생성한 답이 실제 사실에 기반한 것인지 확인할 수 있습니다.
+            </div>
+
+            <h3>GNN의 장점</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>구조 정보 활용:</strong> 데이터의 관계 구조를 직접 활용할 수 있습니다.</li>
+                <li><strong>확장성:</strong> GraphSAGE 같은 기법으로 매우 큰 그래프도 처리할 수 있습니다.</li>
+                <li><strong>해석 가능성:</strong> 어떤 이웃의 정보가 더 중요했는지 알 수 있어서, 모델의 결정을 이해할 수 있습니다.</li>
+                <li><strong>일반화 능력:</strong> 유사한 구조를 가진 다른 그래프에도 적용할 수 있습니다.</li>
+            </ul>
+
+            <h3>GNN의 도전 과제</h3>
+
+            <div class="warning-box">
+                <strong>과다-평활화(Over-smoothing):</strong> GNN 층이 깊어질수록, 모든 노드가 비슷한 표현을 가지게 되는 문제가 발생합니다. 마치 전화 게임에서 메시지가 왜곡되듯이, 정보가 여러 번 전파되면서 개성을 잃게 되는 것입니다.
+            </div>
+
+            <div class="warning-box">
+                <strong>확장성 문제:</strong> 엣지가 매우 많은 그래프(밀집 그래프)는 여전히 처리하기 어렵습니다.
+            </div>
+
+            <div class="note-box">
+                <strong>연구 진행 중:</strong> DropMessage, JumpingKnowledge, GraphGym 같은 새로운 기법들이 계속 개발되고 있습니다.
+            </div>
+        </section>
+
+        <section id="section7" class="section">
+            <h2>7. 전이학습과 도메인 적응</h2>
+
+            <h3>전이학습(Transfer Learning)의 개념</h3>
+
+            <div class="term-box">
+                <strong>전이학습(Transfer Learning)</strong>은 한 분야에서 학습한 지식을 다른 분야에 활용하는 기법입니다. "사전학습된 모델"에서 배운 특성들을 활용하여, 새로운 작업을 더 효율적으로 학습하는 것입니다.
+            </div>
+
+            <p>전이학습의 핵심 아이디어는 간단합니다: 처음부터 모든 것을 배우지 말고, 이미 배워진 지식을 활용하세요. 마치 새로운 언어를 배울 때, 모국어의 문법 개념을 활용하는 것처럼 말입니다.</p>
+
+            <h3>전이학습의 작동 원리</h3>
+
+            <div class="process-flow">
+                <span class="process-step">사전학습</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">특성 추출</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">파인튜닝</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">새 작업 완료</span>
+            </div>
+
+            <h4>사전학습(Pre-training)</h4>
+            <p>대규모 데이터셋(예: ImageNet, BERT 코퍼스)으로 모델을 미리 학습합니다. 이 과정에서 모델은 일반적인 특성들(예: 이미지의 엣지, 텍스트의 문법)을 학습합니다.</p>
+
+            <h4>파인튜닝(Fine-tuning)</h4>
+            <p>사전학습된 모델의 가중치를 초기값으로 사용하고, 새로운 작업의 데이터로 적응시킵니다. 보통 낮은 학습률을 사용하여 이미 배운 특성을 유지하면서 조정합니다.</p>
+
+            <div class="step-cards">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">사전학습 모델</div>
+                    <div class="step-desc">대규모 데이터로 학습된 모델 로드</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">구조 수정</div>
+                    <div class="step-desc">마지막 층을 새 작업에 맞게 수정</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">파인튜닝</div>
+                    <div class="step-desc">새 데이터로 적응시키기</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-title">평가</div>
+                    <div class="step-desc">새 작업에서의 성능 확인</div>
+                </div>
+            </div>
+
+            <h3>전이학습의 전략</h3>
+
+            <h4>특성 추출(Feature Extraction)</h4>
+            <p>사전학습된 모델의 가중치를 고정하고, 마지막 분류 층만 새 작업에 맞게 학습합니다. 데이터가 적을 때 유용합니다.</p>
+
+            <h4>완전 파인튜닝(Full Fine-tuning)</h4>
+            <p>모든 가중치를 학습 가능하게 하고, 전체 모델을 새 데이터에 적응시킵니다. 데이터가 충분할 때 더 좋은 결과를 줄 수 있습니다.</p>
+
+            <h4>부분 파인튜닝(Partial Fine-tuning)</h4>
+            <p>모델의 일부 층만 학습하고 나머지는 고정합니다. 계산 효율성과 성능의 균형을 맞춥니다.</p>
+
+            <h3>전이학습의 응용</h3>
+
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>컴퓨터 비전:</strong> ImageNet으로 사전학습된 ResNet을 의료 이미지 분류에 사용</li>
+                <li><strong>자연어 처리:</strong> BERT, GPT 같은 사전학습 모델을 감정 분류, 기계 번역 등에 활용</li>
+                <li><strong>음성 인식:</strong> 대규모 음성 데이터로 사전학습된 모델을 특정 언어나 악센트에 적응</li>
+                <li><strong>추천 시스템:</strong> 일반적인 사용자-상품 관계로 사전학습하고, 특정 플랫폼에 파인튜닝</li>
+            </ul>
+
+            <h3>도메인 적응(Domain Adaptation)</h3>
+
+            <div class="term-box">
+                <strong>도메인 적응(Domain Adaptation)</strong>은 전이학습의 특수한 경우입니다. 원본 도메인(source domain)에서 학습한 모델을 대상 도메인(target domain)에 적응시키는 기법입니다.
+            </div>
+
+            <h4>도메인 시프트(Domain Shift)</h4>
+            <p>현실 세계에서는 학습 데이터와 실제 사용 데이터가 다를 수 있습니다. 예를 들어:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>광도 변화:</strong> 실험실 조명 아래서 학습했지만, 야외에서 사용</li>
+                <li><strong>카메라 변화:</strong> 한 종류의 카메라로 학습했지만, 다른 카메라 사용</li>
+                <li><strong>데이터 분포 변화:</strong> 젊은 사람의 얼굴로 학습했지만, 나이 든 사람의 얼굴 인식</li>
+            </ul>
+
+            <h3>도메인 적응 기법</h3>
+
+            <h4>비지도 도메인 적응(Unsupervised Domain Adaptation)</h4>
+            <p>대상 도메인의 레이블이 없을 때 사용됩니다. 원본과 대상 도메인의 특성 분포를 유사하게 만드는 방법들:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>최대 평균 불일치(MMD):</strong> 두 도메인의 평균 특성을 가깝게 만들기</li>
+                <li><strong>적대적 도메인 적응:</strong> GAN 기법을 사용하여 도메인 구분 불가능하게 만들기</li>
+                <li><strong>자기 학습(Self-training):</strong> 모델이 대상 도메인에서 신뢰도 높은 예측을 레이블로 사용</li>
+            </ul>
+
+            <h4>준지도 도메인 적응(Semi-supervised Domain Adaptation)</h4>
+            <p>대상 도메인의 일부 레이블이 있을 때 사용됩니다. 레이블된 샘플로 직접 학습하고, 레이블되지 않은 샘플로는 도메인 적응을 수행합니다.</p>
+
+            <h3>전이학습의 장점과 한계</h3>
+
+            <div class="note-box">
+                <strong>장점:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>필요한 학습 데이터 양 감소</li>
+                    <li>학습 시간 단축</li>
+                    <li>작은 데이터셋에서도 좋은 성능</li>
+                    <li>모델의 일반화 능력 향상</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>한계:</strong> 원본 도메인과 대상 도메인이 너무 다르면 오히려 성능이 저하될 수 있습니다(음의 전이). 또한 도메인 시프트가 크면 적응이 어려울 수 있습니다.
+            </div>
+        </section>
+
+        <section id="section8" class="section">
+            <h2>8. 종합 비교 및 선택 가이드</h2>
+
+            <h3>모든 모델의 비교</h3>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th style="width: 12%;">항목</th>
+                        <th style="width: 13%;">GAN</th>
+                        <th style="width: 13%;">VAE</th>
+                        <th style="width: 13%;">Diffusion</th>
+                        <th style="width: 13%;">SNN</th>
+                        <th style="width: 13%;">GNN</th>
+                        <th style="width: 13%;">Transfer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>주요 목표</strong></td>
+                        <td>새 데이터 생성</td>
+                        <td>압축/생성</td>
+                        <td>고품질 생성</td>
+                        <td>효율성</td>
+                        <td>관계 학습</td>
+                        <td>지식 활용</td>
+                    </tr>
+                    <tr>
+                        <td><strong>데이터 유형</strong></td>
+                        <td>이미지, 텍스트</td>
+                        <td>일반 데이터</td>
+                        <td>이미지, 텍스트</td>
+                        <td>시계열, 센서</td>
+                        <td>그래프</td>
+                        <td>모든 유형</td>
+                    </tr>
+                    <tr>
+                        <td><strong>학습 안정성</strong></td>
+                        <td>불안정</td>
+                        <td>안정</td>
+                        <td>매우 안정</td>
+                        <td>어려움</td>
+                        <td>안정</td>
+                        <td>안정</td>
+                    </tr>
+                    <tr>
+                        <td><strong>계산 효율</strong></td>
+                        <td>낮음</td>
+                        <td>중간</td>
+                        <td>낮음</td>
+                        <td>매우 높음</td>
+                        <td>중간</td>
+                        <td>높음</td>
+                    </tr>
+                    <tr>
+                        <td><strong>생성 속도</strong></td>
+                        <td>빠름</td>
+                        <td>빠름</td>
+                        <td>느림</td>
+                        <td>빠름</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>품질</strong></td>
+                        <td>우수</td>
+                        <td>중간</td>
+                        <td>최우수</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>높음</td>
+                    </tr>
+                    <tr>
+                        <td><strong>해석성</strong></td>
+                        <td>낮음</td>
+                        <td>높음</td>
+                        <td>낮음</td>
+                        <td>중간</td>
+                        <td>높음</td>
+                        <td>중간</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>상황별 모델 선택 가이드</h3>
+
+            <div class="note-box">
+                <strong>새로운 이미지를 생성하고 싶을 때:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>최고 품질: Diffusion (Stable Diffusion, DALL-E)</li>
+                    <li>실시간 필요: GAN</li>
+                    <li>해석 가능: VAE</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <strong>이미지를 변환하고 싶을 때:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>스타일 변환: StyleGAN, CycleGAN</li>
+                    <li>보간/편집: VAE</li>
+                    <li>쌍 기반 변환: Pix2Pix</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <strong>에너지 효율이 중요할 때:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>로봇/IoT: SNN</li>
+                    <li>엣지 AI: SNN + 양자화</li>
+                    <li>뉴로모픽 칩: SNN</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <strong>관계 데이터를 분석하고 싶을 때:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>추천: GNN</li>
+                    <li>약물 발견: GNN</li>
+                    <li>사기 탐지: GNN</li>
+                    <li>지식 그래프: GNN</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <strong>데이터가 부족할 때:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>먼저 시도: 전이학습</li>
+                    <li>데이터 증강: GAN</li>
+                    <li>보조 타스크: 멀티태스크 학습</li>
+                </ul>
+            </div>
+
+            <h3>학습 곡선 및 성능 비교</h3>
+
+            <p>일반적인 추세:</p>
+            <ul style="margin-left: 20px; margin-bottom: 14px;">
+                <li><strong>작은 데이터:</strong> 전이학습 > Diffusion > GAN > 처음부터 학습</li>
+                <li><strong>중간 데이터:</strong> 전이학습 ≈ Diffusion > GAN > 처음부터</li>
+                <li><strong>큰 데이터:</strong> 모두 비슷한 성능 (전이학습이 여전히 약간 앞)</li>
+                <li><strong>실시간 필요:</strong> GAN > SNN > Diffusion</li>
+                <li><strong>품질 중심:</strong> Diffusion > GAN > VAE > 전통 모델</li>
+            </ul>
+
+            <h3>미래의 방향</h3>
+
+            <div class="note-box">
+                <strong>다중 모델 조합:</strong> 최신 AI 시스템들은 여러 모델을 조합하여 사용합니다.
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Diffusion + GNN: 조건화된 생성</li>
+                    <li>Transfer Learning + Diffusion: 도메인 적응 생성</li>
+                    <li>SNN + GNN: 효율적 그래프 처리</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="key-summary">
+        <h3>이 장의 핵심 정리</h3>
+        <ul>
+            <li><strong>GAN은 빠른 생성:</strong> 생성자와 판별자의 경쟁을 통해 새로운 데이터를 생성하지만, 학습이 불안정할 수 있습니다.</li>
+            <li><strong>VAE는 해석 가능:</strong> 확률적 잠재공간을 통해 데이터를 압축하고 생성하며, 가장 해석 가능합니다.</li>
+            <li><strong>Diffusion은 최고 품질:</strong> 점진적 노이즈 제거로 가장 높은 품질의 이미지를 생성하지만 느립니다.</li>
+            <li><strong>SNN은 매우 효율적:</strong> 생물학적 뉴런을 모사하여 극도로 낮은 에너지 소비로 작동합니다.</li>
+            <li><strong>GNN은 관계 전문:</strong> 그래프 구조의 데이터에서 복잡한 관계를 효과적으로 학습합니다.</li>
+            <li><strong>전이학습은 필수:</strong> 데이터가 부족한 대부분의 실제 문제에서 가장 실용적인 접근법입니다.</li>
+            <li><strong>모델 선택이 중요:</strong> 문제의 특성, 데이터 양, 계산 자원에 따라 최적의 모델을 선택해야 합니다.</li>
+        </ul>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="04-deeplearning.html">이전: 04. 딥러닝과 모델 최적화</a>
+        <a href="06-large-model.html">다음: 06. 초거대모델</a>
+    </nav>
+
+    <footer class="footer">
+        <p>AI 학습 가이드 | 05. 생성모델과 신경망 확장</p>
+        <p>초보자를 위한 상세한 설명 방식으로 작성되었습니다.</p>
+    </footer>
+</body>
+</html>

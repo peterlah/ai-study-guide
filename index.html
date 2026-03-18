@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 학습 가이드</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.7; }
+        .hero { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); color: white; padding: 60px 24px; text-align: center; }
+        .hero h1 { font-size: 2.4rem; margin-bottom: 12px; }
+        .hero p { font-size: 1.1rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+        .chapter-card { background: white; border-radius: 12px; padding: 28px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); transition: all 0.25s; display: block; text-decoration: none; color: #333; border-left: 5px solid #3498db; }
+        .chapter-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); border-left-color: #2c3e50; }
+        .chapter-card .ch-num { font-size: 0.8rem; font-weight: 700; color: #3498db; text-transform: uppercase; letter-spacing: 1px; }
+        .chapter-card h2 { font-size: 1.3rem; color: #2c3e50; margin: 6px 0 10px; }
+        .chapter-card .topics { font-size: 0.88rem; color: #666; }
+        .chapter-card .topics strong { color: #555; }
+        .section-label { font-size: 0.85rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 2px; margin: 36px 0 16px; padding-left: 4px; }
+        .footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>AI 학습 가이드</h1>
+    <p>인공지능 전 범위를 초보자 눈높이로 정리한 학습 자료</p>
+</header>
+
+<div class="container">
+
+    <div class="section-label">기초 개념</div>
+
+    <a href="01-overview.html" class="chapter-card">
+        <div class="ch-num">Chapter 01</div>
+        <h2>인공지능 개요</h2>
+        <div class="topics">AI 연대표(1차/2차 암흑기), 지적수준 분류(ANI/AGI/ASI), 튜링테스트/캡챠, 규칙기반모델, <strong>추천알고리즘</strong>(협업필터링/콘텐츠기반), 마르코프 모델, <strong>메타휴리스틱스</strong>(유전/PSO/SA), AI 윤리, <strong>XAI</strong>(LIME/SHAP), 머신러닝 개요</div>
+    </a>
+
+    <div class="section-label">머신러닝</div>
+
+    <a href="02-supervised.html" class="chapter-card">
+        <div class="ch-num">Chapter 02</div>
+        <h2>지도학습</h2>
+        <div class="topics"><strong>분류 vs 회귀</strong>, KNN, SVM(커널트릭/서포트벡터), <strong>의사결정나무</strong>(ID3/C4.5/CART), 로지스틱회귀, 나이브베이즈, <strong>앙상블</strong>(배깅/부스팅/보팅/스태킹), 랜덤포레스트, <strong>부스팅</strong>(AdaBoost/XGBoost/LightGBM/CatBoost), 교차검증, 혼동행렬/F1/ROC-AUC, 회귀평가(MAE/RMSE/R2)</div>
+    </a>
+
+    <a href="03-unsupervised-rl.html" class="chapter-card">
+        <div class="ch-num">Chapter 03</div>
+        <h2>비지도학습과 강화학습</h2>
+        <div class="topics"><strong>군집분석</strong>(K-Means/K-Medoids/DBSCAN/GMM/SOM), 거리 5종/유사도 7종, <strong>EM 알고리즘</strong>, 계층적 군집, 평가지표(실루엣/DB/Dunn), <strong>차원축소</strong>(PCA/t-SNE/LDA/SVD), <strong>강화학습</strong>(Q-Learning/DQN/SARSA/PPO/RLHF), 배치 vs 온라인, 연합학습, 온디바이스AI</div>
+    </a>
+
+    <div class="section-label">딥러닝</div>
+
+    <a href="04-deeplearning.html" class="chapter-card">
+        <div class="ch-num">Chapter 04</div>
+        <h2>딥러닝과 모델 최적화</h2>
+        <div class="topics">ANN 구조, <strong>퍼셉트론/MLP</strong>, 활성화함수(ReLU/Sigmoid/Softmax), 손실함수(CE/MSE), <strong>경사하강법</strong>(SGD/Momentum/AdaGrad/RMSprop/Adam), 역전파, FNN, 기울기소멸/폭발, <strong>홉필드/볼츠만</strong>, <strong>CNN</strong>(Conv/Pool/LeNet~ResNet), <strong>RNN/LSTM/GRU</strong>, 하이퍼파라미터 최적화(Grid/Random/Bayesian/AutoML)</div>
+    </a>
+
+    <a href="05-generative-model.html" class="chapter-card">
+        <div class="ch-num">Chapter 05</div>
+        <h2>생성모델과 신경망 확장</h2>
+        <div class="topics"><strong>GAN</strong>(DCGAN/CycleGAN/StyleGAN/StarGAN), 오토인코더, <strong>VAE</strong>, Diffusion Model, <strong>SNN</strong>(스파이킹 신경망), <strong>GNN</strong>(GCN/GAT/GraphSAGE), 전이학습(도메인적응/지식증류), 생성모델 종합비교</div>
+    </a>
+
+    <div class="section-label">초거대 AI</div>
+
+    <a href="06-large-model.html" class="chapter-card">
+        <div class="ch-num">Chapter 06</div>
+        <h2>초거대모델</h2>
+        <div class="topics">Seq2Seq, <strong>Attention</strong>(Bahdanau/Luong), Self-Attention(QKV), Multi-Head Attention, Positional Encoding, <strong>Transformer</strong>(Encoder/Decoder), <strong>BERT</strong>(MLM/NSP), <strong>GPT</strong>(1~4), BERT vs GPT 비교, <strong>멀티모달AI</strong>, LLM 훈련과정, 토큰화(BPE/WordPiece), 임베딩(Word2Vec/GloVe/FastText)</div>
+    </a>
+
+    <a href="07-genai.html" class="chapter-card">
+        <div class="ch-num">Chapter 07</div>
+        <h2>생성형 AI</h2>
+        <div class="topics">생성형AI 개요, <strong>파운데이션 모델</strong>, LLM/sLLM, <strong>프롬프트 엔지니어링</strong>(Zero-shot/Few-shot/CoT/ToT), 파인튜닝(LoRA/PEFT), <strong>RAG</strong>(검색증강생성), 할루시네이션, 보안위협, 프론티어AI, <strong>OWASP LLM Top 10</strong>, LangChain</div>
+    </a>
+
+    <div class="section-label">응용과 실무</div>
+
+    <a href="08-platform.html" class="chapter-card">
+        <div class="ch-num">Chapter 08</div>
+        <h2>AI 플랫폼과 서비스</h2>
+        <div class="topics"><strong>AI 에이전트</strong>, 에이전틱AI, AI 가상비서, <strong>MCP</strong>(Model Context Protocol), <strong>A2A</strong>(Agent-to-Agent), 물리AI, 휴머노이드 로봇, <strong>컴퓨터비전</strong>, 딥페이크, TensorFlow vs PyTorch, LangChain, 신경망 플랫폼</div>
+    </a>
+
+    <a href="09-quality.html" class="chapter-card">
+        <div class="ch-num">Chapter 09</div>
+        <h2>AI 품질</h2>
+        <div class="topics">AI 데이터 <strong>품질 가이드라인</strong>, 초거대AI 데이터 품질, <strong>MLOps</strong>(파이프라인/CI-CD), Ops 비교(ModelOps/DataOps/AIOps), <strong>AI 테스트 표준</strong>(ISO 29119-11), 멀티모달 평가(BLEU/ROUGE), 데이터 드리프트, Feature Store, <strong>AI TRiSM</strong>, 신뢰할 수 있는 AI</div>
+    </a>
+
+    <a href="10-policy-infra.html" class="chapter-card">
+        <div class="ch-num">Chapter 10</div>
+        <h2>AI 정책과 인프라</h2>
+        <div class="topics"><strong>AI 거버넌스</strong>, AI 기본법, AI 신뢰성 인증(CAT), 생성형AI 이용자보호, 공공부문 AI 도입가이드, <strong>AI 윤리 동향</strong>(EU AI Act/미국/한국), AI 반도체(GPU/TPU/NPU/FPGA), <strong>PIM</strong>, 칩렛, CXL, <strong>HBM</strong>, 벡터DB, 2025년 트렌드</div>
+    </a>
+
+</div>
+
+<footer class="footer">
+    <p>AI 학습 가이드 | 초보자 친화 학습 자료</p>
+</footer>
+
+</body>
+</html>

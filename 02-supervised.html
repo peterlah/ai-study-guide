@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02. 지도학습 - AI 학습 가이드</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.8; }
+        .top-nav { background: #2c3e50; padding: 12px 24px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .top-nav a:hover { color: #3498db; }
+        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
+        .page-header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+        .page-header p { font-size: 1.1rem; opacity: 0.9; }
+        .toc { background: white; max-width: 860px; margin: 24px auto; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .toc h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3498db; }
+        .toc ul { list-style: none; }
+        .toc li { margin-bottom: 8px; }
+        .toc a { color: #2c3e50; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+        .toc a:hover { background: #eef6fd; color: #3498db; }
+        .toc .section-num { background: #3498db; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
+        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 48px; }
+        .section { background: white; border-radius: 12px; padding: 36px; margin-top: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .section h2 { font-size: 1.5rem; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #3498db; }
+        .section h3 { font-size: 1.2rem; color: #2c3e50; margin: 24px 0 12px; padding-left: 12px; border-left: 4px solid #3498db; }
+        .section h4 { font-size: 1.05rem; color: #555; margin: 16px 0 8px; }
+        .section p { margin-bottom: 14px; font-size: 0.95rem; }
+        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .term-box strong { color: #2c3e50; }
+        .analogy-box { background: #fef9e7; border-left: 4px solid #f1c40f; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .analogy-box strong { color: #7d6608; }
+        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .note-box strong { color: #1e8449; }
+        .warning-box { background: #fdf2f2; border-left: 4px solid #e74c3c; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+        .warning-box strong { color: #c0392b; }
+        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+        .compare-table th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
+        .compare-table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+        .compare-table tr:nth-child(even) { background: #f8f9fa; }
+        .compare-table tr:hover { background: #eef6fd; }
+        .step-cards { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
+        .step-card { flex: 1; min-width: 180px; background: #f8f9fa; border-radius: 8px; padding: 16px; border-top: 4px solid #3498db; }
+        .step-card .step-num { font-size: 1.8rem; font-weight: bold; color: #3498db; }
+        .step-card .step-title { font-weight: bold; color: #2c3e50; margin: 4px 0; }
+        .step-card .step-desc { font-size: 0.85rem; color: #666; }
+        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
+        .process-step { background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 12px 18px; border-radius: 8px; text-align: center; font-size: 0.85rem; font-weight: 500; min-width: 100px; }
+        .process-arrow { color: #3498db; font-size: 1.4rem; font-weight: bold; }
+        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
+        .key-summary h3 { color: #3498db; border: none; padding: 0; margin-bottom: 12px; font-size: 1.15rem; }
+        .key-summary ul { list-style: disc; padding-left: 20px; }
+        .key-summary li { margin-bottom: 6px; font-size: 0.9rem; opacity: 0.95; }
+        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 32px auto; padding: 0 24px; }
+        .bottom-nav a { background: white; color: #2c3e50; text-decoration: none; padding: 14px 28px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s; font-weight: 500; }
+        .bottom-nav a:hover { background: #3498db; color: white; transform: translateY(-2px); }
+        .footer { text-align: center; padding: 32px; color: #999; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 1.6rem; }
+            .page-header p { font-size: 0.95rem; }
+            .section { padding: 24px; margin-top: 24px; }
+            .section h2 { font-size: 1.3rem; }
+            .section h3 { font-size: 1.1rem; }
+            .step-cards { gap: 12px; }
+            .step-card { min-width: 140px; padding: 12px; }
+            .compare-table { font-size: 0.8rem; }
+            .compare-table th, .compare-table td { padding: 8px; }
+            .bottom-nav { flex-direction: column; gap: 16px; }
+            .bottom-nav a { text-align: center; width: 100%; }
+            .process-flow { gap: 4px; }
+            .process-step { padding: 10px 14px; font-size: 0.75rem; min-width: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <a href="01-overview.html">← 이전: 인공지능 개요</a>
+        <a href="index.html">홈으로</a>
+    </div>
+
+    <div class="page-header">
+        <h1>02. 지도학습 (Supervised Learning)</h1>
+        <p>AI 학습 가이드</p>
+    </div>
+
+    <div class="toc">
+        <h2>목차</h2>
+        <ul>
+            <li><a href="#section1"><span class="section-num">1</span>지도학습 개요</a></li>
+            <li><a href="#section2"><span class="section-num">2</span>분류 vs 회귀</a></li>
+            <li><a href="#section3"><span class="section-num">3</span>K-최근접 이웃 (KNN)</a></li>
+            <li><a href="#section4"><span class="section-num">4</span>서포트 벡터 머신 (SVM)</a></li>
+            <li><a href="#section5"><span class="section-num">5</span>의사결정나무</a></li>
+            <li><a href="#section6"><span class="section-num">6</span>로지스틱 회귀</a></li>
+            <li><a href="#section7"><span class="section-num">7</span>나이브 베이즈</a></li>
+            <li><a href="#section8"><span class="section-num">8</span>앙상블 학습</a></li>
+            <li><a href="#section9"><span class="section-num">9</span>랜덤 포레스트</a></li>
+            <li><a href="#section10"><span class="section-num">10</span>부스팅 알고리즘</a></li>
+            <li><a href="#section11"><span class="section-num">11</span>XGBoost 상세</a></li>
+            <li><a href="#section12"><span class="section-num">12</span>교차검증</a></li>
+            <li><a href="#section13"><span class="section-num">13</span>분류 모델 평가</a></li>
+            <li><a href="#section14"><span class="section-num">14</span>회귀 모델 평가</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- SECTION 1: 지도학습 개요 -->
+        <div class="section" id="section1">
+            <h2>1. 지도학습 개요</h2>
+
+            <h3>지도학습의 정의</h3>
+            <p>지도학습(Supervised Learning)은 정답(레이블)이 미리 정해진 데이터를 이용하여 모델을 학습시키는 머신러닝의 가장 기본적인 방식입니다. 마치 선생님이 "이것이 정답"이라고 알려주며 학생을 가르치는 것처럼, AI 모델은 입력과 정답 쌍을 통해 패턴을 학습합니다.</p>
+
+            <div class="term-box">
+                <strong>핵심 용어 - 레이블과 피처</strong><br>
+                • 레이블(Label): 우리가 예측하려는 정답. 예) "스팸/정상", "고양이/개", "가격(10,000원)"<br>
+                • 피처(Feature): 예측을 위한 입력 정보. 예) 이메일의 길이, 특정 단어, 발신자 정보<br>
+                • 데이터셋: (피처, 레이블) 쌍의 모음. 예) (이메일 내용, 스팸 여부)
+            </div>
+
+            <h3>적응식 신경망과 모수 개념</h3>
+            <p>신경망 모델은 데이터로부터 최적의 파라미터(모수)를 학습하는 적응식 시스템입니다. 학습 과정에서는 두 가지 중요한 개념을 구분해야 합니다.</p>
+
+            <table class="compare-table">
+                <tr>
+                    <th>파라미터 (Parameter)</th>
+                    <th>하이퍼파라미터 (Hyperparameter)</th>
+                </tr>
+                <tr>
+                    <td>데이터로부터 학습되는 값</td>
+                    <td>학습 전에 사람이 정하는 값</td>
+                </tr>
+                <tr>
+                    <td>예: 신경망의 가중치(w), 편향(b)</td>
+                    <td>예: 학습률, 은닉층 개수, 배치 크기</td>
+                </tr>
+                <tr>
+                    <td>모델의 실제 동작 결정</td>
+                    <td>학습 과정 자체를 조절</td>
+                </tr>
+                <tr>
+                    <td>역전파(Backpropagation)로 업데이트</td>
+                    <td>교차검증이나 경험으로 최적화</td>
+                </tr>
+            </table>
+
+            <h3>6단계 학습절차</h3>
+            <p>모든 지도학습 모델은 다음의 체계적인 절차를 따릅니다:</p>
+
+            <div class="step-cards">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">데이터 수집</div>
+                    <div class="step-desc">학습에 필요한 충분한 양의 데이터 준비</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">데이터 전처리</div>
+                    <div class="step-desc">결측값, 이상치 처리, 정규화</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">데이터 분할</div>
+                    <div class="step-desc">학습/검증/테스트 세트로 나누기</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-title">모델 선택</div>
+                    <div class="step-desc">문제 유형에 맞는 알고리즘 선택</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">5</div>
+                    <div class="step-title">모델 학습</div>
+                    <div class="step-desc">손실함수 최소화하여 파라미터 학습</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">6</div>
+                    <div class="step-title">평가 및 튜닝</div>
+                    <div class="step-desc">성능 평가 후 하이퍼파라미터 조정</div>
+                </div>
+            </div>
+
+            <div class="analogy-box">
+                <strong>비유: 운전면허 시험</strong><br>
+                1단계(데이터 수집) = 운전 경험 쌓기<br>
+                2단계(전처리) = 위험한 상황 구분하기<br>
+                3단계(분할) = 학습/모의고사/실제시험으로 나누기<br>
+                4단계(모델 선택) = 어떤 방식으로 배울지 결정 (학원, 친구, 유튜브)<br>
+                5단계(학습) = 실제 운전 연습<br>
+                6단계(평가) = 시험 봐서 성적 확인 후 약점 보완
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 파라미터와 하이퍼파라미터의 명확한 구분 필수<br>
+                • 6단계 학습절차를 순서대로 설명할 수 있어야 함<br>
+                • 적응식(Adaptive) 신경망의 의미: 데이터로부터 자동으로 학습
+            </div>
+        </div>
+
+        <!-- SECTION 2: 분류 vs 회귀 -->
+        <div class="section" id="section2">
+            <h2>2. 분류 vs 회귀</h2>
+
+            <p>지도학습은 예측 대상의 형태에 따라 두 가지로 구분됩니다. 이는 문제의 본질을 이해하는 가장 기본적인 단계입니다.</p>
+
+            <table class="compare-table">
+                <tr>
+                    <th>항목</th>
+                    <th>분류 (Classification)</th>
+                    <th>회귀 (Regression)</th>
+                </tr>
+                <tr>
+                    <td><strong>정답의 형태</strong></td>
+                    <td>범주형 (Categorical)</td>
+                    <td>연속형 (Continuous)</td>
+                </tr>
+                <tr>
+                    <td><strong>예측 내용</strong></td>
+                    <td>"무엇인가?" (범주 선택)</td>
+                    <td>"얼마나?" (수치 예측)</td>
+                </tr>
+                <tr>
+                    <td><strong>구체 사례</strong></td>
+                    <td>스팸/정상, 개/고양이/새, 등급(A/B/C)</td>
+                    <td>내일 온도, 주택 가격, 주가</td>
+                </tr>
+                <tr>
+                    <td><strong>출력값</strong></td>
+                    <td>클래스 또는 확률 (0.1 ~ 1.0)</td>
+                    <td>실수 (음수 가능)</td>
+                </tr>
+                <tr>
+                    <td><strong>대표 알고리즘</strong></td>
+                    <td>KNN, SVM, 의사결정나무, 로지스틱 회귀</td>
+                    <td>선형회귀, 다항회귀, 신경망</td>
+                </tr>
+                <tr>
+                    <td><strong>평가 지표</strong></td>
+                    <td>정확도, 정밀도, 재현율, F1점수, AUC</td>
+                    <td>MSE, RMSE, MAE, R-squared</td>
+                </tr>
+                <tr>
+                    <td><strong>이진 vs 다중</strong></td>
+                    <td>이진분류(2개), 다중분류(3개 이상)</td>
+                    <td>일반적으로 1개의 연속값 (다중출력 가능)</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 병원 진료</strong><br>
+                분류 = "이 환자가 독감인가? 감기인가? 폐렴인가?" → 범주 선택<br>
+                회귀 = "이 환자의 체온은 몇 도인가? 항생제는 몇 mg을 투여해야 하는가?" → 수치 예측
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 분류와 회귀의 구분이 명확해야 함<br>
+                • 이진분류와 다중분류의 구분 필수<br>
+                • 같은 알고리즘을 분류와 회귀에 모두 사용 가능한 경우도 있음 (의사결정나무, 신경망, SVM)
+            </div>
+        </div>
+
+        <!-- SECTION 3: K-최근접 이웃 -->
+        <div class="section" id="section3">
+            <h2>3. K-최근접 이웃 (K-Nearest Neighbors, KNN)</h2>
+
+            <div class="term-box">
+                <strong>KNN의 정의</strong><br>
+                K-최근접 이웃은 새로운 데이터에 대해 "가장 가까운 k개의 이웃 데이터의 클래스를 따른다"는 원칙에 기반한 비모수적 분류 알고리즘입니다.
+            </div>
+
+            <h3>KNN의 특징</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>메모리 기반</strong></td>
+                    <td>명시적인 모델을 생성하지 않고 모든 학습 데이터를 메모리에 저장</td>
+                </tr>
+                <tr>
+                    <td><strong>비모수적</strong></td>
+                    <td>미리 정해진 함수 형태가 없으며, 데이터 형태에 따라 결정경계 결정</td>
+                </tr>
+                <tr>
+                    <td><strong>Lazy Learning</strong></td>
+                    <td>학습 단계가 없고, 예측 시점에 모든 계산 수행 (느림)</td>
+                </tr>
+                <tr>
+                    <td><strong>국소적</strong></td>
+                    <td>전역 패턴이 아닌 주변 이웃의 국소 정보만 고려</td>
+                </tr>
+            </table>
+
+            <h3>KNN 절차</h3>
+            <div class="process-flow">
+                <span class="process-step">거리 계산</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">k개 이웃 찾기</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">투표</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">분류</span>
+            </div>
+
+            <h4>거리 계산 방법</h4>
+            <table class="compare-table">
+                <tr>
+                    <th>거리 측정</th>
+                    <th>공식</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>유클리드 거리</strong></td>
+                    <td>√Σ(xi - yi)²</td>
+                    <td>가장 흔함, 직선거리</td>
+                </tr>
+                <tr>
+                    <td><strong>맨해튼 거리</strong></td>
+                    <td>Σ|xi - yi|</td>
+                    <td>격자 기반, 도시 블록</td>
+                </tr>
+                <tr>
+                    <td><strong>민코프스키 거리</strong></td>
+                    <td>(Σ|xi - yi|^p)^(1/p)</td>
+                    <td>일반화된 거리</td>
+                </tr>
+                <tr>
+                    <td><strong>코사인 유사도</strong></td>
+                    <td>cos(θ) = A·B/(|A||B|)</td>
+                    <td>텍스트, 고차원 데이터</td>
+                </tr>
+            </table>
+
+            <h3>K값의 영향</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>K 값</th>
+                    <th>특징</th>
+                    <th>문제점</th>
+                </tr>
+                <tr>
+                    <td><strong>K=1</strong></td>
+                    <td>가장 가까운 이웃 1개만 참고</td>
+                    <td>노이즈에 매우 민감 (과적합)</td>
+                </tr>
+                <tr>
+                    <td><strong>K=3, 5 (작은 값)</strong></td>
+                    <td>결정경계가 복잡하고 유연함</td>
+                    <td>과적합 위험</td>
+                </tr>
+                <tr>
+                    <td><strong>K=√n (중간값)</strong></td>
+                    <td>일반적으로 권장하는 범위</td>
+                    <td>데이터 크기에 따라 조정 필요</td>
+                </tr>
+                <tr>
+                    <td><strong>K=n (전체, 큰 값)</strong></td>
+                    <td>결정경계가 단순함</td>
+                    <td>과소적합 (High Bias)</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 새 학교에서의 친구 찾기</strong><br>
+                K=1: 가장 가까이 앉은 학생 1명만 따라함 (그 친구가 나쁜 영향 미칠 수 있음)<br>
+                K=3: 가장 가까운 3명을 참고 (더 안정적)<br>
+                K=전체: 반 전체 학생의 성향을 따름 (개성 없음)
+            </div>
+
+            <h3>KNN의 장단점</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>장점</th>
+                    <th>단점</th>
+                </tr>
+                <tr>
+                    <td>구현이 간단하고 직관적</td>
+                    <td>예측이 느림 (모든 학습 데이터와 비교)</td>
+                </tr>
+                <tr>
+                    <td>비모수적 (데이터 분포 가정 없음)</td>
+                    <td>높은 메모리 사용량</td>
+                </tr>
+                <tr>
+                    <td>특성공학 최소화</td>
+                    <td>스케일 민감 (정규화 필요)</td>
+                </tr>
+                <tr>
+                    <td>다중출력, 회귀에도 적용 가능</td>
+                    <td>고차원 데이터에서 거리 의미 부족 (차원의 저주)</td>
+                </tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 메모리 기반/비모수적/Lazy Learning의 의미 이해 필수<br>
+                • K값에 따른 편향-분산 트레이드오프<br>
+                • 거리 측정 방법의 선택이 성능에 미치는 영향<br>
+                • 차원의 저주: 고차원에서 "가까움"의 의미가 퇴색
+            </div>
+        </div>
+
+        <!-- SECTION 4: 서포트 벡터 머신 -->
+        <div class="section" id="section4">
+            <h2>4. 서포트 벡터 머신 (Support Vector Machine, SVM)</h2>
+
+            <div class="term-box">
+                <strong>SVM의 정의</strong><br>
+                SVM은 두 클래스를 분리하는 최적의 초평면(Hyperplane)을 찾아 최대 마진으로 분류하는 알고리즘입니다. "여유있게 떨어뜨려 분리한다"는 원칙에 기반합니다.
+            </div>
+
+            <h3>핵심 개념</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>용어</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>초평면 (Hyperplane)</strong></td>
+                    <td>두 클래스를 분리하는 경계면. 2D에서는 직선, 3D에서는 평면, nD에서는 초평면</td>
+                </tr>
+                <tr>
+                    <td><strong>마진 (Margin)</strong></td>
+                    <td>초평면에서 가장 가까운 데이터까지의 거리. 넓을수록 좋음</td>
+                </tr>
+                <tr>
+                    <td><strong>서포트 벡터</strong></td>
+                    <td>초평면과 가장 가까운 데이터 포인트들. 이들이 경계를 결정함</td>
+                </tr>
+                <tr>
+                    <td><strong>결정경계</strong></td>
+                    <td>SVM이 분류 결정을 내리는 경계선/면</td>
+                </tr>
+            </table>
+
+            <h3>Hard Margin vs Soft Margin</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>개념</th>
+                    <th>Hard Margin</th>
+                    <th>Soft Margin</th>
+                </tr>
+                <tr>
+                    <td><strong>정의</strong></td>
+                    <td>모든 데이터를 완벽히 분리</td>
+                    <td>일부 오류를 허용하며 분리</td>
+                </tr>
+                <tr>
+                    <td><strong>가정</strong></td>
+                    <td>데이터가 선형 분리 가능</td>
+                    <td>데이터가 선형 분리 불가능한 경우도 포함</td>
+                </tr>
+                <tr>
+                    <td><strong>구현</strong></td>
+                    <td>제약없음</td>
+                    <td>슬랙 변수(Slack Variable) ξ 도입</td>
+                </tr>
+                <tr>
+                    <td><strong>실무 적용</strong></td>
+                    <td>현실에서는 거의 불가능</td>
+                    <td>일반적으로 사용 (현실성)</td>
+                </tr>
+                <tr>
+                    <td><strong>일반화</strong></td>
+                    <td>낮음 (과적합 위험)</td>
+                    <td>높음 (더 나은 성능)</td>
+                </tr>
+            </table>
+
+            <h3>커널 트릭 (Kernel Trick)</h3>
+            <p>데이터가 선형 분리 불가능할 때, 원본 특성공간에서 고차원 특성공간으로 암묵적으로 변환하여 분리 가능하게 만드는 기법입니다.</p>
+
+            <table class="compare-table">
+                <tr>
+                    <th>커널</th>
+                    <th>함수</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>선형 커널</strong></td>
+                    <td>K(x, y) = x·y</td>
+                    <td>선형 분리 가능한 경우 사용</td>
+                </tr>
+                <tr>
+                    <td><strong>다항식 커널</strong></td>
+                    <td>K(x, y) = (x·y + c)^d</td>
+                    <td>중간 수준의 비선형성</td>
+                </tr>
+                <tr>
+                    <td><strong>RBF 커널</strong></td>
+                    <td>K(x, y) = exp(-γ||x-y||²)</td>
+                    <td>가장 강력하고 흔히 사용됨</td>
+                </tr>
+                <tr>
+                    <td><strong>시그모이드 커널</strong></td>
+                    <td>K(x, y) = tanh(κ(x·y) + θ)</td>
+                    <td>신경망과 유사</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 원탁과 직선의 분리</strong><br>
+                2D에서 동심원으로 데이터가 분포하면 직선으로 분리 불가능합니다.<br>
+                커널 트릭은 이를 3D 공간으로 "펴서" 분리 가능하게 만드는 것입니다.<br>
+                실제로는 고차원 계산을 하지 않고, 내적(dot product)만 계산하면 됩니다 (계산 효율).
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • Hard Margin과 Soft Margin의 명확한 구분<br>
+                • 슬랙 변수 ξ의 역할 이해<br>
+                • 커널 트릭의 본질: 고차원으로의 함축적 변환<br>
+                • C 파라미터: 마진 위반 허용도 조절 (C 크면 마진 좁음, C 작으면 마진 넓음)<br>
+                • RBF 커널이 가장 널리 사용되는 이유
+            </div>
+        </div>
+
+        <!-- SECTION 5: 의사결정나무 -->
+        <div class="section" id="section5">
+            <h2>5. 의사결정나무 (Decision Tree)</h2>
+
+            <div class="term-box">
+                <strong>의사결정나무의 정의</strong><br>
+                의사결정나무는 데이터를 재귀적으로 분할하여 각 노드에서 선택지를 제시하고, 결국 리프 노드의 클래스로 분류하는 트리 구조의 알고리즘입니다.
+            </div>
+
+            <h3>나무의 구조</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>용어</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>루트 노드</strong></td>
+                    <td>맨 위 시작 노드. 전체 데이터를 첫 번째 분할</td>
+                </tr>
+                <tr>
+                    <td><strong>내부 노드</strong></td>
+                    <td>분할 조건을 가진 노드. "키 > 170?" 같은 질문</td>
+                </tr>
+                <tr>
+                    <td><strong>리프 노드</strong></td>
+                    <td>마지막 노드로서 최종 분류 결과를 나타냄</td>
+                </tr>
+                <tr>
+                    <td><strong>깊이 (Depth)</strong></td>
+                    <td>루트에서 리프까지의 거리. 깊을수록 복잡</td>
+                </tr>
+            </table>
+
+            <h3>분할 기준 (Split Criteria)</h3>
+            <p>각 노드에서 "어느 특성으로 분할할 것인가?"를 결정하기 위한 지표입니다:</p>
+
+            <div class="term-box">
+                <strong>지니 불순도 (Gini Impurity)</strong><br>
+                Gini = 1 - Σ(pi)² where pi는 i번째 클래스의 비율<br>
+                • 0: 완전히 순수 (한 클래스만 존재)<br>
+                • 0.5: 완전히 섞임 (이진분류에서 50:50)<br>
+                • 계산 빠르고 CART에서 사용
+            </div>
+
+            <div class="term-box">
+                <strong>정보이득 (Information Gain)</strong><br>
+                IG = Entropy(Parent) - Σ(|Child|/|Parent| × Entropy(Child))<br>
+                • Entropy = -Σ(pi × log2(pi)): 무질서한 정도<br>
+                • 정보이득이 큰 분할을 선택 (엔트로피 감소 최대)<br>
+                • ID3, C4.5에서 사용
+            </div>
+
+            <div class="term-box">
+                <strong>카이제곱 검정 (Chi-Square)</strong><br>
+                χ² = Σ((O - E)² / E) where O는 관측, E는 기대<br>
+                • 예상과 실제의 차이 측정<br>
+                • CHAID에서 사용
+            </div>
+
+            <h3>나무 성장 알고리즘</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>알고리즘</th>
+                    <th>분할 기준</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>ID3</strong></td>
+                    <td>정보이득</td>
+                    <td>범주형만 처리, 이진분할 강제</td>
+                </tr>
+                <tr>
+                    <td><strong>C4.5</strong></td>
+                    <td>정보이득비</td>
+                    <td>ID3 개선, 연속형 처리 가능</td>
+                </tr>
+                <tr>
+                    <td><strong>CART</strong></td>
+                    <td>지니지수</td>
+                    <td>이진분할만, 회귀나무도 가능 (현대적)</td>
+                </tr>
+                <tr>
+                    <td><strong>CHAID</strong></td>
+                    <td>카이제곱</td>
+                    <td>다진분할 가능</td>
+                </tr>
+            </table>
+
+            <h3>가지치기 (Pruning)</h3>
+            <p>나무가 너무 깊어지면 학습 데이터에만 과도하게 적합되는 과적합이 발생합니다. 가지치기는 나무를 잘라서 일반화 성능을 높입니다.</p>
+
+            <table class="compare-table">
+                <tr>
+                    <th>가지치기 방식</th>
+                    <th>설명</th>
+                    <th>시점</th>
+                </tr>
+                <tr>
+                    <td><strong>선제적 가지치기 (Pre-pruning)</strong></td>
+                    <td>더 이상 분할하지 않기</td>
+                    <td>나무 성장 중</td>
+                </tr>
+                <tr>
+                    <td><strong>사후 가지치기 (Post-pruning)</strong></td>
+                    <td>먼저 전체 나무를 키운 후 자르기</td>
+                    <td>나무 성장 후</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 병원 진단</strong><br>
+                의사가 진료할 때:
+                1. "열이 있는가?" → 예/아니오 (루트 노드)<br>
+                2. "38도 이상인가?" → 예/아니오 (내부 노드)<br>
+                3. "최근 여행 이력이 있는가?" → 예/아니오<br>
+                4. "독감" 또는 "감기" (리프 노드)<br>
+                <br>
+                이것이 의사결정나무입니다. 너무 세밀하면 과진단 위험 (가지치기 필요).
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 지니지수 vs 정보이득의 차이 (계산 복잡도, 사용 알고리즘)<br>
+                • CART가 가장 현대적이고 회귀나무도 가능<br>
+                • 엔트로피의 개념: 정보이론에 기반<br>
+                • 과적합 방지 방법: 깊이 제한, 최소 샘플 수, 가지치기<br>
+                • 나무의 해석가능성이 강점
+            </div>
+        </div>
+
+        <!-- SECTION 6: 로지스틱 회귀 -->
+        <div class="section" id="section6">
+            <h2>6. 로지스틱 회귀 (Logistic Regression)</h2>
+
+            <div class="term-box">
+                <strong>이름과의 혼동</strong><br>
+                이름에 "회귀"가 있지만, 로지스틱 회귀는 <strong>분류</strong> 알고리즘입니다.<br>
+                선형회귀의 출력을 S자형 함수(시그모이드)에 통과시켜 확률로 변환합니다.
+            </div>
+
+            <h3>핵심 변환 과정</h3>
+
+            <div class="term-box">
+                <strong>1단계: 오즈 (Odds)</strong><br>
+                Odds = P(Event) / P(Not Event) = p / (1-p)<br>
+                • 사건이 일어날 확률을 일어나지 않을 확률로 나눈 값<br>
+                • 예) 로또 1등 확률이 1/1000이면, Odds = 1/999 ≈ 0.001
+            </div>
+
+            <div class="term-box">
+                <strong>2단계: 로짓 (Logit)</strong><br>
+                Logit = ln(Odds) = ln(p / (1-p))<br>
+                • 오즈에 자연로그를 취한 값<br>
+                • 범위: -∞ ~ +∞ (선형회귀 가능)<br>
+                • 선형회귀로 예측하기 위해 변환
+            </div>
+
+            <div class="term-box">
+                <strong>3단계: 시그모이드 (Sigmoid)</strong><br>
+                p = 1 / (1 + e^(-z)) where z = w₀ + w₁x₁ + ... + wₙxₙ<br>
+                • 로짓을 역으로 변환하여 확률(0~1)로 변환<br>
+                • S자형 곡선<br>
+                • 모든 입력을 0~1 사이의 확률로 변환
+            </div>
+
+            <h3>로지스틱 회귀의 과정</h3>
+            <div class="process-flow">
+                <span class="process-step">선형식</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">로짓 변환</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">시그모이드</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">확률</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">분류</span>
+            </div>
+
+            <h3>판별함수</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>개념</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>선형 판별함수</strong></td>
+                    <td>z = w₀ + w₁x₁ + w₂x₂ + ... + wₙxₙ<br>이것을 시그모이드에 통과: p = σ(z)</td>
+                </tr>
+                <tr>
+                    <td><strong>의사결정 경계</strong></td>
+                    <td>z = 0 또는 p = 0.5인 지점<br>이 경계선이 두 클래스를 분리</td>
+                </tr>
+                <tr>
+                    <td><strong>선형성</strong></td>
+                    <td>로지스틱 회귀의 결정경계는 항상 선형<br>비선형 패턴은 특성공학 필요</td>
+                </tr>
+            </table>
+
+            <h3>손실함수: 교차엔트로피</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>개념</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>이진분류</strong></td>
+                    <td>L = -[y×log(ŷ) + (1-y)×log(1-ŷ)]<br>y는 실제값(0 또는 1), ŷ는 예측확률</td>
+                </tr>
+                <tr>
+                    <td><strong>최적화</strong></td>
+                    <td>경사하강법(Gradient Descent)으로 가중치 w 업데이트<br>폐쇄형 해가 없음 (신경망과 유사)</td>
+                </tr>
+                <tr>
+                    <td><strong>규제</strong></td>
+                    <td>L1(Lasso) 또는 L2(Ridge) 규제로 과적합 방지<br>가중치 크기 제약</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 합격 확률 예측</strong><br>
+                대학 입시에서 수능점수, GPA, 자소서 질을 고려해 합격 확률을 예측합니다.<br>
+                점수가 높을수록 확률이 높아지지만, 정확히는 S자 곡선을 따릅니다.<br>
+                100점이든 200점이든 확률은 0~1 사이에서만 변함 (시그모이드).
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 오즈(Odds), 로짓(Logit), 시그모이드의 정확한 의미와 변환 과정<br>
+                • 로지스틱 회귀가 분류이지 회귀가 아닌 이유<br>
+                • 결정경계가 항상 선형이라는 한계<br>
+                • 교차엔트로피 손실함수<br>
+                • 다중분류 확장: Softmax 함수 사용
+            </div>
+        </div>
+
+        <!-- SECTION 7: 나이브 베이즈 -->
+        <div class="section" id="section7">
+            <h2>7. 나이브 베이즈 (Naive Bayes)</h2>
+
+            <div class="term-box">
+                <strong>나이브 베이즈의 정의</strong><br>
+                나이브 베이즈는 베이즈 정리를 기반으로 각 특성의 조건부 독립을 가정하는 생성 모델입니다.<br>
+                "나이브(naive)"는 특성들이 서로 독립이라는 단순한 가정을 의미합니다.
+            </div>
+
+            <h3>베이즈 정리 (Bayes' Theorem)</h3>
+            <div class="term-box">
+                <strong>공식</strong><br>
+                P(C|X) = P(X|C) × P(C) / P(X)<br>
+                <br>
+                where:<br>
+                • P(C|X): 후사확률 (Posterior) - X가 주어졌을 때 클래스 C의 확률<br>
+                • P(X|C): 우도 (Likelihood) - 클래스 C가 주어졌을 때 X의 확률<br>
+                • P(C): 사전확률 (Prior) - 클래스 C의 사전 확률<br>
+                • P(X): 증거 (Evidence) - X의 확률 (정규화 상수)
+            </div>
+
+            <h3>생성 모델 (Generative) vs 판별 모델 (Discriminative)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>생성 모델</th>
+                    <th>판별 모델</th>
+                </tr>
+                <tr>
+                    <td><strong>학습 대상</strong></td>
+                    <td>P(X|C)를 학습<br>(각 클래스의 데이터 분포)</td>
+                    <td>P(C|X)를 직접 학습<br>(결정경계)</td>
+                </tr>
+                <tr>
+                    <td><strong>방식</strong></td>
+                    <td>각 클래스의 분포를 모델링 후 베이즈 정리 적용</td>
+                    <td>데이터로부터 직접 경계 학습</td>
+                </tr>
+                <tr>
+                    <td><strong>장점</strong></td>
+                    <td>데이터 적을 때도 가능<br>새로운 클래스 추가 용이</td>
+                    <td>보통 더 정확함<br>계산 효율적</td>
+                </tr>
+                <tr>
+                    <td><strong>단점</strong></td>
+                    <td>분포 가정이 틀리면 성능 저하</td>
+                    <td>충분한 학습 데이터 필요</td>
+                </tr>
+                <tr>
+                    <td><strong>예시</strong></td>
+                    <td>나이브 베이즈, HMM</td>
+                    <td>로지스틱 회귀, SVM, 신경망</td>
+                </tr>
+            </table>
+
+            <h3>나이브 가정 (Conditional Independence)</h3>
+            <div class="term-box">
+                <strong>나이브 가정</strong><br>
+                모든 특성이 클래스 주어졌을 때 조건부 독립이라고 가정합니다.<br>
+                <br>
+                P(X₁, X₂, ..., Xₙ|C) = P(X₁|C) × P(X₂|C) × ... × P(Xₙ|C)<br>
+                <br>
+                이는 현실에서 대부분 거짓이지만, 단순화로 계산 가능하고 실제로 잘 작동합니다.
+            </div>
+
+            <h3>나이브 베이즈의 종류</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>종류</th>
+                    <th>조건부 확률 분포</th>
+                    <th>사용 사례</th>
+                </tr>
+                <tr>
+                    <td><strong>가우시안</strong></td>
+                    <td>정규분포 가정<br>P(X|C) ~ N(μ, σ²)</td>
+                    <td>연속형 변수 (신장, 온도)</td>
+                </tr>
+                <tr>
+                    <td><strong>다항분포</strong></td>
+                    <td>이산 카운트 데이터<br>P(X|C) ~ Multinomial</td>
+                    <td>텍스트 분류 (단어 빈도)</td>
+                </tr>
+                <tr>
+                    <td><strong>베르누이</strong></td>
+                    <td>이진 특성<br>P(X|C) ~ Bernoulli</td>
+                    <td>이진 특성 (있음/없음)</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 스팸 메일 필터</strong><br>
+                "Nigerian Prince"라는 단어가 있으면 스팸일 확률이 높습니다.<br>
+                "무료"라는 단어도 있으면 스팸 확률이 더 높아집니다.<br>
+                나이브 베이즈는 각 단어의 영향을 독립적으로 계산하여 최종 확률을 구합니다<br>
+                (실제로는 단어들이 연관되어 있지만, 단순화로 계산 효율 높임).
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 베이즈 정리의 각 항의 의미<br>
+                • 생성 모델 vs 판별 모델의 명확한 구분<br>
+                • 나이브 가정이 현실에서 거짓이지만 왜 작동하는가<br>
+                • 3가지 나이브 베이즈 종류 (가우시안, 다항분포, 베르누이)<br>
+                • 데이터 부족할 때 생성 모델이 유리한 이유
+            </div>
+        </div>
+
+        <!-- SECTION 8: 앙상블 학습 -->
+        <div class="section" id="section8">
+            <h2>8. 앙상블 학습 (Ensemble Learning)</h2>
+
+            <div class="term-box">
+                <strong>앙상블의 정의</strong><br>
+                여러 개의 약한 학습기(Weak Learner)를 조합하여 강한 학습기(Strong Learner)를 만드는 방법입니다.<br>
+                "여럿이 하나보다 낫다"는 민주주의 원칙을 머신러닝에 적용합니다.
+            </div>
+
+            <h3>주요 앙상블 방법 비교</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>방법</th>
+                    <th>방식</th>
+                    <th>학습</th>
+                    <th>개선 대상</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>배깅</strong></td>
+                    <td>병렬 생성</td>
+                    <td>복원추출로 여러 데이터셋 생성</td>
+                    <td>분산(Variance)</td>
+                    <td>Random Forest</td>
+                </tr>
+                <tr>
+                    <td><strong>부스팅</strong></td>
+                    <td>순차 생성</td>
+                    <td>이전 모델의 오류를 다음 모델이 보정</td>
+                    <td>편향(Bias)</td>
+                    <td>AdaBoost, XGBoost</td>
+                </tr>
+                <tr>
+                    <td><strong>스태킹</strong></td>
+                    <td>계층적</td>
+                    <td>메타 모델이 기반 모델들의 예측을 입력으로</td>
+                    <td>편향과 분산</td>
+                    <td>Stacking Classifier</td>
+                </tr>
+                <tr>
+                    <td><strong>블렌딩</strong></td>
+                    <td>계층적 (단순화)</td>
+                    <td>스태킹과 유사하지만 더 간단함</td>
+                    <td>편향과 분산</td>
+                    <td>Blending</td>
+                </tr>
+                <tr>
+                    <td><strong>보팅</strong></td>
+                    <td>병렬 결합</td>
+                    <td>여러 모델의 예측을 다수결</td>
+                    <td>분산</td>
+                    <td>Voting Classifier</td>
+                </tr>
+            </table>
+
+            <h3>배깅 (Bootstrap Aggregating)</h3>
+            <div class="analogy-box">
+                <strong>비유: 여론조사</strong><br>
+                국민 전체를 조사할 수 없으므로,<br>
+                같은 크기의 샘플을 여러 번 뽑아(복원추출)<br>
+                각 샘플에서 여론을 물은 후<br>
+                평균을 내는 것과 같습니다.
+            </div>
+
+            <div class="term-box">
+                <strong>배깅의 원리</strong><br>
+                1. 원본 데이터에서 복원추출로 n개의 부트스트랩 샘플 생성<br>
+                2. 각 샘플마다 동일한 모델 학습<br>
+                3. 분류: 다수결 투표, 회귀: 평균<br>
+                4. 분산 감소로 일반화 성능 개선
+            </div>
+
+            <h3>부스팅 (Boosting)</h3>
+            <div class="term-box">
+                <strong>부스팅의 원리</strong><br>
+                1. 첫 번째 약한 학습기 학습<br>
+                2. 그것이 못 맞춘 데이터에 높은 가중치 부여<br>
+                3. 두 번째 학습기는 어려운 데이터에 집중<br>
+                4. 이를 반복하여 순차적으로 강력한 모델 구성
+            </div>
+
+            <div class="analogy-box">
+                <strong>비유: 보충학습</strong><br>
+                1차 시험에서 못한 부분을 선생님이 파악한 후,<br>
+                2차 학습에서 그 부분만 집중 가르칩니다.<br>
+                이를 반복하면 점점 더 강한 학생이 됩니다.
+            </div>
+
+            <h3>스태킹 (Stacking) vs 블렌딩 (Blending)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>스태킹</th>
+                    <th>블렌딩</th>
+                </tr>
+                <tr>
+                    <td><strong>메타 모델 학습</strong></td>
+                    <td>교차검증으로 생성된 메타 특성</td>
+                    <td>홀드아웃 검증 세트의 예측</td>
+                </tr>
+                <tr>
+                    <td><strong>계산 비용</strong></td>
+                    <td>높음 (K-폴드 반복)</td>
+                    <td>낮음 (한 번만)</td>
+                </tr>
+                <tr>
+                    <td><strong>과적합 위험</strong></td>
+                    <td>낮음 (교차검증 기반)</td>
+                    <td>약간 높음</td>
+                </tr>
+                <tr>
+                    <td><strong>실무 사용</strong></td>
+                    <td>정확도 중시</td>
+                    <td>속도 중시</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 법원 항소</strong><br>
+                1심 판사(기반 모델1), 2심 판사(기반 모델2)가 각각 판결하면,<br>
+                대법원 판사(메타 모델)가 그 판결들을 검토해 최종 결정을 내립니다.
+            </div>
+
+            <h3>보팅 (Voting)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>보팅 방식</th>
+                    <th>설명</th>
+                    <th>사용</th>
+                </tr>
+                <tr>
+                    <td><strong>하드 보팅</strong></td>
+                    <td>각 모델의 예측 클래스를 모아 다수결</td>
+                    <td>분류 (Yes/No)</td>
+                </tr>
+                <tr>
+                    <td><strong>소프트 보팅</strong></td>
+                    <td>각 모델의 예측 확률을 평균</td>
+                    <td>분류 (확률 평균)</td>
+                </tr>
+                <tr>
+                    <td><strong>회귀</strong></td>
+                    <td>여러 모델의 예측값을 평균</td>
+                    <td>회귀</td>
+                </tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 배깅의 분산 감소 원리<br>
+                • 부스팅의 순차적 학습과 편향 감소<br>
+                • 스태킹과 블렌딩의 차이 (메타 특성 생성 방식)<br>
+                • 하드 보팅 vs 소프트 보팅<br>
+                • 언제 어느 방법을 사용할지 판단 능력
+            </div>
+        </div>
+
+        <!-- SECTION 9: 랜덤 포레스트 -->
+        <div class="section" id="section9">
+            <h2>9. 랜덤 포레스트 (Random Forest)</h2>
+
+            <div class="term-box">
+                <strong>랜덤 포레스트의 정의</strong><br>
+                배깅과 의사결정나무, 그리고 특성의 무작위 선택을 결합한 강력한 앙상블 알고리즘입니다.<br>
+                "숲"은 수많은 "나무"(의사결정나무)들의 집합을 의미합니다.
+            </div>
+
+            <h3>핵심 개념</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>개념</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>부트스트랩 샘플링</strong></td>
+                    <td>N개 데이터에서 복원추출로 N개를 여러 번 샘플링<br>약 63% 데이터만 각 나무에 사용 (OOB: Out-of-Bag)</td>
+                </tr>
+                <tr>
+                    <td><strong>특성 랜덤 선택</strong></td>
+                    <td>각 노드에서 모든 특성 대신 √d개(분류) 또는 d/3개(회귀) 랜덤 선택<br>나무 다양성 증가</td>
+                </tr>
+                <tr>
+                    <td><strong>최대 깊이 제한 없음</strong></td>
+                    <td>각 나무를 완전히 성장시킴 (가지치기 없음)<br>낮은 편향</td>
+                </tr>
+                <tr>
+                    <td><strong>병렬 처리</strong></td>
+                    <td>각 나무는 독립적으로 생성되어 병렬화 가능</td>
+                </tr>
+            </table>
+
+            <h3>랜덤 포레스트의 절차</h3>
+            <div class="process-flow">
+                <span class="process-step">부트스트랩</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">나무 성장</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">특성 무작위</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">예측 결합</span>
+            </div>
+
+            <h3>특성 중요도 (Feature Importance)</h3>
+            <div class="term-box">
+                <strong>계산 방법</strong><br>
+                1. 각 특성이 전체 포레스트의 모든 분할에 기여한 정도 측정<br>
+                2. 지니지수 또는 정보이득 기반 계산<br>
+                3. 특성별 누적 기여도를 정규화하여 중요도 산출<br>
+                4. 어떤 특성이 분류에 가장 영향을 미치는지 파악 가능
+            </div>
+
+            <h3>OOB (Out-of-Bag) 추정</h3>
+            <div class="term-box">
+                <strong>OOB 추정의 장점</strong><br>
+                • 별도의 검증 세트 불필요<br>
+                • 각 샘플마다 약 37%는 사용되지 않음 (OOB)<br>
+                • 이 OOB 샘플로 검증하여 일반화 성능 추정 가능<br>
+                • 테스트 성능과 유사한 정확도 제공
+            </div>
+
+            <h3>랜덤 포레스트의 장단점</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>장점</th>
+                    <th>단점</th>
+                </tr>
+                <tr>
+                    <td>높은 정확도 (강력한 성능)</td>
+                    <td>해석 어려움 (나무 개수가 많음)</td>
+                </tr>
+                <tr>
+                    <td>특성 중요도 제공</td>
+                    <td>계산 비용 높음</td>
+                </tr>
+                <tr>
+                    <td>과적합 저항성 우수</td>
+                    <td>메모리 사용량 많음</td>
+                </tr>
+                <tr>
+                    <td>병렬 처리 가능</td>
+                    <td>임의성으로 결과 재현성 낮음</td>
+                </tr>
+                <tr>
+                    <td>특성 정규화 불필요</td>
+                    <td>불균형 데이터에 약할 수 있음</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 영화 평점</strong><br>
+                100명의 영화 평론가가 각각 독립적으로 영화를 평가하고 (부트스트랩),<br>
+                각 평론가는 약간 다른 기준으로 평가합니다 (특성 무작위 선택),<br>
+                최종 평점은 100명의 평가의 평균입니다 (앙상블)<br>
+                개별 평론가의 의견보다 훨씬 신뢰할 수 있습니다.
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 부트스트랩 샘플링의 약 63% 선택 비율<br>
+                • 특성 무작위 선택의 개수: √d (분류) vs d/3 (회귀)<br>
+                • OOB 추정의 개념과 장점<br>
+                • 특성 중요도 계산 방식<br>
+                • 랜덤 포레스트와 배깅 의사결정나무의 차이
+            </div>
+        </div>
+
+        <!-- SECTION 10: 부스팅 알고리즘 상세 -->
+        <div class="section" id="section10">
+            <h2>10. 부스팅 알고리즘 상세</h2>
+
+            <p>부스팅은 순차적으로 약한 학습기를 결합하여 강한 학습기를 만드는 기법입니다. 여러 종류가 있으며, 각각의 특성을 이해하는 것이 중요합니다.</p>
+
+            <h3>주요 부스팅 알고리즘 비교</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>알고리즘</th>
+                    <th>가중치 업데이트</th>
+                    <th>손실함수</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>AdaBoost</strong></td>
+                    <td>오분류 샘플에 지수 가중치</td>
+                    <td>지수 손실 (Exponential)</td>
+                    <td>부스팅의 기초, 구현 간단</td>
+                </tr>
+                <tr>
+                    <td><strong>Gradient Boosting</strong></td>
+                    <td>손실함수 그래디언트 방향</td>
+                    <td>임의 (제곱, 로그 등)</td>
+                    <td>더 강력, 다양한 손실함수 지원</td>
+                </tr>
+                <tr>
+                    <td><strong>XGBoost</strong></td>
+                    <td>테일러 전개 2차 도함수</td>
+                    <td>정규화 포함 목적함수</td>
+                    <td>병렬화, 정규화, 빠른 수렴</td>
+                </tr>
+                <tr>
+                    <td><strong>LightGBM</strong></td>
+                    <td>리프 방향 성장, 정규화</td>
+                    <td>그래디언트 기반</td>
+                    <td>더 빠름, 메모리 효율, 범주형 지원</td>
+                </tr>
+                <tr>
+                    <td><strong>CatBoost</strong></td>
+                    <td>범주형 특성 자동 처리</td>
+                    <td>범주형 기반 손실</td>
+                    <td>범주형 데이터 최적화, 과적합 저항</td>
+                </tr>
+            </table>
+
+            <h3>AdaBoost (Adaptive Boosting)</h3>
+            <div class="term-box">
+                <strong>AdaBoost의 원리</strong><br>
+                1. 모든 데이터에 동일 가중치로 시작<br>
+                2. 첫 약한 학습기 학습, 오분류 데이터 가중치 증가<br>
+                3. 다음 학습기는 어려운 데이터에 집중<br>
+                4. 각 학습기의 가중치: α = 0.5 × ln((1-ε)/ε) (ε는 오분류율)<br>
+                5. 최종 예측: 가중치된 투표
+            </div>
+
+            <h3>Gradient Boosting (GB)</h3>
+            <div class="term-box">
+                <strong>Gradient Boosting의 핵심</strong><br>
+                • 각 단계에서 손실함수의 음의 그래디언트 방향으로 새 모델 학습<br>
+                • 이전 모델의 잔차(Residual)를 피팅<br>
+                • 임의의 미분 가능한 손실함수 사용 가능<br>
+                • 수렴이 느리지만 높은 정확도
+            </div>
+
+            <h3>XGBoost (eXtreme Gradient Boosting)</h3>
+            <div class="term-box">
+                <strong>XGBoost의 개선사항</strong><br>
+                • 테일러 전개로 2차 도함수 활용 (더 정확한 업데이트)<br>
+                • 정규화 포함: L1(Lasso) + L2(Ridge) 페널티<br>
+                • 병렬 처리 가능<br>
+                • 결측값 자동 처리<br>
+                • Early Stopping으로 최적 반복 횟수 자동 결정
+            </div>
+
+            <h3>LightGBM (Light Gradient Boosting Machine)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>Leaf-wise 성장</strong></td>
+                    <td>트리 깊이 우선이 아닌 리프 중심 성장 (더 빠른 수렴)</td>
+                </tr>
+                <tr>
+                    <td><strong>범주형 특성</strong></td>
+                    <td>범주형 특성을 원-핫 인코딩 없이 직접 처리</td>
+                </tr>
+                <tr>
+                    <td><strong>메모리 효율</strong></td>
+                    <td>히스토그램 기반 학습으로 메모리 50% 이하</td>
+                </tr>
+                <tr>
+                    <td><strong>속도</strong></td>
+                    <td>XGBoost보다 10~20배 빠름</td>
+                </tr>
+            </table>
+
+            <h3>CatBoost (Categorical Boosting)</h3>
+            <div class="term-box">
+                <strong>CatBoost의 특징</strong><br>
+                • 범주형 변수를 자동으로 인코딩<br>
+                • 일반화 오류 감소: 순서화된 부스팅<br>
+                • 과적합 저항성 우수<br>
+                • 하이퍼파라미터 튜닝 덜 필요<br>
+                • GPU 지원
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • AdaBoost부터 CatBoost까지의 진화 과정<br>
+                • 그래디언트 부스팅의 기본 원리<br>
+                • XGBoost: 2차 도함수, 정규화, 병렬화<br>
+                • LightGBM: 속도 개선 (히스토그램, Leaf-wise)<br>
+                • CatBoost: 범주형 특성 최적화<br>
+                • 실무에서 언제 어느 것을 사용할지 판단
+            </div>
+        </div>
+
+        <!-- SECTION 11: XGBoost 상세 -->
+        <div class="section" id="section11">
+            <h2>11. XGBoost 상세</h2>
+
+            <div class="term-box">
+                <strong>XGBoost의 목적함수</strong><br>
+                L(θ) = Σ l(yi, ŷi) + Σ Ω(ft)<br>
+                <br>
+                where:<br>
+                • l(yi, ŷi): 손실함수 (오류 측정)<br>
+                • Ω(ft): 정규화 항 (모델 복잡도 제어)
+            </div>
+
+            <h3>정규화 (Regularization)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>정규화 항</th>
+                    <th>설명</th>
+                    <th>효과</th>
+                </tr>
+                <tr>
+                    <td><strong>L1 정규화</strong></td>
+                    <td>Σ |w| (가중치 절대값)</td>
+                    <td>특성 선택: 중요하지 않은 가중치를 0으로</td>
+                </tr>
+                <tr>
+                    <td><strong>L2 정규화</strong></td>
+                    <td>Σ w² (가중치 제곱)</td>
+                    <td>가중치 축소: 모든 가중치를 작게</td>
+                </tr>
+                <tr>
+                    <td><strong>트리 정규화</strong></td>
+                    <td>γ × T + λ × Σ w² (T는 리프 개수)</td>
+                    <td>나무 복잡도 제어</td>
+                </tr>
+            </table>
+
+            <h3>XGBoost의 핵심 파라미터</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>파라미터</th>
+                    <th>범위</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>eta (학습률)</strong></td>
+                    <td>0 ~ 1 (기본 0.3)</td>
+                    <td>각 부스팅 단계에서의 수축. 작을수록 안정적이지만 느림</td>
+                </tr>
+                <tr>
+                    <td><strong>max_depth</strong></td>
+                    <td>1 ~ ∞ (기본 6)</td>
+                    <td>트리 최대 깊이. 과적합 방지</td>
+                </tr>
+                <tr>
+                    <td><strong>min_child_weight</strong></td>
+                    <td>0 ~ ∞ (기본 1)</td>
+                    <td>리프의 최소 가중치. 크면 보수적 (과적합 방지)</td>
+                </tr>
+                <tr>
+                    <td><strong>subsample</strong></td>
+                    <td>0 ~ 1 (기본 1)</td>
+                    <td>각 나무마다 샘플 비율 (0.5~1 추천)</td>
+                </tr>
+                <tr>
+                    <td><strong>colsample_bytree</strong></td>
+                    <td>0 ~ 1 (기본 1)</td>
+                    <td>각 나무마다 특성 샘플 비율</td>
+                </tr>
+                <tr>
+                    <td><strong>lambda (L2 정규화)</strong></td>
+                    <td>0 ~ ∞ (기본 1)</td>
+                    <td>L2 페널티. 크면 가중치 축소</td>
+                </tr>
+                <tr>
+                    <td><strong>alpha (L1 정규화)</strong></td>
+                    <td>0 ~ ∞ (기본 0)</td>
+                    <td>L1 페널티. 특성 선택 효과</td>
+                </tr>
+            </table>
+
+            <h3>병렬연산 (Parallelization)</h3>
+            <div class="term-box">
+                <strong>XGBoost의 병렬화</strong><br>
+                • 트리 구축 시 각 노드에서의 최적 분할을 병렬로 탐색<br>
+                • 각 특성의 분할점을 병렬로 계산<br>
+                • GPU 지원으로 더욱 빠른 처리<br>
+                • 반복 간에는 순차 처리 (부스팅의 특성)
+            </div>
+
+            <h3>Early Stopping</h3>
+            <div class="term-box">
+                <strong>Early Stopping의 메커니즘</strong><br>
+                1. 검증 성능을 모니터링하며 모델 학습<br>
+                2. 검증 성능이 연속 n번(patience) 개선되지 않으면 중단<br>
+                3. 최적의 반복 횟수에서 멈춤<br>
+                4. 과적합 방지와 계산 시간 단축<br>
+                <br>
+                예: 100회 반복 설정, early_stopping_rounds=10이면<br>
+                60회 차에서 최고 성능이 나면, 70회 차에서 멈춤
+            </div>
+
+            <h3>XGBoost의 학습 과정</h3>
+            <div class="process-flow">
+                <span class="process-step">초기화</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">그래디언트 계산</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">나무 구축</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">가중치 업데이트</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">Early Stopping 확인</span>
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • XGBoost의 목적함수: 손실 + 정규화<br>
+                • 테일러 전개를 통한 2차 도함수 활용<br>
+                • 주요 파라미터의 역할 (eta, max_depth, subsample 등)<br>
+                • Early Stopping의 기준과 효과<br>
+                • 병렬화 가능한 부분과 불가능한 부분 (순차 부스팅)
+            </div>
+        </div>
+
+        <!-- SECTION 12: 교차검증 -->
+        <div class="section" id="section12">
+            <h2>12. 교차검증 (Cross-Validation)</h2>
+
+            <p>데이터 분할이 작으면 모델의 성능 평가가 불안정합니다. 교차검증은 제한된 데이터를 효율적으로 활용하여 신뢰할 수 있는 성능 평가를 제공합니다.</p>
+
+            <h3>문제: 데이터 부족과 과적합</h3>
+            <div class="analogy-box">
+                <strong>비유: 학생 평가</strong><br>
+                1. 교사가 시험 문제만으로 학생 실력 평가 → 부정확<br>
+                2. 다양한 시험으로 여러 번 평가 → 더 정확<br>
+                3. 최종 평가: 여러 시험의 평균<br>
+                <br>
+                교차검증도 같은 원리입니다.
+            </div>
+
+            <h3>주요 교차검증 기법</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>기법</th>
+                    <th>절차</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>Hold-out</strong></td>
+                    <td>학습(60~70%) / 검증(10~15%) / 테스트(15~20%)</td>
+                    <td>가장 간단, 데이터 낭비, 불안정</td>
+                </tr>
+                <tr>
+                    <td><strong>K-Fold</strong></td>
+                    <td>k등분하여 k번 반복 (1개 검증, k-1개 학습)</td>
+                    <td>표준, 데이터 활용 효율적, k=5 또는 10</td>
+                </tr>
+                <tr>
+                    <td><strong>Stratified K-Fold</strong></td>
+                    <td>K-Fold + 클래스 비율 유지</td>
+                    <td>불균형 데이터에 필수</td>
+                </tr>
+                <tr>
+                    <td><strong>Leave-One-Out (LOO)</strong></td>
+                    <td>k=n (데이터 개수)</td>
+                    <td>편향 낮음, 계산 비용 높음 (n번 반복)</td>
+                </tr>
+                <tr>
+                    <td><strong>Leave-P-Out (LPO)</strong></td>
+                    <td>p개를 제외하고 학습</td>
+                    <td>LOO보다는 효율적, 여전히 비쌈</td>
+                </tr>
+                <tr>
+                    <td><strong>Time Series Split</strong></td>
+                    <td>시간 순서 유지한 분할</td>
+                    <td>시계열 데이터 전용</td>
+                </tr>
+            </table>
+
+            <h3>K-Fold의 절차</h3>
+            <div class="process-flow">
+                <span class="process-step">데이터 5등분</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">Fold1 검증</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">Fold2 검증</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">...</span>
+                <span class="process-arrow">→</span>
+                <span class="process-step">평균 성능</span>
+            </div>
+
+            <h3>Stratified K-Fold</h3>
+            <div class="term-box">
+                <strong>언제 필요한가?</strong><br>
+                • 불균형 데이터: 암진단 데이터가 "암 1%, 정상 99%"<br>
+                • 일반 K-Fold: 어떤 폴드는 암 0개, 다른 폴드는 암 10개 (불균형)<br>
+                • Stratified K-Fold: 각 폴드에서 1% / 99% 비율 유지<br>
+                • 결과: 안정적이고 신뢰할 수 있는 성능 평가
+            </div>
+
+            <h3>Leave-One-Out (LOO)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td><strong>k 값</strong></td>
+                    <td>k = n (데이터 개수)</td>
+                </tr>
+                <tr>
+                    <td><strong>반복 횟수</strong></td>
+                    <td>n번 (매우 많음)</td>
+                </tr>
+                <tr>
+                    <td><strong>장점</strong></td>
+                    <td>편향 가장 낮음, 데이터 최대 활용</td>
+                </tr>
+                <tr>
+                    <td><strong>단점</strong></td>
+                    <td>계산 비용 극도로 높음, 노이즈 민감</td>
+                </tr>
+                <tr>
+                    <td><strong>사용</strong></td>
+                    <td>소규모 데이터셋에만 (n < 1000)</td>
+                </tr>
+            </table>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • Hold-out vs K-Fold의 장단점<br>
+                • Stratified K-Fold가 필수인 상황<br>
+                • LOO의 계산 비용과 편향<br>
+                • 일반적인 권장사항: K=5 또는 K=10<br>
+                • 시계열 데이터는 시간 순서 유지 필수<br>
+                • 하이퍼파라미터 튜닝 시 중첩 교차검증 사용
+            </div>
+        </div>
+
+        <!-- SECTION 13: 분류 모델 평가 -->
+        <div class="section" id="section13">
+            <h2>13. 분류 모델 평가</h2>
+
+            <p>분류 문제에서 정확도(Accuracy)만으로는 부족합니다. 다양한 관점에서 모델 성능을 평가해야 합니다.</p>
+
+            <h3>혼동행렬 (Confusion Matrix)</h3>
+            <table class="compare-table">
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">예측</th>
+                </tr>
+                <tr>
+                    <th colspan="2"></th>
+                    <th>양성 (1)</th>
+                    <th>음성 (0)</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">실제</th>
+                    <td><strong>양성 (1)</strong></td>
+                    <td><strong>TP</strong> (참양성)</td>
+                    <td><strong>FN</strong> (거짓음성)</td>
+                </tr>
+                <tr>
+                    <td><strong>음성 (0)</strong></td>
+                    <td><strong>FP</strong> (거짓양성)</td>
+                    <td><strong>TN</strong> (참음성)</td>
+                </tr>
+            </table>
+
+            <div class="term-box">
+                <strong>각 항의 의미</strong><br>
+                • TP (True Positive): 양성이라고 예측했는데 실제로 양성 ✓<br>
+                • TN (True Negative): 음성이라고 예측했는데 실제로 음성 ✓<br>
+                • FP (False Positive): 양성이라고 예측했는데 실제로 음성 ✗ (거짓알람)<br>
+                • FN (False Negative): 음성이라고 예측했는데 실제로 양성 ✗ (놓친 것)
+            </div>
+
+            <h3>성능 지표들</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>지표</th>
+                    <th>공식</th>
+                    <th>의미</th>
+                    <th>사용 시기</th>
+                </tr>
+                <tr>
+                    <td><strong>정확도 (Accuracy)</strong></td>
+                    <td>(TP + TN) / (TP + FP + FN + TN)</td>
+                    <td>전체 중 맞춘 비율</td>
+                    <td>균형 데이터</td>
+                </tr>
+                <tr>
+                    <td><strong>정밀도 (Precision)</strong></td>
+                    <td>TP / (TP + FP)</td>
+                    <td>"양성"이라 한 것 중 진짜 비율</td>
+                    <td>거짓양성 비용 높을 때</td>
+                </tr>
+                <tr>
+                    <td><strong>재현율 (Recall)</strong></td>
+                    <td>TP / (TP + FN)</td>
+                    <td>실제 양성 중 찾은 비율</td>
+                    <td>거짓음성 비용 높을 때</td>
+                </tr>
+                <tr>
+                    <td><strong>F1점수</strong></td>
+                    <td>2 × (P × R) / (P + R)</td>
+                    <td>정밀도와 재현율의 조화평균</td>
+                    <td>둘의 균형 필요할 때</td>
+                </tr>
+                <tr>
+                    <td><strong>F-Beta</strong></td>
+                    <td>(1+β²) × (P × R) / (β² × P + R)</td>
+                    <td>재현율을 더 중요하게 (β>1)</td>
+                    <td>비대칭 가중치</td>
+                </tr>
+                <tr>
+                    <td><strong>특이도 (Specificity)</strong></td>
+                    <td>TN / (TN + FP)</td>
+                    <td>실제 음성 중 찾은 비율</td>
+                    <td>의료진단</td>
+                </tr>
+            </table>
+
+            <h3>정밀도-재현율 트레이드오프</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>상황</th>
+                    <th>정밀도 중시</th>
+                    <th>재현율 중시</th>
+                </tr>
+                <tr>
+                    <td><strong>스팸 필터</strong></td>
+                    <td>정상 메일을 스팸으로 보내면 안 됨</td>
+                    <td>(재현율은 낮아도 괜찮음)</td>
+                </tr>
+                <tr>
+                    <td><strong>암진단</strong></td>
+                    <td>(정밀도는 낮아도 괜찮음)</td>
+                    <td>암을 놓치면 안 됨 (정밀도 낮음 용인)</td>
+                </tr>
+                <tr>
+                    <td><strong>신용카드 사기</strong></td>
+                    <td>정상을 사기로 꼬리표하면 고객 불만</td>
+                    <td>사기를 놓치면 손실 발생</td>
+                </tr>
+            </table>
+
+            <h3>ROC 곡선과 AUC</h3>
+            <div class="term-box">
+                <strong>ROC (Receiver Operating Characteristic)</strong><br>
+                • X축: FPR (거짓양성율) = FP / (FP + TN)<br>
+                • Y축: TPR (참양성율) = TP / (TP + FN) = 재현율<br>
+                • 임계값을 변경하면서 그린 곡선<br>
+                • AUC (곡선 아래 면적): 0.5 (운) ~ 1.0 (완벽)
+            </div>
+
+            <div class="term-box">
+                <strong>PR (Precision-Recall) 곡선</strong><br>
+                • X축: 재현율, Y축: 정밀도<br>
+                • 불균형 데이터에서 ROC보다 더 유용<br>
+                • 마찬가지로 AUC로 평가<br>
+                • ROC보다 작은 규모로 변하여 차이 민감
+            </div>
+
+            <h3>임계값 조정</h3>
+            <div class="term-box">
+                <strong>임계값의 영향</strong><br>
+                로지스틱 회귀나 확률 기반 분류는 기본 임계값 0.5를 사용합니다.<br>
+                <br>
+                임계값을 낮추면 (예: 0.3):<br>
+                • 양성 판정이 더 쉬워짐 → 재현율↑, 정밀도↓<br>
+                <br>
+                임계값을 높이면 (예: 0.7):<br>
+                • 양성 판정이 더 어려워짐 → 재현율↓, 정밀도↑
+            </div>
+
+            <h3>향상도 차트 (Lift Chart)</h3>
+            <div class="term-box">
+                <strong>향상도 차트의 사용</strong><br>
+                마케팅 분야에서 모델의 효율성을 평가합니다.<br>
+                <br>
+                Lift = 모델의 성과 / 무작위 성과<br>
+                <br>
+                예) 무작위로 고객을 선택하면 10% 반응<br>
+                모델로 상위 30% 고객 선택 → 25% 반응<br>
+                Lift = 25% / 10% = 2.5배
+            </div>
+
+            <h3>코언의 카파 지수 (Cohen's Kappa)</h3>
+            <div class="term-box">
+                <strong>카파 지수</strong><br>
+                κ = (Po - Pe) / (1 - Pe)<br>
+                <br>
+                • Po: 관찰된 일치도<br>
+                • Pe: 우연에 의한 기대 일치도<br>
+                • -1 ~ 1 범위, 0.4 이상이 보통 수준<br>
+                • 불균형 데이터에서 정확도보다 신뢰할 수 있음
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • 혼동행렬의 TP, TN, FP, FN 정의<br>
+                • 정밀도와 재현율의 트레이드오프 (임계값 조정)<br>
+                • 균형 데이터: ROC/AUC 사용<br>
+                • 불균형 데이터: PR 곡선 또는 카파 지수<br>
+                • 비즈니스 목표에 따른 지표 선택<br>
+                • 향상도 차트의 마케팅 활용
+            </div>
+        </div>
+
+        <!-- SECTION 14: 회귀 모델 평가 -->
+        <div class="section" id="section14">
+            <h2>14. 회귀 모델 평가</h2>
+
+            <p>회귀 문제의 평가는 예측 오류의 크기를 측정하는 지표들을 사용합니다. 절대오차와 제곱오차의 두 가지 관점이 있습니다.</p>
+
+            <h3>절대오차 지표</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>지표</th>
+                    <th>공식</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>AE (Absolute Error)</strong></td>
+                    <td>|y - ŷ|</td>
+                    <td>개별 오류, 최대값이나 평균 계산</td>
+                </tr>
+                <tr>
+                    <td><strong>MAE (Mean Absolute Error)</strong></td>
+                    <td>(1/n) Σ|yi - ŷi|</td>
+                    <td>평균 절대오차, 원래 단위 유지, 해석 쉬움</td>
+                </tr>
+                <tr>
+                    <td><strong>MAPE (Mean Absolute Percentage Error)</strong></td>
+                    <td>(1/n) Σ|yi - ŷi| / |yi| × 100</td>
+                    <td>백분율 오류, 크기 무관한 비교</td>
+                </tr>
+                <tr>
+                    <td><strong>RMAPE</strong></td>
+                    <td>중앙값 기반 MAPE</td>
+                    <td>이상치 영향 적음</td>
+                </tr>
+            </table>
+
+            <h3>제곱오차 지표</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>지표</th>
+                    <th>공식</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>MSE (Mean Squared Error)</strong></td>
+                    <td>(1/n) Σ(yi - ŷi)²</td>
+                    <td>큰 오류에 더 높은 패널티, 미분 가능</td>
+                </tr>
+                <tr>
+                    <td><strong>RMSE (Root Mean Squared Error)</strong></td>
+                    <td>√MSE</td>
+                    <td>원래 단위로 변환, 가장 널리 사용</td>
+                </tr>
+                <tr>
+                    <td><strong>MSLE (Mean Squared Log Error)</strong></td>
+                    <td>(1/n) Σ(log(yi+1) - log(ŷi+1))²</td>
+                    <td>상대적 오류 중시, 음수 값 처리 불가</td>
+                </tr>
+            </table>
+
+            <h3>상대적 오류 지표</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>지표</th>
+                    <th>공식</th>
+                    <th>사용</th>
+                </tr>
+                <tr>
+                    <td><strong>R² (결정계수)</strong></td>
+                    <td>1 - (SS_res / SS_tot)<br>where SS_res = Σ(yi - ŷi)²<br>SS_tot = Σ(yi - ȳ)²</td>
+                    <td>설명력, 0 ~ 1 범위 (1이 최고)<br>음수 가능 (모델이 평균보다 나쁨)</td>
+                </tr>
+                <tr>
+                    <td><strong>Adjusted R²</strong></td>
+                    <td>1 - (1 - R²) × (n-1) / (n-p-1)</td>
+                    <td>특성 개수에 따른 보정<br>특성 추가 효과 평가</td>
+                </tr>
+                <tr>
+                    <td><strong>RMSLE (Root Mean Squared Log Error)</strong></td>
+                    <td>√[(1/n) Σ(log(yi+1) - log(ŷi+1))²]</td>
+                    <td>상대적 오류, 스케일 불변</td>
+                </tr>
+            </table>
+
+            <h3>MAE vs RMSE 선택</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>특징</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                </tr>
+                <tr>
+                    <td><strong>계산</strong></td>
+                    <td>절대값</td>
+                    <td>제곱근</td>
+                </tr>
+                <tr>
+                    <td><strong>이상치 민감도</strong></td>
+                    <td>낮음 (선형)</td>
+                    <td>높음 (제곱)</td>
+                </tr>
+                <tr>
+                    <td><strong>최적화</strong></td>
+                    <td>중앙값</td>
+                    <td>평균값</td>
+                </tr>
+                <tr>
+                    <td><strong>사용</strong></td>
+                    <td>이상치 있는 데이터</td>
+                    <td>정규분포 데이터</td>
+                </tr>
+                <tr>
+                    <td><strong>해석</strong></td>
+                    <td>더 직관적</td>
+                    <td>통계학에서 선호</td>
+                </tr>
+            </table>
+
+            <h3>R² (결정계수) 이해</h3>
+            <div class="term-box">
+                <strong>R² 의미</strong><br>
+                R² = 1 - (모델의 오차) / (단순 평균의 오차)<br>
+                <br>
+                • R² = 1.0: 완벽한 적합<br>
+                • R² = 0.8: 80% 설명력 (좋음)<br>
+                • R² = 0.5: 50% 설명력 (중간)<br>
+                • R² = 0.0: 모델이 평균만큼만 설명<br>
+                • R² < 0: 모델이 평균보다 나쁨
+            </div>
+
+            <h3>다중회귀에서의 조정 R²</h3>
+            <div class="term-box">
+                <strong>Adjusted R²의 필요성</strong><br>
+                특성을 추가하면 항상 R²가 증가합니다 (과적합).<br>
+                <br>
+                Adj R² = 1 - (1 - R²) × (n-1) / (n-p-1)<br>
+                <br>
+                where n = 샘플 수, p = 특성 개수<br>
+                <br>
+                불필요한 특성 추가 시 감소 → 모델 선택에 유용
+            </div>
+
+            <h3>스케일에 따른 지표 선택</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>상황</th>
+                    <th>추천 지표</th>
+                    <th>이유</th>
+                </tr>
+                <tr>
+                    <td><strong>절대 오류값이 중요</strong></td>
+                    <td>MAE</td>
+                    <td>해석이 직관적 (원 단위)</td>
+                </tr>
+                <tr>
+                    <td><strong>상대적 오류 비교</strong></td>
+                    <td>MAPE, R²</td>
+                    <td>스케일 무관, 여러 모델 비교</td>
+                </tr>
+                <tr>
+                    <td><strong>이상치가 많은 데이터</strong></td>
+                    <td>MAE, MSLE</td>
+                    <td>큰 오류의 영향 제한</td>
+                </tr>
+                <tr>
+                    <td><strong>모델 설명력 강조</strong></td>
+                    <td>R² (또는 Adj R²)</td>
+                    <td>데이터의 변동성 설명도</td>
+                </tr>
+                <tr>
+                    <td><strong>학습 과정 최적화</strong></td>
+                    <td>MSE (또는 RMSE)</td>
+                    <td>미분 가능하여 경사하강법 사용</td>
+                </tr>
+            </table>
+
+            <div class="analogy-box">
+                <strong>비유: 화살 맞추기</strong><br>
+                • MAE: 평균적으로 과녁에서 얼마나 떨어져 있는가?<br>
+                • RMSE: 운이 안 좋으면 얼마나 멀리 빗나가는가? (큰 오류 강조)<br>
+                • R²: 전체 움직임의 몇 %를 설명하는가? (설명력)
+            </div>
+
+            <div class="note-box">
+                <strong>기술사 시험 포인트</strong><br>
+                • MAE vs RMSE의 차이와 선택 기준<br>
+                • R² 의 의미와 해석 (0 ~ 1 또는 음수 가능)<br>
+                • Adjusted R² 의 필요성 (특성 수 보정)<br>
+                • MAPE의 사용: 상대적 오류, 스케일 무관<br>
+                • 이상치가 있을 때 MAE 선호<br>
+                • 통계 기반 분석은 RMSE 선호
+            </div>
+        </div>
+
+        <!-- KEY SUMMARY -->
+        <div class="key-summary">
+            <h3>이 장의 핵심 요점</h3>
+            <ul>
+                <li>지도학습은 정답이 있는 데이터로부터 학습하는 기본 방식</li>
+                <li>파라미터는 학습되는 값, 하이퍼파라미터는 미리 정하는 값</li>
+                <li>분류와 회귀는 예측 대상의 형태에 따른 구분</li>
+                <li>KNN: 가까운 이웃의 투표, 비모수적, 메모리 기반</li>
+                <li>SVM: 최대 마진으로 분리, 커널 트릭으로 비선형 처리</li>
+                <li>의사결정나무: 재귀적 분할, 해석 가능, 가지치기로 과적합 방지</li>
+                <li>로지스틱 회귀: 선형식을 시그모이드로 확률화, 판별 모델</li>
+                <li>나이브 베이즈: 베이즈 정리 기반, 생성 모델, 조건부 독립 가정</li>
+                <li>배깅: 병렬 앙상블, 분산 감소 (예: 랜덤 포레스트)</li>
+                <li>부스팅: 순차 앙상블, 편향 감소 (예: AdaBoost, XGBoost)</li>
+                <li>XGBoost: 2차 도함수, 정규화, Early Stopping, 병렬화</li>
+                <li>교차검증: K-Fold (k=5 또는 10), Stratified K-Fold (불균형 데이터)</li>
+                <li>분류 평가: 정밀도/재현율 트레이드오프, ROC/AUC, 카파 지수</li>
+                <li>회귀 평가: MAE (직관적), RMSE (통계), R² (설명력)</li>
+                <li>불균형 데이터는 PR 곡선과 F1 점수 사용</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="01-overview.html">이전: 01. 인공지능 개요</a>
+        <a href="03-unsupervised-rl.html">다음: 03. 비지도학습과 강화학습</a>
+    </div>
+
+    <div class="footer">
+        <p>AI 학습 가이드 | 02. 지도학습</p>
+    </div>
+</body>
+</html>
