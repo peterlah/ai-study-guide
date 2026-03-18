@@ -369,6 +369,14 @@
                 <strong>특징:</strong> Binary Cross Entropy의 확장. 각 클래스별로 손실을 계산합니다.
             </div>
 
+            <div class="note-box">
+                <strong>손실 함수 선택 가이드</strong><br>
+                <strong>회귀 문제:</strong> MSE (Mean Squared Error) 또는 MAE (Mean Absolute Error). MSE는 이상치에 민감하고, MAE는 견고함<br>
+                <strong>이진 분류:</strong> Binary Cross Entropy (로지스틱 손실)<br>
+                <strong>다중 분류:</strong> Categorical Cross Entropy (소프트맥스 손실)<br>
+                <strong>클래스 불균형 문제:</strong> Focal Loss (어려운 샘플에 더 집중)
+            </div>
+
             <h3>경사하강법 (Gradient Descent)</h3>
 
             <div class="analogy-box">
@@ -710,6 +718,13 @@
                 <li>필터와 이미지 영역의 원소별 곱셈 후 합산</li>
                 <li>결과값이 특징 맵(feature map)을 형성</li>
             </ol>
+
+            <div class="analogy-box">
+                <strong>합성곱 연산의 구체적 예시</strong><br>
+                3x3 필터가 이미지 위를 슬라이딩하면서 각 위치에서 9개 값의 가중합을 계산합니다. 예를 들어, 세로선 탐지 필터는 다음과 같이 정의됩니다:<br>
+                [-1 0 1], [-2 0 2], [-1 0 1] (수직 소벨 필터)<br>
+                이 필터는 세로 엣지가 강한 곳에서 높은 값을 출력하고, 수평선이나 텍스처가 있는 곳에서는 낮은 값을 출력합니다.
+            </div>
 
             <h3>풀링 층(Pooling Layer)</h3>
 

@@ -161,6 +161,10 @@
         Output = 0.15·"나"Value + 0.10·"는"Value + 0.65·"밥을"Value + 0.10·"먹었다"Value
       </div>
 
+      <div class="analogy-box">
+        <strong>도서관 비유:</strong> Query는 '찾고 싶은 주제', Key는 '각 책의 제목', Value는 '책의 내용'. Q와 K의 유사도가 높은 책(Attention Weight)의 Value를 더 많이 참고합니다.
+      </div>
+
       <h3>Bahdanau vs Luong Attention 비교</h3>
       <p>Attention 메커니즘의 두 가지 주요 변형:</p>
 
@@ -380,6 +384,10 @@
     <!-- Section 4: Transformer -->
     <section id="section4" class="section">
       <h2>4. Transformer 아키텍처</h2>
+
+      <div class="note-box">
+        <strong>Transformer 핵심:</strong> RNN의 순차 처리를 Self-Attention의 병렬 처리로 대체. 모든 위치가 동시에 모든 다른 위치를 참조 가능 → 학습 속도 대폭 향상
+      </div>
 
       <h3>혁신적인 구조</h3>
       <p>Transformer는 2017년 "Attention Is All You Need" 논문에서 제안되었습니다. RNN(순환 신경망)을 완전히 대체했으며, Attention만으로 이루어진 혁신적인 구조입니다.</p>

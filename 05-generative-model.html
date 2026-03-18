@@ -251,6 +251,12 @@
                 이 균형이 중요합니다. KL 발산이 너무 크면 너무 흐릿한 이미지를 생성하고, 너무 작으면 단순 오토인코더처럼 작동합니다.
             </div>
 
+            <div class="note-box">
+                <strong>VAE 손실함수의 의미</strong><br>
+                <strong>복원 오차 (Reconstruction Error):</strong> 원본 이미지와 복원된 이미지의 차이를 최소화하므로, 모델이 입력 정보를 정확히 학습하도록 강제합니다<br>
+                <strong>KL 발산 (KL Divergence):</strong> 잠재공간이 정규분포를 따르도록 제약합니다. 만약 KL 발산이 없다면 잠재공간이 불규칙해져서 새로운 샘플 생성이 불가능해집니다. 즉, 두 항의 균형이 생성 모델로 기능하게 합니다.
+            </div>
+
             <h3>VAE의 응용</h3>
 
             <ul style="margin-left: 20px; margin-bottom: 14px;">
@@ -936,6 +942,15 @@
             </table>
 
             <h3>상황별 모델 선택 가이드</h3>
+
+            <div class="note-box">
+                <strong>생성 모델 선택 가이드 (종합)</strong><br>
+                <strong>이미지 생성 (신규):</strong> GAN (고품질, 빠른 생성) 또는 Diffusion 모델 (최고 품질, 느림)<br>
+                <strong>데이터 증강:</strong> VAE (다양한 변형 생성 가능)<br>
+                <strong>텍스트 생성:</strong> Transformer 기반 모델 (GPT, T5 등)<br>
+                <strong>그래프/관계 데이터:</strong> GNN (Graph Neural Network, 구조 학습)<br>
+                <strong>에너지 효율:</strong> SNN (Spiking Neural Network, IoT/엣지 기기)
+            </div>
 
             <div class="note-box">
                 <strong>새로운 이미지를 생성하고 싶을 때:</strong>

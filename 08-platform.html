@@ -336,6 +336,10 @@
                 <strong>MCP (Model Context Protocol)</strong> - AI 모델이 외부 도구, API, 데이터베이스에 접근하기 위한 표준 인터페이스. Host, Client, Server의 3계층으로 구성된 개방형 프로토콜.
             </div>
 
+            <div class="analogy-box">
+                <strong>MCP는 AI의 'USB 포트'와 같습니다.</strong> USB가 키보드, 마우스, 프린터 등 다양한 장치를 하나의 표준으로 연결하듯, MCP는 LLM이 데이터베이스, API, 파일시스템 등 외부 도구를 표준화된 방식으로 연결합니다.
+            </div>
+
             <h3>MCP의 구조: Host / Client / Server</h3>
 
             <div class="step-cards">
@@ -1105,6 +1109,10 @@
             </table>
 
             <h3>선택 기준</h3>
+
+            <div class="note-box">
+                <strong>선택 가이드:</strong> 빠른 프로토타이핑/연구 → PyTorch (직관적 디버깅) / 모바일/에지 배포 → TensorFlow (TFLite 지원) / 대규모 프로덕션 → 둘 다 가능, 팀 경험에 따라 선택
+            </div>
 
             <h4>TensorFlow를 선택할 때</h4>
             <p>• 프로덕션 환경 배포 필요</p>

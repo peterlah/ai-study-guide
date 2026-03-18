@@ -282,6 +282,10 @@
                 <strong>4. 로우-랭크 적응 (LoRA):</strong> 학습 가능한 파라미터를 최소화<br>
                 <strong>5. MoE 아키텍처:</strong> 전문가 네트워크로 효율성 향상
             </div>
+
+            <div class="note-box">
+                <strong>양자화(Quantization) 쉽게 말하면:</strong> FP32(소수점 32자리) → INT8(정수 8비트)로 표현 정밀도를 낮추는 것. 모델 크기가 1/4로 줄지만, 정확도는 1~2%만 감소. 스마트폰에서 LLM을 돌릴 수 있게 만드는 핵심 기술
+            </div>
         </div>
 
         <!-- Section 5: Prompt Engineering -->
@@ -455,6 +459,10 @@
             <h3>RAG의 정의</h3>
             <div class="term-box">
                 <strong>RAG:</strong> 대규모 외부 지식 베이스(knowledge base)에서 관련 문서를 검색(retrieval)한 후, 이를 프롬프트에 포함시켜 생성(generation) 능력을 강화하는 기법입니다.
+            </div>
+
+            <div class="analogy-box">
+                <strong>RAG는 '오픈북 시험'과 같습니다.</strong> LLM이 답을 생성할 때 자기 기억(사전학습)만 쓰지 않고, 외부 문서(교과서)를 검색해서 참고한 뒤 답변합니다. 할루시네이션을 줄이고 최신 정보를 반영할 수 있는 핵심 기술입니다.
             </div>
 
             <h3>RAG의 구조</h3>

@@ -140,6 +140,14 @@
                 <strong>기억법:</strong> "유맨민표마" = 유클리드, 맨해튼, 민코프스키, 표준화, 마할라노비스
             </div>
 
+            <div class="analogy-box">
+                <strong>거리 측정 방식 비교: 같은 두 점 A(0,0), B(3,4)</strong><br>
+                <strong>유클리드 거리:</strong> √(3² + 4²) = 5 (직선 거리, 새가 날아가는 경로)<br>
+                <strong>맨해튼 거리:</strong> |3| + |4| = 7 (격자 도로를 따라, 택시가 가는 경로)<br>
+                <strong>체비셰프 거리:</strong> max(|3|, |4|) = 4 (가장 먼 한 축 기준, 체스의 킹이 이동하는 거리)<br>
+                같은 두 점이어도 측정 방식에 따라 거리 값이 완전히 달라집니다!
+            </div>
+
             <h3>유사도 측정 방법 - 상관계수 3가지</h3>
             <table class="compare-table">
                 <tr>
@@ -453,6 +461,12 @@
                 - Log-Likelihood: 최대화하려는 목적함수<br>
                 - 수렴성: 반복할수록 Log-likelihood가 증가<br>
                 - K-Means보다 느리지만 더 정교한 결과
+            </div>
+
+            <div class="note-box">
+                <strong>하드 할당 (Hard Assignment) vs 소프트 할당 (Soft Assignment)</strong><br>
+                <strong>K-Means (하드 할당):</strong> 포인트 X는 Cluster 2에 100% 속함. 포인트는 정확히 하나의 군집에만 할당됨. 빠르지만 경계가 명확한 경우만 처리<br>
+                <strong>GMM (소프트 할당):</strong> 포인트 X는 Cluster 1에 10%, Cluster 2에 85%, Cluster 3에 5% 속함. 포인트가 모든 군집에 확률적으로 속함. 더 유연하고 현실적인 해석 제공
             </div>
 
             <h3>계층적 군집화 (Hierarchical Clustering)</h3>

@@ -446,6 +446,13 @@
             </div>
 
             <div class="note-box">
+                <strong>커널 선택 가이드</strong><br>
+                <strong>선형 커널 (Linear):</strong> 특성이 이미 선형 분리 가능할 때. 빠르고 간단하지만 복잡한 패턴 미포착<br>
+                <strong>RBF 커널 (Radial Basis Function):</strong> 비선형, 복잡한 패턴에 강함. 가장 널리 추천되는 기본값<br>
+                <strong>다항식 커널 (Polynomial):</strong> 중간 수준의 비선형성 필요할 때. 파라미터 조정 필요
+            </div>
+
+            <div class="note-box">
                 <strong>기술사 시험 포인트</strong><br>
                 • Hard Margin과 Soft Margin의 명확한 구분<br>
                 • 슬랙 변수 ξ의 역할 이해<br>
@@ -653,6 +660,11 @@
                 </tr>
             </table>
 
+            <div class="analogy-box">
+                <strong>임계값 0.5가 결정경계인 이유</strong><br>
+                시그모이드(z) = 0.5일 때, 양성과 음성의 확률이 정확히 동일합니다. 따라서 이 지점이 두 클래스를 구분하는 경계선이 됩니다. 이를 결정경계(Decision Boundary)라고 부르며, 임계값을 조정하면 이 경계를 이동시켜 재현율과 정밀도의 균형을 맞출 수 있습니다.
+            </div>
+
             <h3>손실함수: 교차엔트로피</h3>
             <table class="compare-table">
                 <tr>
@@ -806,6 +818,11 @@
                 <strong>앙상블의 정의</strong><br>
                 여러 개의 약한 학습기(Weak Learner)를 조합하여 강한 학습기(Strong Learner)를 만드는 방법입니다.<br>
                 "여럿이 하나보다 낫다"는 민주주의 원칙을 머신러닝에 적용합니다.
+            </div>
+
+            <div class="term-box">
+                <strong>약한 학습기 (Weak Learner)</strong><br>
+                랜덤 추측(50%)보다 약간 나은 정확도를 가진 모델을 말합니다. 예를 들어, 동전 던지기보다 조금 나은 51% 정도의 정확도면 충분합니다. 앙상블의 핵심은 이러한 많은 약한 학습기들을 결합하면 강한 학습기(Strong Learner)가 되어 높은 정확도를 달성할 수 있다는 원리입니다.
             </div>
 
             <h3>주요 앙상블 방법 비교</h3>
