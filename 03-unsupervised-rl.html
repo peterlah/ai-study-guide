@@ -5,103 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>03. 비지도학습과 강화학습 - AI 학습 가이드</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.8; }
-        .top-nav { background: #2c3e50; padding: 12px 24px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.9rem; }
-        .top-nav a:hover { color: #3498db; }
-        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
-        .page-header h1 { font-size: 2.2rem; margin-bottom: 8px; }
-        .page-header p { font-size: 1.1rem; opacity: 0.9; }
-        .toc { background: white; max-width: 860px; margin: 24px auto; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .toc h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3498db; }
-        .toc ul { list-style: none; }
-        .toc li { margin-bottom: 8px; }
-        .toc a { color: #2c3e50; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 6px; }
-        .toc a:hover { background: #eef6fd; color: #3498db; }
-        .toc .section-num { background: #3498db; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
-        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 48px; }
-        .section { background: white; border-radius: 12px; padding: 36px; margin-top: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .section h2 { font-size: 1.5rem; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #3498db; }
-        .section h3 { font-size: 1.2rem; color: #2c3e50; margin: 24px 0 12px; padding-left: 12px; border-left: 4px solid #3498db; }
-        .section h4 { font-size: 1.05rem; color: #555; margin: 16px 0 8px; }
-        .section p { margin-bottom: 14px; font-size: 0.95rem; }
-        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .term-box strong { color: #2c3e50; }
-        .analogy-box { background: #fef9e7; border-left: 4px solid #f1c40f; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .analogy-box strong { color: #7d6608; }
-        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .warning-box { background: #fdf2f2; border-left: 4px solid #e74c3c; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
-        .compare-table th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
-        .compare-table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
-        .compare-table tr:nth-child(even) { background: #f8f9fa; }
-        .compare-table tr:hover { background: #eef6fd; }
-        .step-cards { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
-        .step-card { flex: 1; min-width: 180px; background: #f8f9fa; border-radius: 8px; padding: 16px; border-top: 4px solid #3498db; }
-        .step-card .step-num { font-size: 1.8rem; font-weight: bold; color: #3498db; }
-        .step-card .step-title { font-weight: bold; color: #2c3e50; margin: 4px 0; }
-        .step-card .step-desc { font-size: 0.85rem; color: #666; }
-        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
-        .process-step { background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 12px 18px; border-radius: 8px; text-align: center; font-size: 0.85rem; font-weight: 500; min-width: 100px; }
-        .process-arrow { color: #3498db; font-size: 1.4rem; font-weight: bold; }
-        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
-        .key-summary h3 { color: #3498db; border: none; padding: 0; margin-bottom: 12px; font-size: 1.15rem; }
-        .key-summary ul { list-style: disc; padding-left: 20px; }
-        .key-summary li { margin-bottom: 6px; font-size: 0.9rem; opacity: 0.95; }
-        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 32px auto; padding: 0 24px; }
-        .bottom-nav a { background: white; color: #2c3e50; text-decoration: none; padding: 14px 28px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s; font-weight: 500; }
-        .bottom-nav a:hover { background: #3498db; color: white; transform: translateY(-2px); }
-        .footer { text-align: center; padding: 32px; color: #999; font-size: 0.85rem; }
-
-        @media (max-width: 768px) {
-            .page-header { padding: 32px 16px; }
-            .page-header h1 { font-size: 1.6rem; }
-            .page-header p { font-size: 0.95rem; }
-            .toc { margin: 16px auto; padding: 20px; }
-            .toc h2 { font-size: 1.1rem; }
-            .toc a { font-size: 0.85rem; }
-            .container { padding: 0 16px 32px; }
-            .section { padding: 20px; margin-top: 20px; }
-            .section h2 { font-size: 1.2rem; }
-            .section h3 { font-size: 1rem; }
-            .compare-table { font-size: 0.8rem; }
-            .compare-table th, .compare-table td { padding: 8px; }
-            .step-cards { gap: 12px; }
-            .step-card { min-width: 150px; padding: 12px; }
-            .process-flow { gap: 4px; }
-            .process-step { padding: 10px 14px; font-size: 0.75rem; min-width: 80px; }
-            .bottom-nav { flex-direction: column; gap: 12px; }
-            .bottom-nav a { width: 100%; text-align: center; }
-            .key-summary { padding: 20px; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
     <nav class="top-nav">
-        <a href="02-supervised.html">← 이전: 지도학습</a>
+        <a href="02-supervised.html" class="prev-link">← 이전: 지도학습</a>
+        <span class="nav-title">03. 비지도학습과 강화학습</span>
         <a href="index.html">홈으로</a>
     </nav>
 
-    <header class="page-header">
+    <div class="hero">
         <h1>03. 비지도학습과 강화학습</h1>
         <p>데이터의 숨은 패턴을 발견하고, 행동을 통해 배우는 AI</p>
-    </header>
+    </div>
 
     <div class="toc">
-        <h2>학습 목차</h2>
-        <ul>
-            <li><a href="#section1"><span class="section-num">1</span> 비지도학습 개요</a></li>
-            <li><a href="#section2"><span class="section-num">2</span> 거리와 유사도</a></li>
-            <li><a href="#section3"><span class="section-num">3</span> 군집분석 알고리즘</a></li>
-            <li><a href="#section4"><span class="section-num">4</span> 고급 군집 기법</a></li>
-            <li><a href="#section5"><span class="section-num">5</span> 차원축소와 차원의 저주</a></li>
-            <li><a href="#section6"><span class="section-num">6</span> 강화학습 기초</a></li>
-            <li><a href="#section7"><span class="section-num">7</span> Q-Learning과 DQN</a></li>
-            <li><a href="#section8"><span class="section-num">8</span> 정책 기반 강화학습</a></li>
-            <li><a href="#section9"><span class="section-num">9</span> 고급 강화학습</a></li>
-        </ul>
-    </div>
+    <h3>학습 목차</h3>
+    <ol class="toc-list">
+        <li><a href="#section1"><span class="num">1</span> 비지도학습 개요</a></li>
+        <li><a href="#section2"><span class="num">2</span> 거리와 유사도</a></li>
+        <li><a href="#section3"><span class="num">3</span> 군집분석 알고리즘</a></li>
+        <li><a href="#section4"><span class="num">4</span> 고급 군집 기법</a></li>
+        <li><a href="#section5"><span class="num">5</span> 차원축소와 차원의 저주</a></li>
+        <li><a href="#section6"><span class="num">6</span> 강화학습 기초</a></li>
+        <li><a href="#section7"><span class="num">7</span> Q-Learning과 DQN</a></li>
+        <li><a href="#section8"><span class="num">8</span> 정책 기반 강화학습</a></li>
+        <li><a href="#section9"><span class="num">9</span> 고급 강화학습</a></li>
+    </ol>
+</div>
 
     <div class="container">
         <!-- Section 1: 비지도학습 개요 -->
@@ -326,22 +258,22 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">초기화</div>
                     <div class="step-desc">K개의 초기 중심점을 무작위로 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">할당</div>
                     <div class="step-desc">각 포인트를 가장 가까운 중심에 할당</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">중심 업데이트</div>
                     <div class="step-desc">각 군집의 평균값으로 중심 갱신</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">수렴</div>
                     <div class="step-desc">중심이 변하지 않을 때까지 2-3 반복</div>
                 </div>
@@ -365,32 +297,32 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">Medoid 선택</div>
                     <div class="step-desc">실제 데이터 중 K개를 무작위로 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">할당</div>
                     <div class="step-desc">각 포인트를 가장 가까운 medoid에 할당</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">Medoid 교환</div>
                     <div class="step-desc">군집 내에서 비용을 최소화하는 새 medoid 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">비용 개선</div>
                     <div class="step-desc">비용이 더 이상 개선되지 않을 때까지 반복</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">5</div>
+                    <div class="num">5</div>
                     <div class="step-title">수렴 검증</div>
                     <div class="step-desc">변경이 없으면 완료</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">6</div>
+                    <div class="num">6</div>
                     <div class="step-title">결과 반환</div>
                     <div class="step-desc">최종 군집 할당 반환</div>
                 </div>
@@ -503,12 +435,12 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">E</div>
+                    <div class="num">E</div>
                     <div class="step-title">E-Step (기댓값)</div>
                     <div class="step-desc">각 포인트가 각 가우시안에 속할 확률 계산</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">M</div>
+                    <div class="num">M</div>
                     <div class="step-title">M-Step (최대화)</div>
                     <div class="step-desc">그 확률을 기반으로 파라미터 업데이트</div>
                 </div>
@@ -582,32 +514,32 @@
             <h4>SOM의 6단계</h4>
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">초기화</div>
                     <div class="step-desc">격자 뉴런의 가중치를 무작위로 초기화</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">입력 선택</div>
                     <div class="step-desc">학습 데이터에서 입력 벡터 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">BMU 찾기</div>
                     <div class="step-desc">최적 일치 단위(Best Matching Unit) 계산</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">이웃 결정</div>
                     <div class="step-desc">BMU 근처의 뉴런들을 이웃으로 결정</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">5</div>
+                    <div class="num">5</div>
                     <div class="step-title">가중치 업데이트</div>
                     <div class="step-desc">BMU와 이웃의 가중치를 입력에 근접하게 조정</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">6</div>
+                    <div class="num">6</div>
                     <div class="step-title">반복</div>
                     <div class="step-desc">학습률과 이웃반경 감소시키며 2-5단계 반복</div>
                 </div>
@@ -873,22 +805,22 @@
             <h4>Q-Learning 학습과정</h4>
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">Q-table 초기화</div>
                     <div class="step-desc">모든 Q값을 0으로 설정</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">상태 관찰</div>
                     <div class="step-desc">에이전트가 현재 상태 확인</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">탐험-활용</div>
                     <div class="step-desc">ε-탐욕(epsilon-greedy): 무작위 행동 또는 최고 Q값 행동</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">Q값 업데이트</div>
                     <div class="step-desc">Q(s,a) ← Q(s,a) + α[r + γmax Q(s',a') - Q(s,a)]</div>
                 </div>
@@ -1021,22 +953,22 @@
             <h4>PPO의 학습과정</h4>
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">경험 수집</div>
                     <div class="step-desc">정책으로 상호작용하여 경험 모음</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">장점 계산</div>
                     <div class="step-desc">각 행동의 상대적 가치 평가</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">정책 개선</div>
                     <div class="step-desc">신뢰 구간 내에서 정책 업데이트</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">반복</div>
                     <div class="step-desc">1-3단계를 여러 에폭 동안 반복</div>
                 </div>
@@ -1096,22 +1028,22 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">Selection</div>
                     <div class="step-desc">탐색할 유망한 노드 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">Expansion</div>
                     <div class="step-desc">트리에 새 노드 추가</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">Simulation</div>
                     <div class="step-desc">끝까지 무작위로 진행하여 결과 관찰</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">Backpropagation</div>
                     <div class="step-desc">결과를 역으로 전파하여 노드 가치 업데이트</div>
                 </div>
@@ -1169,27 +1101,27 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">초기화</div>
                     <div class="step-desc">서버가 초기 모델 배포</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">분산 학습</div>
                     <div class="step-desc">각 클라이언트가 로컬 데이터로 학습</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">파라미터 전송</div>
                     <div class="step-desc">클라이언트가 학습된 파라미터만 서버로 전송</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">집계</div>
                     <div class="step-desc">서버가 파라미터를 평균 또는 병합</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">5</div>
+                    <div class="num">5</div>
                     <div class="step-title">반복</div>
                     <div class="step-desc">1-4단계를 반복하여 전역 모델 개선</div>
                 </div>
@@ -1291,7 +1223,8 @@
         <!-- Key Summary -->
         <div class="key-summary">
             <h3>핵심 요점 정리</h3>
-            <ul>
+    <ol class="toc-list">
+        
                 <li>비지도학습은 정답 없이 데이터의 내재된 구조를 발견합니다.</li>
                 <li>거리 측정(유클리드, 맨해튼, 마할라노비스)과 유사도(피어슨, 코사인, 자카드)는 군집화의 기초입니다.</li>
                 <li>K-Means는 빠르지만 이상치에 약하고, K-Medoids는 강건하지만 느립니다.</li>
@@ -1308,17 +1241,17 @@
                 <li>RLHF는 인간의 선호도에 따라 생성형 AI를 미세조정합니다.</li>
                 <li>연합학습은 개인정보를 보호하면서 분산 환경에서 학습합니다.</li>
                 <li>온디바이스 AI는 TPU, GPU, NPU 같은 하드웨어와 양자화, 가지치기 같은 소프트웨어 기술을 활용합니다.</li>
-            </ul>
-        </div>
+                </ol>
+    </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="02-supervised.html">이전: 02. 지도학습</a>
-        <a href="04-deeplearning.html">다음: 04. 딥러닝과 모델 최적화</a>
-    </nav>
+    <div class="bottom-nav">
+    <a href="02-supervised.html" class="prev-link">← 이전: 지도학습</a>
+    <a href="04-deeplearning.html" class="next-link">다음: 딥러닝과 모델 최적화 →</a>
+</div>
 
-    <footer class="footer">
+    <div class="footer">
         <p>AI 학습 가이드 | 03. 비지도학습과 강화학습</p>
-    </footer>
+    </div>
 </body>
 </html>

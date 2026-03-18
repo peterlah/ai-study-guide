@@ -5,71 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>04. 딥러닝과 모델 최적화 - AI 학습 가이드</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f5f7fa; color:#333; line-height:1.8; }
-        .top-nav { background:#2c3e50; padding:12px 24px; position:sticky; top:0; z-index:100; display:flex; justify-content:space-between; align-items:center; }
-        .top-nav a { color:#ecf0f1; text-decoration:none; font-size:0.9rem; }
-        .top-nav a:hover { color:#3498db; }
-        .page-header { background:linear-gradient(135deg,#2c3e50,#3498db); color:white; padding:48px 24px; text-align:center; }
-        .page-header h1 { font-size:2.2rem; margin-bottom:8px; }
-        .page-header p { font-size:1.1rem; opacity:0.9; }
-        .toc { background:white; max-width:860px; margin:24px auto; border-radius:12px; padding:32px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
-        .toc h2 { font-size:1.3rem; color:#2c3e50; margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid #3498db; }
-        .toc ul { list-style:none; }
-        .toc li { margin-bottom:8px; }
-        .toc a { color:#2c3e50; text-decoration:none; font-size:0.95rem; display:flex; align-items:center; gap:8px; padding:4px 8px; border-radius:6px; }
-        .toc a:hover { background:#eef6fd; color:#3498db; }
-        .toc .section-num { background:#3498db; color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:bold; flex-shrink:0; }
-        .container { max-width:860px; margin:0 auto; padding:0 24px 48px; }
-        .section { background:white; border-radius:12px; padding:36px; margin-top:32px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
-        .section h2 { font-size:1.5rem; color:#2c3e50; margin-bottom:20px; padding-bottom:10px; border-bottom:3px solid #3498db; }
-        .section h3 { font-size:1.2rem; color:#2c3e50; margin:24px 0 12px; padding-left:12px; border-left:4px solid #3498db; }
-        .section h4 { font-size:1.05rem; color:#555; margin:16px 0 8px; }
-        .section p { margin-bottom:14px; font-size:0.95rem; }
-        .term-box { background:#eef6fd; border-left:4px solid #3498db; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
-        .term-box strong { color:#2c3e50; }
-        .analogy-box { background:#fef9e7; border-left:4px solid #f1c40f; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
-        .analogy-box strong { color:#7d6608; }
-        .note-box { background:#f0f9f0; border-left:4px solid #27ae60; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
-        .warning-box { background:#fdf2f2; border-left:4px solid #e74c3c; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; }
-        .compare-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9rem; }
-        .compare-table th { background:#2c3e50; color:white; padding:12px; text-align:left; }
-        .compare-table td { padding:10px 12px; border-bottom:1px solid #e0e0e0; vertical-align:top; }
-        .compare-table tr:nth-child(even) { background:#f8f9fa; }
-        .step-cards { display:flex; flex-wrap:wrap; gap:16px; margin:16px 0; }
-        .step-card { flex:1; min-width:180px; background:#f8f9fa; border-radius:8px; padding:16px; border-top:4px solid #3498db; }
-        .step-card .step-num { font-size:1.8rem; font-weight:bold; color:#3498db; }
-        .step-card .step-title { font-weight:bold; color:#2c3e50; margin:4px 0; }
-        .step-card .step-desc { font-size:0.85rem; color:#666; }
-        .process-flow { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:16px 0; justify-content:center; }
-        .process-step { background:linear-gradient(135deg,#3498db,#2c3e50); color:white; padding:12px 18px; border-radius:8px; text-align:center; font-size:0.85rem; min-width:100px; }
-        .process-arrow { color:#3498db; font-size:1.4rem; font-weight:bold; }
-        .key-summary { background:linear-gradient(135deg,#2c3e50,#34495e); color:white; border-radius:12px; padding:28px; margin:24px 0; }
-        .key-summary h3 { color:#3498db; border:none; padding:0; margin-bottom:12px; }
-        .key-summary ul { list-style:disc; padding-left:20px; }
-        .key-summary li { margin-bottom:6px; font-size:0.9rem; opacity:0.95; }
-        .bottom-nav { display:flex; justify-content:space-between; max-width:860px; margin:32px auto; padding:0 24px; }
-        .bottom-nav a { background:white; color:#2c3e50; text-decoration:none; padding:14px 28px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); font-weight:500; }
-        .bottom-nav a:hover { background:#3498db; color:white; }
-        .footer { text-align:center; padding:32px; color:#999; font-size:0.85rem; }
-        @media(max-width:768px) {
-            .page-header h1 { font-size:1.6rem; }
-            .page-header p { font-size:0.95rem; }
-            .toc { padding:24px; margin:16px auto; }
-            .section { padding:24px; margin-top:16px; }
-            .section h2 { font-size:1.3rem; }
-            .section h3 { font-size:1.1rem; }
-            .step-cards { gap:12px; }
-            .process-flow { gap:4px; }
-            .process-step { padding:10px 14px; font-size:0.75rem; min-width:80px; }
-            .bottom-nav { flex-direction:column; gap:12px; }
-            .bottom-nav a { width:100%; text-align:center; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
     <nav class="top-nav">
         <a href="03-unsupervised-rl.html">← 이전: 비지도학습과 강화학습</a>
+        <span class="nav-title">딥러닝과 모델 최적화</span>
         <a href="index.html">홈으로</a>
     </nav>
 
@@ -79,23 +21,23 @@
     </header>
 
     <div class="toc">
-        <h2>이 페이지의 학습 주제</h2>
-        <ul>
-            <li><a href="#section1"><span class="section-num">1</span>딥러닝 개요 및 역사</a></li>
-            <li><a href="#section2"><span class="section-num">2</span>신경망 기본 구조</a></li>
-            <li><a href="#section3"><span class="section-num">3</span>퍼셉트론과 단층 신경망</a></li>
-            <li><a href="#section4"><span class="section-num">4</span>다층 퍼셉트론과 역전파</a></li>
-            <li><a href="#section5"><span class="section-num">5</span>활성화 함수 완벽 가이드</a></li>
-            <li><a href="#section6"><span class="section-num">6</span>손실 함수와 경사하강법</a></li>
-            <li><a href="#section7"><span class="section-num">7</span>고급 최적화 기법</a></li>
-            <li><a href="#section8"><span class="section-num">8</span>기울기 문제와 정규화</a></li>
-            <li><a href="#section9"><span class="section-num">9</span>Feedforward 신경망</a></li>
-            <li><a href="#section10"><span class="section-num">10</span>홉필드와 볼츠만 머신</a></li>
-            <li><a href="#section11"><span class="section-num">11</span>합성곱 신경망(CNN)</a></li>
-            <li><a href="#section12"><span class="section-num">12</span>순환신경망(RNN/LSTM/GRU)</a></li>
-            <li><a href="#section13"><span class="section-num">13</span>하이퍼파라미터 최적화</a></li>
-            <li><a href="#section14"><span class="section-num">14</span>모델 최적화 총정리</a></li>
-        </ul>
+        <h3>목차</h3>
+        <ol class="toc-list">
+        <li><a href="#section1"><span class="num">1</span> 딥러닝 개요 및 역사</a></li>
+        <li><a href="#section2"><span class="num">2</span> 신경망 기본 구조</a></li>
+        <li><a href="#section3"><span class="num">3</span> 퍼셉트론과 단층 신경망</a></li>
+        <li><a href="#section4"><span class="num">4</span> 다층 퍼셉트론과 역전파</a></li>
+        <li><a href="#section5"><span class="num">5</span> 활성화 함수 완벽 가이드</a></li>
+        <li><a href="#section6"><span class="num">6</span> 손실 함수와 경사하강법</a></li>
+        <li><a href="#section7"><span class="num">7</span> 고급 최적화 기법</a></li>
+        <li><a href="#section8"><span class="num">8</span> 기울기 문제와 정규화</a></li>
+        <li><a href="#section9"><span class="num">9</span> Feedforward 신경망</a></li>
+        <li><a href="#section10"><span class="num">10</span> 홉필드와 볼츠만 머신</a></li>
+        <li><a href="#section11"><span class="num">11</span> 합성곱 신경망(CNN)</a></li>
+        <li><a href="#section12"><span class="num">12</span> 순환신경망(RNN/LSTM/GRU)</a></li>
+        <li><a href="#section13"><span class="num">13</span> 하이퍼파라미터 최적화</a></li>
+        <li><a href="#section14"><span class="num">14</span> 모델 최적화 총정리</a></li>
+        </ol>
     </div>
 
     <div class="container">
@@ -1282,8 +1224,8 @@
     </div>
 
     <div class="bottom-nav">
-        <a href="03-unsupervised-rl.html">이전: 03. 비지도학습과 강화학습</a>
-        <a href="05-generative-model.html">다음: 05. 생성모델과 신경망 확장</a>
+        <a href="03-unsupervised-rl.html">← 이전: 비지도학습과 강화학습</a>
+        <a href="05-generative-model.html">다음: 생성모델과 신경망 확장 →</a>
     </div>
 
     <footer class="footer">

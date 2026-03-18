@@ -5,65 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapter 09 - AI 품질 | AI 학습 가이드</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.7; }
-        .top-nav { position: sticky; top: 0; background: rgba(44,62,80,0.97); padding: 10px 24px; display: flex; justify-content: space-between; z-index: 100; }
-        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.85rem; }
-        .top-nav a:hover { color: #3498db; }
-        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
-        .page-header h1 { font-size: 2rem; margin-bottom: 8px; }
-        .page-header p { opacity: 0.85; font-size: 1rem; }
-        .toc { background: white; max-width: 860px; margin: -20px auto 24px; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .toc h3 { font-size: 0.95rem; color: #2c3e50; margin-bottom: 12px; }
-        .toc ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
-        .toc a { text-decoration: none; color: #555; font-size: 0.88rem; }
-        .toc a:hover { color: #3498db; }
-        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; }
-        .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .section h2 { color: #2c3e50; font-size: 1.4rem; border-bottom: 3px solid #3498db; padding-bottom: 8px; margin-bottom: 20px; }
-        .section h3 { color: #34495e; font-size: 1.1rem; margin: 20px 0 10px; padding-left: 12px; border-left: 3px solid #3498db; }
-        .section h4 { color: #555; font-size: 0.95rem; margin: 14px 0 8px; }
-        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .term-box strong { color: #2c3e50; }
-        .analogy-box { background: #fef9e7; border-left: 4px solid #f39c12; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .analogy-box strong { color: #e67e22; }
-        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .warning-box { background: #fdf0f0; border-left: 4px solid #e74c3c; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
-        .compare-table th { background: #2c3e50; color: white; padding: 10px 14px; text-align: left; }
-        .compare-table td { padding: 10px 14px; border-bottom: 1px solid #e0e0e0; }
-        .compare-table tr:nth-child(even) { background: #f8f9fa; }
-        .step-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
-        .step-card { background: #f8f9fa; border-radius: 8px; padding: 16px; text-align: center; border-top: 3px solid #3498db; }
-        .step-card .num { font-size: 1.4rem; font-weight: 700; color: #3498db; }
-        .step-card .label { font-size: 0.85rem; color: #555; margin-top: 4px; }
-        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-        .process-step { background: #eef6fd; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #2c3e50; }
-        .process-arrow { color: #3498db; font-weight: bold; }
-        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
-        .key-summary h3 { color: #3498db; margin-bottom: 12px; }
-        .key-summary ul { list-style: none; }
-        .key-summary li { padding: 4px 0; padding-left: 16px; position: relative; }
-        .key-summary li::before { content: ">>"; position: absolute; left: 0; color: #3498db; }
-        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 0 auto 40px; padding: 0 24px; }
-        .bottom-nav a { background: white; padding: 14px 24px; border-radius: 8px; text-decoration: none; color: #2c3e50; box-shadow: 0 2px 8px rgba(0,0,0,0.08); font-size: 0.9rem; }
-        .bottom-nav a:hover { background: #3498db; color: white; }
-        .footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.85rem; }
-        @media (max-width: 768px) {
-            .toc ul { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 1.5rem; }
-            .section { padding: 20px; }
-            .step-cards { grid-template-columns: 1fr; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
     <nav class="top-nav">
-        <span>AI 학습 가이드</span>
-        <div>
-            <a href="08-platform.html">이전</a> | <a href="10-policy-infra.html">다음</a>
-        </div>
-    </nav>
+    <a href="08-platform.html">← 이전: AI 플랫폼과 서비스</a>
+    <span class="nav-title">AI 품질</span>
+    <a href="index.html">홈으로</a>
+</nav>
 
     <div class="page-header">
         <h1>Chapter 09 - AI 품질</h1>
@@ -72,19 +22,19 @@
 
     <div class="toc">
         <h3>목차</h3>
-        <ul>
-            <li><a href="#section1">AI 학습용 데이터 품질 가이드라인</a></li>
-            <li><a href="#section2">초거대 AI 데이터 품질관리</a></li>
-            <li><a href="#section3">MLOps 상세 분석</a></li>
-            <li><a href="#section4">Ops 체계 비교</a></li>
-            <li><a href="#section5">AI 테스트 표준</a></li>
-            <li><a href="#section6">멀티모달 데이터 평가</a></li>
-            <li><a href="#section7">데이터 드리프트</a></li>
-            <li><a href="#section8">Feature Store</a></li>
-            <li><a href="#section9">AI TRiSM</a></li>
-            <li><a href="#section10">신뢰할 수 있는 AI</a></li>
-            <li><a href="#summary">핵심 요약</a></li>
-        </ul>
+    <ol class="toc-list">
+            <li><a href="#section1"><span class="num">1</span> AI 학습용 데이터 품질 가이드라인</a></li>
+            <li><a href="#section2"><span class="num">2</span> 초거대 AI 데이터 품질관리</a></li>
+            <li><a href="#section3"><span class="num">3</span> MLOps 상세 분석</a></li>
+            <li><a href="#section4"><span class="num">4</span> Ops 체계 비교</a></li>
+            <li><a href="#section5"><span class="num">5</span> AI 테스트 표준</a></li>
+            <li><a href="#section6"><span class="num">6</span> 멀티모달 데이터 평가</a></li>
+            <li><a href="#section7"><span class="num">7</span> 데이터 드리프트</a></li>
+            <li><a href="#section8"><span class="num">8</span> Feature Store</a></li>
+            <li><a href="#section9"><span class="num">9</span> AI TRiSM</a></li>
+            <li><a href="#section10"><span class="num">10</span> 신뢰할 수 있는 AI</a></li>
+            <li><a href="#summary"><span class="num">11</span> 핵심 요약</a></li>
+            </ol>
     </div>
 
     <div class="container">
@@ -910,11 +860,11 @@
     </div>
 
     <div class="bottom-nav">
-        <a href="08-platform.html">이전: 플랫폼과 프레임워크</a>
-        <a href="10-policy-infra.html">다음: 정책과 인프라</a>
-    </div>
+    <a href="08-platform.html">← 이전: AI 플랫폼과 서비스</a>
+    <a href="10-policy-infra.html">다음: AI 정책과 인프라 →</a>
+</div>
 
-    <div class="footer">
+<div class="footer">
         <p>AI 학습 가이드 | 09. AI 품질</p>
         <p>최종 업데이트: 2026년 3월</p>
     </div>

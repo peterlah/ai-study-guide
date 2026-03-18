@@ -5,104 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>02. 지도학습 - AI 학습 가이드</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.8; }
-        .top-nav { background: #2c3e50; padding: 12px 24px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-        .top-nav a:hover { color: #3498db; }
-        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
-        .page-header h1 { font-size: 2.2rem; margin-bottom: 8px; }
-        .page-header p { font-size: 1.1rem; opacity: 0.9; }
-        .toc { background: white; max-width: 860px; margin: 24px auto; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .toc h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #3498db; }
-        .toc ul { list-style: none; }
-        .toc li { margin-bottom: 8px; }
-        .toc a { color: #2c3e50; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
-        .toc a:hover { background: #eef6fd; color: #3498db; }
-        .toc .section-num { background: #3498db; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
-        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 48px; }
-        .section { background: white; border-radius: 12px; padding: 36px; margin-top: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .section h2 { font-size: 1.5rem; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #3498db; }
-        .section h3 { font-size: 1.2rem; color: #2c3e50; margin: 24px 0 12px; padding-left: 12px; border-left: 4px solid #3498db; }
-        .section h4 { font-size: 1.05rem; color: #555; margin: 16px 0 8px; }
-        .section p { margin-bottom: 14px; font-size: 0.95rem; }
-        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .term-box strong { color: #2c3e50; }
-        .analogy-box { background: #fef9e7; border-left: 4px solid #f1c40f; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .analogy-box strong { color: #7d6608; }
-        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .note-box strong { color: #1e8449; }
-        .warning-box { background: #fdf2f2; border-left: 4px solid #e74c3c; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
-        .warning-box strong { color: #c0392b; }
-        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
-        .compare-table th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
-        .compare-table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
-        .compare-table tr:nth-child(even) { background: #f8f9fa; }
-        .compare-table tr:hover { background: #eef6fd; }
-        .step-cards { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
-        .step-card { flex: 1; min-width: 180px; background: #f8f9fa; border-radius: 8px; padding: 16px; border-top: 4px solid #3498db; }
-        .step-card .step-num { font-size: 1.8rem; font-weight: bold; color: #3498db; }
-        .step-card .step-title { font-weight: bold; color: #2c3e50; margin: 4px 0; }
-        .step-card .step-desc { font-size: 0.85rem; color: #666; }
-        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
-        .process-step { background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 12px 18px; border-radius: 8px; text-align: center; font-size: 0.85rem; font-weight: 500; min-width: 100px; }
-        .process-arrow { color: #3498db; font-size: 1.4rem; font-weight: bold; }
-        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
-        .key-summary h3 { color: #3498db; border: none; padding: 0; margin-bottom: 12px; font-size: 1.15rem; }
-        .key-summary ul { list-style: disc; padding-left: 20px; }
-        .key-summary li { margin-bottom: 6px; font-size: 0.9rem; opacity: 0.95; }
-        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 32px auto; padding: 0 24px; }
-        .bottom-nav a { background: white; color: #2c3e50; text-decoration: none; padding: 14px 28px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s; font-weight: 500; }
-        .bottom-nav a:hover { background: #3498db; color: white; transform: translateY(-2px); }
-        .footer { text-align: center; padding: 32px; color: #999; font-size: 0.85rem; }
-
-        @media (max-width: 768px) {
-            .page-header h1 { font-size: 1.6rem; }
-            .page-header p { font-size: 0.95rem; }
-            .section { padding: 24px; margin-top: 24px; }
-            .section h2 { font-size: 1.3rem; }
-            .section h3 { font-size: 1.1rem; }
-            .step-cards { gap: 12px; }
-            .step-card { min-width: 140px; padding: 12px; }
-            .compare-table { font-size: 0.8rem; }
-            .compare-table th, .compare-table td { padding: 8px; }
-            .bottom-nav { flex-direction: column; gap: 16px; }
-            .bottom-nav a { text-align: center; width: 100%; }
-            .process-flow { gap: 4px; }
-            .process-step { padding: 10px 14px; font-size: 0.75rem; min-width: 80px; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
-    <div class="top-nav">
+    <nav class="top-nav">
         <a href="01-overview.html">← 이전: 인공지능 개요</a>
+        <span class="nav-title">02. 지도학습 (Supervised Learning)</span>
         <a href="index.html">홈으로</a>
-    </div>
+    </nav>
 
-    <div class="page-header">
+    <div class="hero">
         <h1>02. 지도학습 (Supervised Learning)</h1>
         <p>AI 학습 가이드</p>
     </div>
 
     <div class="toc">
-        <h2>목차</h2>
-        <ul>
-            <li><a href="#section1"><span class="section-num">1</span>지도학습 개요</a></li>
-            <li><a href="#section2"><span class="section-num">2</span>분류 vs 회귀</a></li>
-            <li><a href="#section3"><span class="section-num">3</span>K-최근접 이웃 (KNN)</a></li>
-            <li><a href="#section4"><span class="section-num">4</span>서포트 벡터 머신 (SVM)</a></li>
-            <li><a href="#section5"><span class="section-num">5</span>의사결정나무</a></li>
-            <li><a href="#section6"><span class="section-num">6</span>로지스틱 회귀</a></li>
-            <li><a href="#section7"><span class="section-num">7</span>나이브 베이즈</a></li>
-            <li><a href="#section8"><span class="section-num">8</span>앙상블 학습</a></li>
-            <li><a href="#section9"><span class="section-num">9</span>랜덤 포레스트</a></li>
-            <li><a href="#section10"><span class="section-num">10</span>부스팅 알고리즘</a></li>
-            <li><a href="#section11"><span class="section-num">11</span>XGBoost 상세</a></li>
-            <li><a href="#section12"><span class="section-num">12</span>교차검증</a></li>
-            <li><a href="#section13"><span class="section-num">13</span>분류 모델 평가</a></li>
-            <li><a href="#section14"><span class="section-num">14</span>회귀 모델 평가</a></li>
-        </ul>
-    </div>
+    <h3>목차</h3>
+    <ol class="toc-list">
+        <li><a href="#section1"><span class="num">1</span>지도학습 개요</a></li>
+        <li><a href="#section2"><span class="num">2</span>분류 vs 회귀</a></li>
+        <li><a href="#section3"><span class="num">3</span>K-최근접 이웃 (KNN)</a></li>
+        <li><a href="#section4"><span class="num">4</span>서포트 벡터 머신 (SVM)</a></li>
+        <li><a href="#section5"><span class="num">5</span>의사결정나무</a></li>
+        <li><a href="#section6"><span class="num">6</span>로지스틱 회귀</a></li>
+        <li><a href="#section7"><span class="num">7</span>나이브 베이즈</a></li>
+        <li><a href="#section8"><span class="num">8</span>앙상블 학습</a></li>
+        <li><a href="#section9"><span class="num">9</span>랜덤 포레스트</a></li>
+        <li><a href="#section10"><span class="num">10</span>부스팅 알고리즘</a></li>
+        <li><a href="#section11"><span class="num">11</span>XGBoost 상세</a></li>
+        <li><a href="#section12"><span class="num">12</span>교차검증</a></li>
+        <li><a href="#section13"><span class="num">13</span>분류 모델 평가</a></li>
+        <li><a href="#section14"><span class="num">14</span>회귀 모델 평가</a></li>
+    </ol>
+</div>
 
     <div class="container">
         <!-- SECTION 1: 지도학습 개요 -->
@@ -150,32 +86,32 @@
 
             <div class="step-cards">
                 <div class="step-card">
-                    <div class="step-num">1</div>
+                    <div class="num">1</div>
                     <div class="step-title">데이터 수집</div>
                     <div class="step-desc">학습에 필요한 충분한 양의 데이터 준비</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">2</div>
+                    <div class="num">2</div>
                     <div class="step-title">데이터 전처리</div>
                     <div class="step-desc">결측값, 이상치 처리, 정규화</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">3</div>
+                    <div class="num">3</div>
                     <div class="step-title">데이터 분할</div>
                     <div class="step-desc">학습/검증/테스트 세트로 나누기</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">4</div>
+                    <div class="num">4</div>
                     <div class="step-title">모델 선택</div>
                     <div class="step-desc">문제 유형에 맞는 알고리즘 선택</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">5</div>
+                    <div class="num">5</div>
                     <div class="step-title">모델 학습</div>
                     <div class="step-desc">손실함수 최소화하여 파라미터 학습</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-num">6</div>
+                    <div class="num">6</div>
                     <div class="step-title">평가 및 튜닝</div>
                     <div class="step-desc">성능 평가 후 하이퍼파라미터 조정</div>
                 </div>
@@ -1857,7 +1793,8 @@
         <!-- KEY SUMMARY -->
         <div class="key-summary">
             <h3>이 장의 핵심 요점</h3>
-            <ul>
+    <ol class="toc-list">
+        
                 <li>지도학습은 정답이 있는 데이터로부터 학습하는 기본 방식</li>
                 <li>파라미터는 학습되는 값, 하이퍼파라미터는 미리 정하는 값</li>
                 <li>분류와 회귀는 예측 대상의 형태에 따른 구분</li>
@@ -1873,16 +1810,16 @@
                 <li>분류 평가: 정밀도/재현율 트레이드오프, ROC/AUC, 카파 지수</li>
                 <li>회귀 평가: MAE (직관적), RMSE (통계), R² (설명력)</li>
                 <li>불균형 데이터는 PR 곡선과 F1 점수 사용</li>
-            </ul>
-        </div>
+                </ol>
+    </div>
     </div>
 
     <div class="bottom-nav">
-        <a href="01-overview.html">이전: 01. 인공지능 개요</a>
-        <a href="03-unsupervised-rl.html">다음: 03. 비지도학습과 강화학습</a>
-    </div>
+    <a href="01-overview.html" class="prev-link">← 이전: 인공지능 개요</a>
+    <a href="03-unsupervised-rl.html" class="next-link">다음: 비지도학습과 강화학습 →</a>
+</div>
 
-    <div class="footer">
+<div class="footer">
         <p>AI 학습 가이드 | 02. 지도학습</p>
     </div>
 </body>

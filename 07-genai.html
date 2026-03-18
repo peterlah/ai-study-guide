@@ -5,64 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapter 07 - 생성형 AI | AI 학습 가이드</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.7; }
-        .top-nav { position: sticky; top: 0; background: rgba(44,62,80,0.97); padding: 10px 24px; display: flex; justify-content: space-between; z-index: 100; }
-        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.85rem; }
-        .top-nav a:hover { color: #3498db; }
-        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
-        .page-header h1 { font-size: 2rem; margin-bottom: 8px; }
-        .page-header p { opacity: 0.85; font-size: 1rem; }
-        .toc { background: white; max-width: 860px; margin: -20px auto 24px; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .toc h3 { font-size: 0.95rem; color: #2c3e50; margin-bottom: 12px; }
-        .toc ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
-        .toc a { text-decoration: none; color: #555; font-size: 0.88rem; }
-        .toc a:hover { color: #3498db; }
-        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; }
-        .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .section h2 { color: #2c3e50; font-size: 1.4rem; border-bottom: 3px solid #3498db; padding-bottom: 8px; margin-bottom: 20px; }
-        .section h3 { color: #34495e; font-size: 1.1rem; margin: 20px 0 10px; padding-left: 12px; border-left: 3px solid #3498db; }
-        .section h4 { color: #555; font-size: 0.95rem; margin: 14px 0 8px; }
-        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .term-box strong { color: #2c3e50; }
-        .analogy-box { background: #fef9e7; border-left: 4px solid #f39c12; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .analogy-box strong { color: #e67e22; }
-        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .warning-box { background: #fdf0f0; border-left: 4px solid #e74c3c; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
-        .compare-table th { background: #2c3e50; color: white; padding: 10px 14px; text-align: left; }
-        .compare-table td { padding: 10px 14px; border-bottom: 1px solid #e0e0e0; }
-        .compare-table tr:nth-child(even) { background: #f8f9fa; }
-        .step-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
-        .step-card { background: #f8f9fa; border-radius: 8px; padding: 16px; text-align: center; border-top: 3px solid #3498db; }
-        .step-card .num { font-size: 1.4rem; font-weight: 700; color: #3498db; }
-        .step-card .label { font-size: 0.85rem; color: #555; margin-top: 4px; }
-        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-        .process-step { background: #eef6fd; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #2c3e50; }
-        .process-arrow { color: #3498db; font-weight: bold; }
-        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
-        .key-summary h3 { color: #3498db; margin-bottom: 12px; }
-        .key-summary ul { list-style: none; }
-        .key-summary li { padding: 4px 0; padding-left: 16px; position: relative; }
-        .key-summary li::before { content: ">>"; position: absolute; left: 0; color: #3498db; }
-        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 0 auto 40px; padding: 0 24px; }
-        .bottom-nav a { background: white; padding: 14px 24px; border-radius: 8px; text-decoration: none; color: #2c3e50; box-shadow: 0 2px 8px rgba(0,0,0,0.08); font-size: 0.9rem; }
-        .bottom-nav a:hover { background: #3498db; color: white; }
-        .footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.85rem; }
-        @media (max-width: 768px) {
-            .toc ul { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 1.5rem; }
-            .section { padding: 20px; }
-            .step-cards { grid-template-columns: 1fr; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
     <nav class="top-nav">
-        <a href="06-large-model.html">이전: 06-large-model</a>
-        <span style="color: #ecf0f1;">Chapter 07 - 생성형 AI</span>
-        <a href="08-platform.html">다음: 08-platform</a>
-    </nav>
+    <a href="06-large-model.html">← 이전: 초거대모델</a>
+    <span class="nav-title">생성형 AI</span>
+    <a href="index.html">홈으로</a>
+</nav>
 
     <div class="page-header">
         <h1>Chapter 07 - 생성형 AI (Generative AI)</h1>
@@ -71,21 +22,22 @@
 
     <div class="toc">
         <h3>목차</h3>
-        <ul>
-            <li><a href="#genai-overview">1. 생성형 AI 개요</a></li>
-            <li><a href="#foundation-model">2. 파운데이션 모델</a></li>
-            <li><a href="#llm">3. LLM (대규모 언어모델)</a></li>
-            <li><a href="#sllm">4. sLLM (소형 LLM)</a></li>
-            <li><a href="#prompt-eng">5. 프롬프트 엔지니어링</a></li>
-            <li><a href="#fine-tuning">6. 파인튜닝</a></li>
-            <li><a href="#rag">7. RAG</a></li>
-            <li><a href="#hallucination">8. AI 할루시네이션</a></li>
-            <li><a href="#security-threat">9. 보안 위협</a></li>
-            <li><a href="#democratized">10. 보편화된 생성형 AI</a></li>
-            <li><a href="#frontier-ai">11. 프론티어 AI</a></li>
-            <li><a href="#owasp">12. OWASP LLM Top 10</a></li>
-            <li><a href="#langchain">13. LangChain</a></li>
-        </ul>
+    <ol class="toc-list">
+            
+            <li><a href="#genai-overview"><span class="num">1</span> 생성형 AI 개요</a></li>
+            <li><a href="#foundation-model"><span class="num">2</span> 파운데이션 모델</a></li>
+            <li><a href="#llm"><span class="num">3</span> LLM (대규모 언어모델)</a></li>
+            <li><a href="#sllm"><span class="num">4</span> sLLM (소형 LLM)</a></li>
+            <li><a href="#prompt-eng"><span class="num">5</span> 프롬프트 엔지니어링</a></li>
+            <li><a href="#fine-tuning"><span class="num">6</span> 파인튜닝</a></li>
+            <li><a href="#rag"><span class="num">7</span> RAG</a></li>
+            <li><a href="#hallucination"><span class="num">8</span> AI 할루시네이션</a></li>
+            <li><a href="#security-threat"><span class="num">9</span> 보안 위협</a></li>
+            <li><a href="#democratized"><span class="num">10</span> 보편화된 생성형 AI</a></li>
+            <li><a href="#frontier-ai"><span class="num">11</span> 프론티어 AI</a></li>
+            <li><a href="#owasp"><span class="num">12</span> OWASP LLM Top 10</a></li>
+            <li><a href="#langchain"><span class="num">13</span> LangChain</a></li>
+        </ol>
     </div>
 
     <div class="container">
@@ -1030,11 +982,11 @@
     </div>
 
     <div class="bottom-nav">
-        <a href="06-large-model.html">← 이전: Large Model</a>
-        <a href="08-platform.html">다음: Platform →</a>
-    </div>
+    <a href="06-large-model.html">← 이전: 초거대모델</a>
+    <a href="08-platform.html">다음: AI 플랫폼과 서비스 →</a>
+</div>
 
-    <div class="footer">
+<div class="footer">
         <p>AI 학습 가이드 | Chapter 07 - 생성형 AI | © 2026</p>
     </div>
 </body>

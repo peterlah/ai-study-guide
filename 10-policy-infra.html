@@ -5,61 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapter 10 - AI 정책과 인프라</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.7; }
-        .top-nav { position: sticky; top: 0; background: rgba(44,62,80,0.97); padding: 10px 24px; display: flex; justify-content: space-between; z-index: 100; }
-        .top-nav a { color: #ecf0f1; text-decoration: none; font-size: 0.85rem; }
-        .top-nav a:hover { color: #3498db; }
-        .page-header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 48px 24px; text-align: center; }
-        .page-header h1 { font-size: 2rem; margin-bottom: 8px; }
-        .page-header p { opacity: 0.85; font-size: 1rem; }
-        .toc { background: white; max-width: 860px; margin: -20px auto 24px; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .toc h3 { font-size: 0.95rem; color: #2c3e50; margin-bottom: 12px; }
-        .toc ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
-        .toc a { text-decoration: none; color: #555; font-size: 0.88rem; }
-        .toc a:hover { color: #3498db; }
-        .container { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; }
-        .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .section h2 { color: #2c3e50; font-size: 1.4rem; border-bottom: 3px solid #3498db; padding-bottom: 8px; margin-bottom: 20px; }
-        .section h3 { color: #34495e; font-size: 1.1rem; margin: 20px 0 10px; padding-left: 12px; border-left: 3px solid #3498db; }
-        .section h4 { color: #555; font-size: 0.95rem; margin: 14px 0 8px; }
-        .term-box { background: #eef6fd; border-left: 4px solid #3498db; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .term-box strong { color: #2c3e50; }
-        .analogy-box { background: #fef9e7; border-left: 4px solid #f39c12; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .analogy-box strong { color: #e67e22; }
-        .note-box { background: #f0f9f0; border-left: 4px solid #27ae60; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .warning-box { background: #fdf0f0; border-left: 4px solid #e74c3c; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 12px 0; }
-        .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
-        .compare-table th { background: #2c3e50; color: white; padding: 10px 14px; text-align: left; }
-        .compare-table td { padding: 10px 14px; border-bottom: 1px solid #e0e0e0; }
-        .compare-table tr:nth-child(even) { background: #f8f9fa; }
-        .step-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
-        .step-card { background: #f8f9fa; border-radius: 8px; padding: 16px; text-align: center; border-top: 3px solid #3498db; }
-        .step-card .num { font-size: 1.4rem; font-weight: 700; color: #3498db; }
-        .step-card .label { font-size: 0.85rem; color: #555; margin-top: 4px; }
-        .process-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-        .process-step { background: #eef6fd; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #2c3e50; }
-        .process-arrow { color: #3498db; font-weight: bold; }
-        .key-summary { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border-radius: 12px; padding: 28px; margin: 24px 0; }
-        .key-summary h3 { color: #3498db; margin-bottom: 12px; }
-        .key-summary ul { list-style: none; }
-        .key-summary li { padding: 4px 0; padding-left: 16px; position: relative; }
-        .key-summary li::before { content: ">>"; position: absolute; left: 0; color: #3498db; }
-        .bottom-nav { display: flex; justify-content: space-between; max-width: 860px; margin: 0 auto 40px; padding: 0 24px; }
-        .bottom-nav a { background: white; padding: 14px 24px; border-radius: 8px; text-decoration: none; color: #2c3e50; box-shadow: 0 2px 8px rgba(0,0,0,0.08); font-size: 0.9rem; }
-        .bottom-nav a:hover { background: #3498db; color: white; }
-        .footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.85rem; }
-        @media (max-width: 768px) {
-            .toc ul { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 1.5rem; }
-            .section { padding: 20px; }
-            .step-cards { grid-template-columns: 1fr; }
-        }
+        @import url('common.css');
     </style>
 </head>
 <body>
-    <div class="top-nav">
-        <div>Chapter 10 - AI 정책과 인프라</div>
+    <nav class="top-nav">
+    <a href="09-quality.html">← 이전: AI 품질</a>
+    <span class="nav-title">AI 정책과 인프라</span>
+    <a href="index.html">홈으로</a>
+</nav>
         <div>
             <a href="09-quality.html">이전 章</a>
             <span style="color: #aaa; margin: 0 12px;">|</span>
@@ -74,21 +28,22 @@
 
     <div class="toc">
         <h3>이 장의 주요 주제</h3>
-        <ul>
-            <li><a href="#governance">1. AI 거버넌스</a></li>
-            <li><a href="#ai-law">2. AI 기본법</a></li>
-            <li><a href="#cat">3. AI 신뢰성 인증</a></li>
-            <li><a href="#guidelines">4. 생성형 AI 이용자보호</a></li>
-            <li><a href="#public-ai">5. 공공부문 AI 도입가이드</a></li>
-            <li><a href="#ai-ethics">6. AI 윤리 동향</a></li>
-            <li><a href="#ai-chip">7. AI 반도체 기술</a></li>
-            <li><a href="#pim">8. PIM 메모리 처리</a></li>
-            <li><a href="#chiplet">9. 칩렛 기술</a></li>
-            <li><a href="#cxl">10. CXL 프로토콜</a></li>
-            <li><a href="#hbm">11. HBM 메모리</a></li>
-            <li><a href="#vector-db">12. 벡터 데이터베이스</a></li>
-            <li><a href="#trends">13. 2025 AI 트렌드</a></li>
-        </ul>
+    <ol class="toc-list">
+            
+            <li><a href="#governance"><span class="num">1</span> AI 거버넌스</a></li>
+            <li><a href="#ai-law"><span class="num">2</span> AI 기본법</a></li>
+            <li><a href="#cat"><span class="num">3</span> AI 신뢰성 인증</a></li>
+            <li><a href="#guidelines"><span class="num">4</span> 생성형 AI 이용자보호</a></li>
+            <li><a href="#public-ai"><span class="num">5</span> 공공부문 AI 도입가이드</a></li>
+            <li><a href="#ai-ethics"><span class="num">6</span> AI 윤리 동향</a></li>
+            <li><a href="#ai-chip"><span class="num">7</span> AI 반도체 기술</a></li>
+            <li><a href="#pim"><span class="num">8</span> PIM 메모리 처리</a></li>
+            <li><a href="#chiplet"><span class="num">9</span> 칩렛 기술</a></li>
+            <li><a href="#cxl"><span class="num">10</span> CXL 프로토콜</a></li>
+            <li><a href="#hbm"><span class="num">11</span> HBM 메모리</a></li>
+            <li><a href="#vector-db"><span class="num">12</span> 벡터 데이터베이스</a></li>
+            <li><a href="#trends"><span class="num">13</span> 2025 AI 트렌드</a></li>
+        </ol>
     </div>
 
     <div class="container">
@@ -1530,14 +1485,13 @@
             </ul>
         </div>
     </div>
-    </div>
 
     <div class="bottom-nav">
-        <a href="09-quality.html">이전 장 (Chapter 9)</a>
-        <a href="index.html">목차로 돌아가기</a>
-    </div>
+    <a href="09-quality.html">← 이전: AI 품질</a>
+    <a href="index.html">다음: 목차 →</a>
+</div>
 
-    <div class="footer">
+<div class="footer">
         <p>AI 학습 가이드 | 10. AI 정책과 인프라</p>
     </div>
 
