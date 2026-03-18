@@ -31,13 +31,14 @@
             <li><a href="#guidelines"><span class="num">4</span> 생성형 AI 이용자보호</a></li>
             <li><a href="#public-ai"><span class="num">5</span> 공공부문 AI 도입가이드</a></li>
             <li><a href="#ai-ethics"><span class="num">6</span> AI 윤리 동향</a></li>
-            <li><a href="#ai-chip"><span class="num">7</span> AI 반도체 기술</a></li>
-            <li><a href="#pim"><span class="num">8</span> PIM 메모리 처리</a></li>
-            <li><a href="#chiplet"><span class="num">9</span> 칩렛 기술</a></li>
-            <li><a href="#cxl"><span class="num">10</span> CXL 프로토콜</a></li>
-            <li><a href="#hbm"><span class="num">11</span> HBM 메모리</a></li>
-            <li><a href="#vector-db"><span class="num">12</span> 벡터 데이터베이스</a></li>
-            <li><a href="#trends"><span class="num">13</span> 2025 AI 트렌드</a></li>
+            <li><a href="#diff-privacy"><span class="num">7</span> 차등 프라이버시</a></li>
+            <li><a href="#ai-chip"><span class="num">8</span> AI 반도체 기술</a></li>
+            <li><a href="#pim"><span class="num">9</span> PIM 메모리 처리</a></li>
+            <li><a href="#chiplet"><span class="num">10</span> 칩렛 기술</a></li>
+            <li><a href="#cxl"><span class="num">11</span> CXL 프로토콜</a></li>
+            <li><a href="#hbm"><span class="num">12</span> HBM 메모리</a></li>
+            <li><a href="#vector-db"><span class="num">13</span> 벡터 데이터베이스</a></li>
+            <li><a href="#trends"><span class="num">14</span> 2025 AI 트렌드</a></li>
         </ol>
     </div>
 
@@ -644,9 +645,110 @@
             </div>
         </div>
 
-        <!-- Section 7: AI 반도체 상세 기술 -->
+        <!-- Section 7: 차등 프라이버시 -->
+        <div class="section" id="diff-privacy">
+            <h2>7. 차등 프라이버시 (Differential Privacy)</h2>
+
+            <h3>개요</h3>
+            <p>차등 프라이버시는 데이터셋의 개별 데이터 추가 또는 제거가 분석 결과에 미치는 영향을 수학적으로 제한하는 프라이버시 보호 기법입니다. AI 모델 학습 과정에서 민감한 개인정보를 보호하면서도 의미 있는 분석을 가능하게 합니다.</p>
+
+            <div class="term-box">
+                <strong>정의:</strong> 데이터셋에서 개별 데이터 추가/제거가 분석 결과에 미치는 영향을 수학적으로 제한하는 프라이버시 보호 기법으로, 특정 개인의 데이터 포함 여부를 통계적으로 구분할 수 없도록 설계합니다.
+            </div>
+
+            <h3>수학적 정의: ε-차등 프라이버시 (ε-Differential Privacy)</h3>
+            <p>차등 프라이버시의 핵심은 프라이버시 예산(Privacy Budget) 개념입니다:</p>
+            <ul style="margin-left: 20px;">
+                <li><strong>ε (엡실론):</strong> 프라이버시 예산 - 값이 작을수록 강한 프라이버시 보호</li>
+                <li><strong>수학적 표현:</strong> 거의 동일한 두 데이터셋의 분석 결과가 e^ε 배 이상 차이 나지 않음</li>
+                <li><strong>일반적 기준:</strong> ε = 0.1~1.0 (강한 보호), ε = 1.0~10 (중간 보호)</li>
+                <li><strong>δ (델타):</strong> 실패 확률 - 보통 1/(데이터 수)로 설정</li>
+            </ul>
+
+            <div class="analogy-box">
+                <strong>비유:</strong> "투표 결과는 공개하되, 누가 누구에게 투표했는지는 절대 알 수 없게 하는 것" - 전체 집계 통계는 정확하지만, 개별 투표자를 식별할 수 없습니다.
+            </div>
+
+            <h3>핵심 메커니즘 비교</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>메커니즘</th>
+                    <th>특징</th>
+                    <th>사용 사례</th>
+                </tr>
+                <tr>
+                    <td><strong>라플라스 메커니즘<br/>(Laplace Mechanism)</strong></td>
+                    <td>쿼리 결과에 라플라스 분포의 노이즈 추가<br/>• 수치형 데이터에 최적<br/>• 구현 단순</td>
+                    <td>나이, 소득, 통계량 등 숫자 결과</td>
+                </tr>
+                <tr>
+                    <td><strong>가우시안 메커니즘<br/>(Gaussian Mechanism)</strong></td>
+                    <td>쿼리 결과에 정규분포(가우시안) 노이즈 추가<br/>• 누적 쿼리에 더 효율적<br/>• 더 나은 유틸리티</td>
+                    <td>다중 쿼리 처리, 기계학습</td>
+                </tr>
+                <tr>
+                    <td><strong>지수 메커니즘<br/>(Exponential Mechanism)</strong></td>
+                    <td>카테고리형 응답에 확률 기반 선택<br/>• 비수치 데이터 처리<br/>• 최적성 보장</td>
+                    <td>범주형 응답, 선호도 조사</td>
+                </tr>
+            </table>
+
+            <h3>적용 유형 비교</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>유형</th>
+                    <th>정의</th>
+                    <th>장점</th>
+                    <th>한계</th>
+                </tr>
+                <tr>
+                    <td><strong>로컬 차등 프라이버시<br/>(Local DP)</strong></td>
+                    <td>클라이언트 측에서 데이터를 난독화<br/>후 수집</td>
+                    <td>• 서버를 신뢰 불필요<br/>• 강력한 개인정보 보호</td>
+                    <td>• 높은 노이즈<br/>• 정확도 저하</td>
+                </tr>
+                <tr>
+                    <td><strong>글로벌 차등 프라이버시<br/>(Central DP)</strong></td>
+                    <td>중앙 서버에서 일괄 처리<br/>후 노이즈 추가</td>
+                    <td>• 더 나은 정확도<br/>• 효율적 처리</td>
+                    <td>• 서버 신뢰 필요<br/>• 중앙 관리 필수</td>
+                </tr>
+            </table>
+
+            <h3>실제 활용 사례</h3>
+            <div class="note-box">
+                <strong>주요 기업/기관 사례:</strong>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Apple (Safari 브라우징):</strong> 사용자의 개인 브라우징 습관 추적 없이 웹사이트 통계 수집</li>
+                    <li><strong>Google (RAPPOR):</strong> 크롬 사용자의 설정값을 프라이버시 보호하며 수집</li>
+                    <li><strong>미국 인구조사청 (US Census):</strong> 2020 인구조사에서 개별 인구 데이터를 차등 프라이버시로 보호</li>
+                    <li><strong>Uber:</strong> 위치 데이터 기반 트렌드 분석 시 운전자 개인정보 보호</li>
+                </ul>
+            </div>
+
+            <h3>AI 모델 학습과의 결합</h3>
+            <p>차등 프라이버시는 특히 다음 AI 기술과 결합하여 사용됩니다:</p>
+            <ul style="margin-left: 20px;">
+                <li><strong>연합학습 (Federated Learning) + 차등 프라이버시:</strong> 각 클라이언트에서 로컬 모델 학습 후 프라이버시 보호하며 중앙 집계 (Google Gboard, Apple Siri)</li>
+                <li><strong>차등 프라이버시 SGD:</strong> 확률적 경사 하강법(SGD)에 프라이버시 제약 추가 - 그래디언트 클리핑과 노이즈 추가</li>
+                <li><strong>보장:</strong> 모델이 학습 데이터의 특정 샘플에 과적합되지 않도록 수학적 보장</li>
+            </ul>
+
+            <div class="key-summary">
+                <strong>핵심 요약:</strong>
+                <ul style="margin-left: 20px;">
+                    <li>차등 프라이버시는 개별 데이터의 영향을 수학적으로 제한하는 기법</li>
+                    <li>프라이버시 예산 ε로 보호 수준 제어 (작을수록 강한 보호)</li>
+                    <li>라플라스, 가우시안, 지수 메커니즘이 주요 기법</li>
+                    <li>연합학습 + 차등 프라이버시로 데이터 프라이버시 보장하며 AI 모델 학습</li>
+                    <li>실제로는 정확도와 프라이버시의 트레이드오프 고려 필요</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 8: AI 반도체 상세 기술 -->
         <div class="section" id="ai-chip">
-            <h2>7. AI 반도체 상세 - 다양한 가속기 기술</h2>
+            <h2>8. AI 반도체 상세 - 다양한 가속기 기술</h2>
 
             <h3>개요</h3>
             <p>AI 연산을 최적화한 다양한 칩들이 등장했습니다. 각 칩의 특성을 이해하면 AI 인프라 설계의 핵심이 보입니다.</p>
@@ -753,7 +855,7 @@
 
         <!-- Section 5: PIM (Processing-in-Memory) -->
         <div class="section" id="pim">
-            <h2>5. PIM - 처리-메모리 통합 (Processing-in-Memory)</h2>
+            <h2>9. PIM - 처리-메모리 통합 (Processing-in-Memory)</h2>
 
             <h3>PIM의 개념</h3>
             <div class="term-box">
@@ -840,7 +942,7 @@
 
         <!-- Section 6: 칩렛 (Chiplet) -->
         <div class="section" id="chiplet">
-            <h2>6. 칩렛 (Chiplet) - 칩의 모듈화</h2>
+            <h2>10. 칩렛 (Chiplet) - 칩의 모듈화</h2>
 
             <h3>칩렛의 개념</h3>
             <div class="term-box">
@@ -919,7 +1021,7 @@
 
         <!-- Section 7: CXL (Compute Express Link) -->
         <div class="section" id="cxl">
-            <h2>7. CXL - 컴퓨트 익스프레스 링크 (Compute Express Link)</h2>
+            <h2>11. CXL - 컴퓨트 익스프레스 링크 (Compute Express Link)</h2>
 
             <h3>CXL의 개념</h3>
             <div class="term-box">
@@ -1023,7 +1125,7 @@
 
         <!-- Section 8: HBM (High Bandwidth Memory) -->
         <div class="section" id="hbm">
-            <h2>8. HBM - 고대역폭 메모리 (High Bandwidth Memory)</h2>
+            <h2>12. HBM - 고대역폭 메모리 (High Bandwidth Memory)</h2>
 
             <h3>HBM의 개념</h3>
             <div class="term-box">
@@ -1162,7 +1264,7 @@
 
         <!-- Section 12: 벡터 데이터베이스 (Vector Database) -->
         <div class="section" id="vector-db">
-            <h2>12. 벡터 데이터베이스 (Vector Database)</h2>
+            <h2>13. 벡터 데이터베이스 (Vector Database)</h2>
 
             <h3>개요</h3>
             <p>생성형 AI 시대의 필수 인프라. 일반 데이터베이스로는 AI가 원하는 "의미 기반 검색"을 할 수 없어서, 벡터 DB가 등장했습니다.</p>
@@ -1314,7 +1416,7 @@
 
         <!-- Section 13: 2025년 AI 트렌드 및 전망 -->
         <div class="section" id="trends">
-            <h2>13. 2025년 AI 트렌드 및 전망</h2>
+            <h2>14. 2025년 AI 트렌드 및 전망</h2>
 
             <h3>주요 키워드</h3>
             <div class="step-cards">

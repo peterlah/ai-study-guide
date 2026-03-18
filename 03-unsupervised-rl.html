@@ -29,10 +29,11 @@
         <li><a href="#section3"><span class="num">3</span> 군집분석 알고리즘</a></li>
         <li><a href="#section4"><span class="num">4</span> 고급 군집 기법</a></li>
         <li><a href="#section5"><span class="num">5</span> 차원축소와 차원의 저주</a></li>
-        <li><a href="#section6"><span class="num">6</span> 강화학습 기초</a></li>
-        <li><a href="#section7"><span class="num">7</span> Q-Learning과 DQN</a></li>
-        <li><a href="#section8"><span class="num">8</span> 정책 기반 강화학습</a></li>
-        <li><a href="#section9"><span class="num">9</span> 고급 강화학습</a></li>
+        <li><a href="#section6"><span class="num">6</span> 이상탐지</a></li>
+        <li><a href="#section7"><span class="num">7</span> 강화학습 기초</a></li>
+        <li><a href="#section8"><span class="num">8</span> Q-Learning과 DQN</a></li>
+        <li><a href="#section9"><span class="num">9</span> 정책 기반 강화학습</a></li>
+        <li><a href="#section10"><span class="num">10</span> 고급 강화학습</a></li>
     </ol>
 </div>
 
@@ -697,9 +698,100 @@
             </table>
         </section>
 
-        <!-- Section 6: 강화학습 기초 -->
+        <!-- Section 6: 이상탐지 -->
         <section class="section" id="section6">
-            <h2>6. 강화학습 기초</h2>
+            <h2>6. 이상탐지(Anomaly Detection)</h2>
+
+            <div class="term-box">
+                <strong>이상탐지의 정의와 필요성:</strong>
+                이상탐지는 정상적인 패턴에서 벗어나는 비정상 데이터를 식별하는 비지도학습 기법입니다. 대부분의 데이터가 정상이고 비정상 샘플이 극소수인 불균형 데이터 문제를 다룹니다. 사기 탐지, 시스템 모니터링, 품질 검사 등에서 필수적입니다.
+            </div>
+
+            <h3>이상탐지의 유형</h3>
+            <table class="compare-table">
+                <tr>
+                    <th>유형</th>
+                    <th>영문명</th>
+                    <th>특징</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>점 이상</strong></td>
+                    <td>Point Anomaly</td>
+                    <td>개별 데이터가 정상 범위를 벗어남</td>
+                    <td>신용카드 한 건의 이상거래</td>
+                </tr>
+                <tr>
+                    <td><strong>맥락 이상</strong></td>
+                    <td>Contextual Anomaly</td>
+                    <td>특정 상황/문맥에서만 이상</td>
+                    <td>겨울철 과도한 전력 사용</td>
+                </tr>
+                <tr>
+                    <td><strong>집단 이상</strong></td>
+                    <td>Collective Anomaly</td>
+                    <td>데이터의 부분집합이 집단적으로 이상</td>
+                    <td>특정 시간대 네트워크 DDoS 공격</td>
+                </tr>
+            </table>
+
+            <h3>주요 알고리즘</h3>
+            <h4>1. 통계적 방법 (Statistical Methods)</h4>
+            <p><strong>Z-score:</strong> 데이터가 평균으로부터 표준편차의 몇 배 떨어져 있는지 계산. |Z| > 3인 점을 이상으로 판정(정규분포 가정).</p>
+            <p><strong>IQR(Interquartile Range):</strong> Q1, Q3 사분위수를 이용하여 경계값 설정. Q1-1.5×IQR 또는 Q3+1.5×IQR 범위 밖은 이상으로 판정. 이상치에 강건함.</p>
+
+            <h4>2. 거리 기반 (Distance-based)</h4>
+            <p><strong>LOF(Local Outlier Factor):</strong> 이웃과의 거리 비율로 이상도 계산. 전역 이상뿐만 아니라 국소 이상도 탐지. k-NN과 유사하나 밀도를 고려한 개선 버전.</p>
+
+            <h4>3. 밀도 기반 (Density-based)</h4>
+            <p><strong>DBSCAN 활용:</strong> 밀도 기반 군집 알고리즘으로, 어떤 군집에도 속하지 않는 점을 이상으로 판정. 임계값(eps, min_samples) 설정이 중요. 다양한 밀도의 군집 탐지 가능.</p>
+
+            <h4>4. 앙상블 기반</h4>
+            <p><strong>Isolation Forest:</strong> 특성을 랜덤하게 선택하여 데이터를 분할하는 결정 트리 집합. 이상치는 정상보다 적은 분할로 고립되므로, 짧은 경로 길이로 탐지. 고차원 데이터에 효율적.</p>
+
+            <h4>5. 딥러닝 기반</h4>
+            <p><strong>오토인코더 기반 이상탐지:</strong> 정상 데이터만으로 학습하여 인코더-디코더 구조. 재구성 오류(Reconstruction Error)가 크면 이상으로 판정. 복잡한 비선형 패턴 학습 가능.</p>
+
+            <h3>활용 사례</h3>
+            <div class="note-box">
+                <strong>주요 응용 분야:</strong>
+                <ul>
+                    <li><strong>금융 사기 탐지:</strong> 신용카드 거래 내역에서 불정상 거래 패턴 식별</li>
+                    <li><strong>네트워크 침입 탐지:</strong> 비정상적인 트래픽, 포트 스캔, DDoS 공격 탐지</li>
+                    <li><strong>제조 품질 검사:</strong> 센서 데이터에서 불량품 자동 판별</li>
+                    <li><strong>의료 진단:</strong> 이상 심박수, 뇌파 패턴 감지</li>
+                    <li><strong>시스템 모니터링:</strong> 서버 성능 저하, 디스크 용량 급증 탐지</li>
+                </ul>
+            </div>
+
+            <h3>평가 지표 (불균형 데이터 고려)</h3>
+            <p>이상탐지는 정상 샘플이 대부분이므로 Accuracy는 의미 없음. 대신:</p>
+            <ul>
+                <li><strong>Precision(정밀도):</strong> 탐지된 이상 중 실제 이상의 비율. 거짓 양성 최소화.</li>
+                <li><strong>Recall(재현율):</strong> 실제 이상 중 탐지된 비율. 놓친 이상 최소화. 보안은 높은 Recall 필요.</li>
+                <li><strong>F1 점수:</strong> Precision과 Recall의 조화평균. 불균형 데이터 평가에 적합.</li>
+                <li><strong>ROC-AUC:</strong> 임계값 변화에 따른 성능 곡선 평가.</li>
+            </ul>
+
+            <h3>쉽게 말하면</h3>
+            <div class="analogy-box">
+                <strong>비유:</strong> 병원 응급실의 환자 분류와 같습니다. 대부분의 환자는 가벼운 질환이지만(정상), 드물게 생명을 위협하는 중증 환자가 들어옵니다(이상). 의료진은 일반적인 패턴에서 벗어나는 증상을 빠르게 찾아내야 합니다. 이상탐지도 정상 데이터의 "숨은 구조"를 학습한 후, 그에 맞지 않는 데이터를 찾는 것입니다.
+            </div>
+
+            <div class="key-summary">
+                <strong>핵심 요약:</strong>
+                <ul>
+                    <li>이상탐지는 극소수의 비정상 샘플을 찾는 비지도학습 문제</li>
+                    <li>통계, 거리, 밀도, 앙상블, 딥러닝 등 다양한 알고리즘 활용</li>
+                    <li>금융, 보안, 제조, 의료 등 실무 응용 매우 광범위</li>
+                    <li>불균형 데이터이므로 Precision, Recall, F1 지표 중요</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 7: 강화학습 기초 -->
+        <section class="section" id="section7">
+            <h2>7. 강화학습 기초</h2>
 
             <h3>강화학습의 정의</h3>
             <p>강화학습은 에이전트가 환경과 상호작용하면서 시행착오를 통해 최적의 정책(행동 방식)을 학습하는 방식입니다. 좋은 행동에는 보상을, 나쁜 행동에는 벌칙을 주어 점진적으로 성능을 개선합니다.</p>
@@ -784,9 +876,9 @@
             </table>
         </section>
 
-        <!-- Section 7: Q-Learning과 DQN -->
-        <section class="section" id="section7">
-            <h2>7. Q-Learning과 DQN</h2>
+        <!-- Section 8: Q-Learning과 DQN -->
+        <section class="section" id="section8">
+            <h2>8. Q-Learning과 DQN</h2>
 
             <h3>Q-Learning (오프-폴리시 가치 기반)</h3>
             <div class="term-box">
@@ -921,9 +1013,9 @@
             </table>
         </section>
 
-        <!-- Section 8: 정책 기반 강화학습 -->
-        <section class="section" id="section8">
-            <h2>8. 정책 기반 강화학습</h2>
+        <!-- Section 9: 정책 기반 강화학습 -->
+        <section class="section" id="section9">
+            <h2>9. 정책 기반 강화학습</h2>
 
             <h3>정책 기반 강화학습의 원리</h3>
             <p>가치함수를 학습하는 대신, 정책 자체를 직접 학습합니다. "빨간 신호에서는 멈춰"라는 규칙을 직접 배우는 방식입니다.</p>
@@ -1008,9 +1100,9 @@
             </div>
         </section>
 
-        <!-- Section 9: 고급 강화학습 -->
-        <section class="section" id="section9">
-            <h2>9. 고급 강화학습 기법</h2>
+        <!-- Section 10: 고급 강화학습 -->
+        <section class="section" id="section10">
+            <h2>10. 고급 강화학습 기법</h2>
 
             <h3>모델 기반 강화학습 (Model-Based)</h3>
             <p>환경의 규칙을 먼저 학습한 후 계획을 세웁니다. "빨간 신호에서 계속 가면 사고 난다"는 인과관계를 미리 파악합니다.</p>
